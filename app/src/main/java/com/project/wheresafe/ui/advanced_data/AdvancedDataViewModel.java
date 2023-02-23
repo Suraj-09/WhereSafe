@@ -1,16 +1,16 @@
-package com.project.wheresafe.ui.slideshow;
+package com.project.wheresafe.ui.advanced_data;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
+public class AdvancedDataViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
+    public AdvancedDataViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("Advanced stuff");
     }
 
     public LiveData<String> getText() {

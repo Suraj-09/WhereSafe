@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.gallery;
+package com.project.wheresafe.ui.advanced_data;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.project.wheresafe.databinding.FragmentGalleryBinding;
+import com.project.wheresafe.databinding.FragmentAdvancedDataBinding;
 
-public class GalleryFragment extends Fragment {
+public class AdvancedDataFragment extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentAdvancedDataBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        AdvancedDataViewModel galleryViewModel =
+                new ViewModelProvider(this).get(AdvancedDataViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentAdvancedDataBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
+        final TextView textView = binding.textAdvancedData;
         galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }

@@ -17,10 +17,7 @@ public class PersonalFragment extends Fragment {
 
     private FragmentPersonalBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        PersonalViewModel personalViewModel =
-                new ViewModelProvider(this).get(PersonalViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

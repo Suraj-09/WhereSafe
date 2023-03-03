@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
+
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -24,9 +28,33 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+//        if (getArguments() != null) {
+//            String temperatureStr = getArguments().getString("temperature");
+//            TextView txtTemperature = requireView().findViewById(R.id.txtTemperature);
+//            txtTemperature.setText(temperatureStr);
+//        } else {
+//            System.out.println("getArguments() = null");
+//        }
+
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() != null) {
+            String temperatureStr = getArguments().getString("temperature");
+            TextView txtTemperature = requireActivity().findViewById(R.id.txtTemperature);
+            if (txtTemperature != null) {
+                txtTemperature.setText(temperatureStr);
+            }
+        } else {
+            System.out.println("getArguments() = null");
+        }
+
     }
 
     @Override

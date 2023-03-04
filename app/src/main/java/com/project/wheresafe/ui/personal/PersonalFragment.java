@@ -57,20 +57,17 @@ public class PersonalFragment extends Fragment {
     public void onPause() {
         super.onPause();
         paused = true;
-//        timerTask.cancel();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        runOnTimer();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-//        timerTask.cancel();
     }
 
     public void runOnTimer() {
@@ -98,31 +95,32 @@ public class PersonalFragment extends Fragment {
         if (mActivity != null) {
             // get data stored in database
             BmeData bmeData = dbHelper.getBmeData();
-            String temperatureStr = String.format("%.2f", bmeData.getTemperature());
-            String humidityStr = String.format("%.2f", bmeData.getHumidity());
-            String pressureStr = String.format("%.2f", bmeData.getPressure());
-            String gasStr = String.format("%.2f", bmeData.getGas());
-            String altitudeStr = String.format("%.2f", bmeData.getAltitude());
-            String timestamp = bmeData.getTimestamp();
+            if (bmeData != null) {
+                String temperatureStr = String.format("%.2f", bmeData.getTemperature());
+                String humidityStr = String.format("%.2f", bmeData.getHumidity());
+                String pressureStr = String.format("%.2f", bmeData.getPressure());
+                String gasStr = String.format("%.2f", bmeData.getGas());
+                String altitudeStr = String.format("%.2f", bmeData.getAltitude());
+                String timestamp = bmeData.getTimestamp();
 
+                TextView txtTemperature = mActivity.findViewById(R.id.txtTemperature);
+                txtTemperature.setText(temperatureStr);
 
-            TextView txtTemperature = mActivity.findViewById(R.id.txtTemperature);
-            txtTemperature.setText(temperatureStr);
+                TextView txtHumidity = mActivity.findViewById(R.id.txtHumidity);
+                txtHumidity.setText(humidityStr);
 
-            TextView txtHumidity = mActivity.findViewById(R.id.txtHumidity);
-            txtHumidity.setText(humidityStr);
+                TextView txtPressure = mActivity.findViewById(R.id.txtPressure);
+                txtPressure.setText(pressureStr);
 
-            TextView txtPressure = mActivity.findViewById(R.id.txtPressure);
-            txtPressure.setText(pressureStr);
+                TextView txtGas = mActivity.findViewById(R.id.txtGas);
+                txtGas.setText(gasStr);
 
-            TextView txtGas = mActivity.findViewById(R.id.txtGas);
-            txtGas.setText(gasStr);
+                TextView txtAltitude = mActivity.findViewById(R.id.txtAltitude);
+                txtAltitude.setText(altitudeStr);
 
-            TextView txtAltitude = mActivity.findViewById(R.id.txtAltitude);
-            txtAltitude.setText(altitudeStr);
-
-            TextView txtTimestamp = mActivity.findViewById(R.id.txtTimestamp);
-            txtTimestamp.setText(timestamp);
+                TextView txtTimestamp = mActivity.findViewById(R.id.txtTimestamp);
+                txtTimestamp.setText(timestamp);
+            }
         }
     }
 

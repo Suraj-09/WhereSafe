@@ -1,8 +1,7 @@
-package com.project.wheresafe.ui.personal;
+package com.project.wheresafe.controllers;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.project.wheresafe.BmeData;
-import com.project.wheresafe.DatabaseHelper;
+import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
+import com.project.wheresafe.viewmodels.PersonalViewModel;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 

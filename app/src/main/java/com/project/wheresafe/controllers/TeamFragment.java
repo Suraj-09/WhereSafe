@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.team;
+package com.project.wheresafe.controllers;
 
 
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.wheresafe.databinding.FragmentTeamBinding;
+import com.project.wheresafe.viewmodels.TeamViewModel;
 
 public class TeamFragment extends Fragment {
 

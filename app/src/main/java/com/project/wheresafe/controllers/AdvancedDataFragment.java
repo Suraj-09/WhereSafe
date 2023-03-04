@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.advanced_data;
+package com.project.wheresafe.controllers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.wheresafe.databinding.FragmentAdvancedDataBinding;
+import com.project.wheresafe.viewmodels.AdvancedDataViewModel;
 
 public class AdvancedDataFragment extends Fragment {
 

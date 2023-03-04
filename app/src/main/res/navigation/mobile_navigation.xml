@@ -7,31 +7,31 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.project.wheresafe.ui.home.HomeFragment"
+        android:name="com.project.wheresafe.controllers.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_advanced_data"
-        android:name="com.project.wheresafe.ui.advanced_data.AdvancedDataFragment"
+        android:name="com.project.wheresafe.controllers.AdvancedDataFragment"
         android:label="@string/menu_advanced_data"
         tools:layout="@layout/fragment_advanced_data" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.project.wheresafe.ui.settings.SettingsFragment"
+        android:name="com.project.wheresafe.controllers.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_personal"
-        android:name="com.project.wheresafe.ui.personal.PersonalFragment"
+        android:name="com.project.wheresafe.controllers.PersonalFragment"
         android:label="@string/title_personal"
         tools:layout="@layout/fragment_personal"/>
 
     <fragment
         android:id="@+id/navigation_team"
-        android:name="com.project.wheresafe.ui.team.TeamFragment"
+        android:name="com.project.wheresafe.controllers.TeamFragment"
         android:label="@string/title_team"
         tools:layout="@layout/fragment_team" />
 

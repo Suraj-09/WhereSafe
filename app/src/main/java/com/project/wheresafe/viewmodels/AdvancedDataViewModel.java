@@ -1,16 +1,16 @@
-package com.project.wheresafe.ui.settings;
+package com.project.wheresafe.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SettingsViewModel extends ViewModel {
+public class AdvancedDataViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public SettingsViewModel() {
+    public AdvancedDataViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Settings");
+        mText.setValue("Advanced stuff");
     }
 
     public LiveData<String> getText() {

@@ -1,9 +1,8 @@
-package com.project.wheresafe;
+package com.project.wheresafe.utils;
 
-public class Config {
+public class DbConfig {
     public static final String DATABASE_NAME = "bme_db";
     public static final String BME_TABLE = "bme_data";
-
     public static final String COLUMN_ID = "data_id";
     public static final String COLUMN_TEMPERATURE = "temperature";
     public static final String COLUMN_HUMIDITY = "humidity";

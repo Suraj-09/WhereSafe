@@ -96,7 +96,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     @SuppressLint("Range") double altitude = cursor.getDouble(cursor.getColumnIndex(DbConfig.COLUMN_ALTITUDE));
                     @SuppressLint("Range") String timestamp = cursor.getString(cursor.getColumnIndex(DbConfig.COLUMN_TIMESTAMP));
 
-
                     bmeData = new BmeData(id, temperature, humidity, pressure, gas, altitude, timestamp);
                 } while (cursor.moveToNext());
             }

@@ -27,14 +27,6 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//        if (getArguments() != null) {
-//            String temperatureStr = getArguments().getString("temperature");
-//            TextView txtTemperature = requireView().findViewById(R.id.txtTemperature);
-//            txtTemperature.setText(temperatureStr);
-//        } else {
-//            System.out.println("getArguments() = null");
-//        }
-
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
@@ -43,16 +35,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (getArguments() != null) {
-            String temperatureStr = getArguments().getString("temperature");
-            TextView txtTemperature = requireActivity().findViewById(R.id.txtTemperature);
-            if (txtTemperature != null) {
-                txtTemperature.setText(temperatureStr);
-            }
-        } else {
-            System.out.println("getArguments() = null");
-        }
 
     }
 

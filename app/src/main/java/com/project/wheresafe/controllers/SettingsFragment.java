@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.settings;
+package com.project.wheresafe.controllers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.wheresafe.databinding.FragmentSettingsBinding;
+import com.project.wheresafe.viewmodels.SettingsViewModel;
 
 public class SettingsFragment extends Fragment {
 

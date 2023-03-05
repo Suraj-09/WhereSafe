@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.personal;
+package com.project.wheresafe.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

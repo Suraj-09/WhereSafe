@@ -1,16 +1,16 @@
-package com.project.wheresafe.ui.advanced_data;
+package com.project.wheresafe.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class AdvancedDataViewModel extends ViewModel {
+public class TeamViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public AdvancedDataViewModel() {
+    public TeamViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Advanced stuff");
+        mText.setValue("Team shenanigans");
     }
 
     public LiveData<String> getText() {

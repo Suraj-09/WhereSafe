@@ -1,4 +1,4 @@
-package com.project.wheresafe;
+package com.project.wheresafe.utils;
 
 public class BmeData {
     private int data_id;

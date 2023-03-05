@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="100dp"
-    tools:context=".ui.personal.PersonalFragment">
+    tools:context=".controllers.PersonalFragment">
 
         <TableLayout
             android:id="@+id/tblData"

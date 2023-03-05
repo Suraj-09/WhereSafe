@@ -1,4 +1,4 @@
-package com.project.wheresafe.ui.home;
+package com.project.wheresafe.controllers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
-
-import java.util.Objects;
+import com.project.wheresafe.viewmodels.HomeViewModel;
 
 public class HomeFragment extends Fragment {
 

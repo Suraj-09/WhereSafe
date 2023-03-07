@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "150714581738",
+    "project_id": "wheresafe-b5ea8",
+    "storage_bucket": "wheresafe-b5ea8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150714581738:android:b8eda74568dba82a704d93",
+        "android_client_info": {
+          "package_name": "com.project.wheresafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150714581738-usk5hlb7h67o3838ojkj79iv32ffsn4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.wheresafe",
+            "certificate_hash": "f735171a65c6497342d0c8557ef785d6e1360bea"
+          }
+        },
+        {
+          "client_id": "150714581738-vq0khtb7h7l6urgebg6bfoojrp6hq5ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl5yam0AfXj-FcCzQ2uhl0BDjTXp7EM_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150714581738-pe3mr2n514b15v17g0s8e2161e7j6ivd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

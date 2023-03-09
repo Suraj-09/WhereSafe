@@ -1,5 +1,11 @@
 package com.project.wheresafe.utils;
 
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class BmeData {
     private int data_id;
     private double temperature;
@@ -26,6 +32,15 @@ public class BmeData {
         this.gas = gas;
         this.altitude = altitude;
         this.timestamp = timestamp;
+    }
+    
+    public BmeData(Map<String, Object> bmeMap) {
+        this.temperature = (double) bmeMap.get("temperature");
+        this.humidity = (double) bmeMap.get("humidity");
+        this.pressure = (double) bmeMap.get("pressure");
+        this.gas = (double) bmeMap.get("gas");
+        this.altitude = (double) bmeMap.get("altitude");
+        this.timestamp = (String) bmeMap.get("timestamp").toString();
     }
 
     public double getTemperature() {
@@ -74,6 +89,18 @@ public class BmeData {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> bmeMap  = new HashMap<>();
+        bmeMap.put("temperature", this.temperature);
+        bmeMap.put("humidity", this.humidity);
+        bmeMap.put("pressure", this.pressure);
+        bmeMap.put("gas", this.gas);
+        bmeMap.put("altitude", this.altitude);
+        bmeMap.put("timestamp", new Timestamp(new Date()));
+
+        return bmeMap;
     }
 
     @Override

@@ -27,17 +27,16 @@ import com.google.android.material.navigation.NavigationView;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
+import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.utils.BmeData;
 
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private final String DEVICE_NAME = "WhereSafe";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
     private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3;
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -58,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
         bleEspService.run();
 
+
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getAllPersonalData();
+        System.out.println(bmeDataArrayList);
     }
 
     @Override
@@ -66,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navViewBottom = findViewById(R.id.nav_view_bottom);
         NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
         DrawerLayout drawer = binding.drawerLayout;
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

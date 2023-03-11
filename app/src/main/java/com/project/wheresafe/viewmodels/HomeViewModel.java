@@ -32,11 +32,7 @@ public class HomeViewModel extends ViewModel {
         bmeArraylist = new MutableLiveData<>();
         latestBmeData = new MutableLiveData<>();
         mText = new MutableLiveData<>();
-//        mText.setValue("Home :)");
-//        System.out.println("initialized view model");
         attachListener();
-//        init();
-
     }
 
     public void attachListener() {

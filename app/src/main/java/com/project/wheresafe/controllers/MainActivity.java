@@ -29,6 +29,7 @@ import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.FirestoreCallback;
 
 import java.util.ArrayList;
 
@@ -57,10 +58,26 @@ public class MainActivity extends AppCompatActivity {
         BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
         bleEspService.run();
 
-
         FirestoreHelper firestoreHelper = new FirestoreHelper();
-        ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getAllPersonalData();
-        System.out.println(bmeDataArrayList);
+
+        // get latest object stored
+        firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                BmeData bmeData = firestoreHelper.getBmeDataLatest();
+                // do stuff
+            }
+        });
+
+        // Get an Arraylist of BmeData
+        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getBmeDataArrayList();
+                // do stuff
+            }
+        });
+
     }
 
     @Override
@@ -144,4 +161,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public void getPresonalData(ArrayList<BmeData> bmeDataArrayList) {
+//        System.out.println(bmeDataArrayList);
+//    }
 }

@@ -88,7 +88,7 @@ public class FirestoreHelper {
 
         ////
         sensorDataCollection
-                .orderBy("timestamp", Query.Direction.DESCENDING).limit(100)
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(20)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

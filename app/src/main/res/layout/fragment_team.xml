@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_team_id"
+    android:id="@+id/fragment_settings_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controllers.TeamFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -25,6 +25,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/createTeamButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Team"
+            app:layout_constraintTop_toBottomOf="@+id/text_team"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/joinTeamButton"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"/>
+
+        <Button
+            android:id="@+id/joinTeamButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Join Team"
+            app:layout_constraintTop_toBottomOf="@+id/text_team"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/createTeamButton"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

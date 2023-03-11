@@ -21,6 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--    add charts to home page?
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="157dp"
@@ -40,6 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.567"
-        app:layout_constraintStart_toEndOf="@+id/line_chart" />
+        app:layout_constraintStart_toEndOf="@+id/line_chart" /> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

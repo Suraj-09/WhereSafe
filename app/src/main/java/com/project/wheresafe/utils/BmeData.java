@@ -1,7 +1,14 @@
 package com.project.wheresafe.utils;
 
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class BmeData {
-    private int data_id;
+    private int dataId;
+    private String docId;
     private double temperature;
     private double humidity;
     private double pressure;
@@ -18,14 +25,58 @@ public class BmeData {
         this.timestamp = null;
     }
 
-    public BmeData(int data_id, double temperature, double humidity, double pressure, double gas, double altitude, String timestamp) {
-        this.data_id = data_id;
+    public BmeData(int dataId, double temperature, double humidity, double pressure, double gas, double altitude, String timestamp) {
+        this.dataId = dataId;
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
         this.gas = gas;
         this.altitude = altitude;
         this.timestamp = timestamp;
+    }
+    
+    public BmeData(String docId, Map<String, Object> bmeMap) {
+        this.docId = (String) docId;
+        this.temperature = objectToDouble(bmeMap.get("temperature"));
+        this.humidity = objectToDouble(bmeMap.get("humidity"));
+        this.pressure = objectToDouble(bmeMap.get("pressure"));
+        this.gas = objectToDouble(bmeMap.get("gas"));
+        this.altitude = objectToDouble(bmeMap.get("altitude"));
+        this.timestamp = objectToTimestampStr(bmeMap.get("timestamp"));
+    }
+
+    private double objectToDouble(Object o) {
+        if (o instanceof Double) {
+            return (Double) o;
+        }
+
+        return 0;
+    }
+    private String objectToTimestampStr(Object o) {
+        if (o instanceof Timestamp) {
+            return ((Timestamp) o).toDate().toString();
+        }
+
+        return null;
+    }
+
+    public BmeData(BmeData bmeData) {
+        this.dataId = bmeData.getDataId();
+        this.docId = bmeData.getDocId();
+        this.temperature = bmeData.getTemperature();
+        this.humidity = bmeData.getHumidity();
+        this.pressure = bmeData.getPressure();
+        this.gas = bmeData.getGas();
+        this.altitude = bmeData.getAltitude();
+        this.timestamp = bmeData.getTimestamp();
+    }
+
+    public int getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(int dataId) {
+        this.dataId = dataId;
     }
 
     public double getTemperature() {
@@ -76,10 +127,40 @@ public class BmeData {
         this.timestamp = timestamp;
     }
 
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> bmeMap  = new HashMap<>();
+        bmeMap.put("temperature", this.temperature);
+        bmeMap.put("humidity", this.humidity);
+        bmeMap.put("pressure", this.pressure);
+        bmeMap.put("gas", this.gas);
+        bmeMap.put("altitude", this.altitude);
+        bmeMap.put("timestamp", new Timestamp(new Date()));
+
+        return bmeMap;
+    }
+    public String toBetterString() {
+        return "BmeData\n" +
+                "doc_id=" + docId +
+                "\ntemperature=" + temperature +
+                "\nhumidity=" + humidity +
+                "\npressure=" + pressure +
+                "\ngas=" + gas +
+                "\naltitude=" + altitude +
+                "\ntimestamp='" + timestamp;
+    }
+
     @Override
     public String toString() {
         return "BmeData{" +
-                "data_id=" + data_id +
+                "doc_id=" + docId +
                 ", temperature=" + temperature +
                 ", humidity=" + humidity +
                 ", pressure=" + pressure +

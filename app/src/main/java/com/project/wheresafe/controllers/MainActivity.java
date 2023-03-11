@@ -33,20 +33,18 @@ import com.google.android.material.navigation.NavigationView;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
+import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.FirestoreCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-
 
 public class MainActivity extends AppCompatActivity {
     private final String DEVICE_NAME = "WhereSafe";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
     private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3;
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -67,6 +65,28 @@ public class MainActivity extends AppCompatActivity {
         BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
         bleEspService.run();
 
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+
+        // get latest object stored
+        firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                BmeData bmeData = firestoreHelper.getBmeDataLatest();
+                // do stuff
+            }
+        });
+
+        // Get an Arraylist of BmeData
+        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getBmeDataArrayList();
+                // do stuff
+
+                //
+            }
+        });
+
     }
 
     @Override
@@ -75,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navViewBottom = findViewById(R.id.nav_view_bottom);
         NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
         DrawerLayout drawer = binding.drawerLayout;
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -151,4 +170,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public void getPresonalData(ArrayList<BmeData> bmeDataArrayList) {
+//        System.out.println(bmeDataArrayList);
+//    }
 }

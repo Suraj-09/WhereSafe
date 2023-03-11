@@ -5,164 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="80dp"
+    android:paddingHorizontal="10dp"
     tools:context=".controllers.PersonalFragment">
 
-<!--        <TableLayout-->
-<!--            android:id="@+id/tblData"-->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/linearMap">
+
+
+<!--        <Switch-->
+<!--            android:id="@+id/switch1"-->
 <!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="158dp"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_marginEnd="0dp"-->
-<!--            android:paddingHorizontal="10dp"-->
-<!--            android:stretchColumns="*">-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Show map" />-->
 
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+<!--        <com.google.android.gms.maps.MapView-->
+<!--            android:id="@+id/mapView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:accessibilityLiveRegion="polite"-->
+<!--            android:apiKey="AIzaSyDmsIq-0qDu2AAZpBPjjFJ8vG2ewVDEeGk"-->
+<!--            android:contentDescription="Map showing location of the user"-->
+<!--            android:paddingTop="10dp"-->
+<!--            android:visibility="gone" />-->
 
-<!--                        <TextView-->
-<!--                            android:layout_width="157dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Temperature"-->
-<!--                            android:textSize="18sp" />-->
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtTemperature"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
+    </LinearLayout>
 
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/linearMap">
 
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Humidity"-->
-<!--                            android:textSize="18sp" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="80dp">
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtHumidity"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
 
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Pressure"-->
-<!--                            android:textSize="18sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtPressure"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
-
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Gas"-->
-<!--                            android:textSize="18sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtGas"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
-
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Altitude"-->
-<!--                            android:textSize="18sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtAltitude"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
-
-<!--                <TableRow-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Timestamp"-->
-<!--                            android:textSize="18sp" />-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/txtTimestamp"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="[value]"-->
-<!--                            android:textSize="18sp" />-->
-<!--                </TableRow>-->
-
-<!--        </TableLayout>-->
-        <ScrollView
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/temperatureChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-<!--            android:layout_below="@+id/tblData">-->
+            android:layout_height="300dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="80dp">
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/humidityChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
 
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/temperatureChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp" />
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/pressureChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/humidityChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp" />
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/gasChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/pressureChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp" />
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/altitudeChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/gasChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp" />
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/altitudeChart"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp" />
-
-                </LinearLayout>
-        </ScrollView>
+    </LinearLayout>
+</ScrollView>
 
 </RelativeLayout>

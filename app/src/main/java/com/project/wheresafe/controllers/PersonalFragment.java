@@ -1,7 +1,8 @@
 package com.project.wheresafe.controllers;
 
-
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,24 +26,54 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
+import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.PersonalViewModel;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.widget.Toast;
+import androidx.core.app.ActivityCompat;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.maps.SupportMapFragment;
 
-public class PersonalFragment extends Fragment {
+
+
+public class PersonalFragment extends Fragment implements OnMapReadyCallback, LocationListener {
     private FragmentPersonalBinding binding;
     private boolean paused;
     DatabaseHelper dbHelper;
     Timer timer;
     TimerTask timerTask;
+
+//    private MapView mapView;
+//    private GoogleMap googleMap;
+//    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
+//    private LocationManager locationManager;
+//    private Location currentLocation;
+//    private double latitude;
+//    private double longitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +86,27 @@ public class PersonalFragment extends Fragment {
         View root = binding.getRoot();
 
         paused = false;
+
+
 //        runOnTimer();
+
+
+//        mapView = root.findViewById(R.id.mapView);
+//        mapView.onCreate(savedInstanceState);
+//        mapView.getMapAsync(this);
+
+//        locationManager = (LocationManager) requireActivity().getSystemService(Activity.LOCATION_SERVICE);
+//
+//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Permission is not granted, request it from the user
+//            ActivityCompat.requestPermissions(requireActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+//            return null;
+//        }
+//
+//        // Permission is already granted, request location updates
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         return root;
     }
@@ -63,18 +114,65 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        populateCharts(); // populates da charts
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                populateCharts(firestoreHelper.getBmeDataArrayList());
+            }
+        });
+         // populates da charts
+
+
+//        // Initialize the MapView
+//        mapView = (MapView) view.findViewById(R.id.mapView);
+//        mapView.onCreate(savedInstanceState);
+//
+////        getPreciseLocation();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+//        googleMap = map;
+//
+//        // Set up the map
+//        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//        googleMap.getUiSettings().setZoomControlsEnabled(true);
+//
+//        // Add a marker
+//        LatLng location = new LatLng(latitude, longitude);
+//        googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+//        System.out.println("MAP READY");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         paused = true;
+//        mapView.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+//        mapView.onResume();
+//        if (mapView != null) {
+//            mapView.onResume();
+//        }
+
+//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Permission is not granted, request it from the user
+//            ActivityCompat.requestPermissions(requireActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+//            return;
+//        }
+//
+//        // Permission is already granted, request location updates
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+//
+//        getPreciseLocation();
     }
 
     @Override
@@ -83,134 +181,131 @@ public class PersonalFragment extends Fragment {
         binding = null;
     }
 
-    public void runOnTimer() {
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            public void run() {
-                if (!paused) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            updateTextView();
-                        }
-                    });
-                }
-            }
-        };
-        timer.schedule(timerTask, 0, 2000);
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+//        // Update latitude and longitude with the new location
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
+//
+//        // Update the map view with the new location
+//        mapView.getMapAsync(new OnMapReadyCallback() {
+//            @Override
+//            public void onMapReady(@NonNull GoogleMap map) {
+//                googleMap = map;
+//
+//                // Set up the map
+//                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//                googleMap.getUiSettings().setZoomControlsEnabled(true);
+//
+//                // Add a marker
+//                LatLng location = new LatLng(latitude, longitude);
+//                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+//            }
+//        });
     }
 
-//    @SuppressLint("DefaultLocale")
-//    public void updateTextView() {
-//        // get activity before getting TextViews
+
+//    private void getPreciseLocation() {
 //        FragmentActivity mActivity = getActivity();
 //
-//        if (mActivity != null) {
-//            // get data stored in database
-//            BmeData bmeData = dbHelper.getBmeData();
-//            if (bmeData != null) {
-//                String temperatureStr = String.format("%.2f", bmeData.getTemperature());
-//                String humidityStr = String.format("%.2f", bmeData.getHumidity());
-//                String pressureStr = String.format("%.2f", bmeData.getPressure());
-//                String gasStr = String.format("%.2f", bmeData.getGas());
-//                String altitudeStr = String.format("%.2f", bmeData.getAltitude());
-//                String timestamp = bmeData.getTimestamp();
-//
-//                TextView txtTemperature = mActivity.findViewById(R.id.txtTemperature);
-//                txtTemperature.setText(temperatureStr);
-//
-//                TextView txtHumidity = mActivity.findViewById(R.id.txtHumidity);
-//                txtHumidity.setText(humidityStr);
-//
-//                TextView txtPressure = mActivity.findViewById(R.id.txtPressure);
-//                txtPressure.setText(pressureStr);
-//
-//                TextView txtGas = mActivity.findViewById(R.id.txtGas);
-//                txtGas.setText(gasStr);
-//
-//                TextView txtAltitude = mActivity.findViewById(R.id.txtAltitude);
-//                txtAltitude.setText(altitudeStr);
-//
-//                TextView txtTimestamp = mActivity.findViewById(R.id.txtTimestamp);
-//                txtTimestamp.setText(timestamp);
-//            }
+//        // get user's precise location
+//        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mActivity);
+//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Permission is not granted, request it from the user
+//            ActivityCompat.requestPermissions(requireActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
 //        }
+//
+//        // Permission is already granted, request location updates
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+//
 //    }
 
-    public void populateCharts(){
+    public void populateCharts(ArrayList<BmeData> bmeDataArrayList){
         // Populate charts!
         FragmentActivity mActivity = getActivity();
-        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
+//        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
+        LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
         LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
         LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
         LineChart gasChart = mActivity.findViewById(R.id.gasChart);
         LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
 
         // Customize CHART appearance and behavior
-        initializeBarChart(temperatureChart);
+//        initializeBarChart(temperatureChart);
+        initializeLineChart(temperatureChart);
         initializeLineChart(humidityChart);
         initializeLineChart(pressureChart);
         initializeLineChart(gasChart);
         initializeLineChart(altitudeChart);
 
         // create ArrayLists for BarCharts & create Lists for LineCharts
-        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
+//        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
+        List<Entry> temperatureReadings = new ArrayList<>();
         List<Entry> humidityReadings = new ArrayList<>();
         List<Entry> pressureReadings = new ArrayList<>();
         List<Entry> gasReadings = new ArrayList<>();
         List<Entry> altitudeReadings = new ArrayList<>();
 
-        BmeData[] bmeDataArray = new BmeData[] {
-                new BmeData(20.0, 50.0, 1013.0, 100.0, 100.0),
-                new BmeData(25.0, 52.0, 1014.0, 110.0, 105.0),
-                new BmeData(18.0, 58.0, 1019.0, 90.0, 102.0),
-                new BmeData(27.0, 42.0, 1032.0, 95.0, 95.0),
-                new BmeData(19.0, 49.0, 1002.0, 99.0, 99.0),
-                new BmeData(22.0, 55.0, 1010.0, 102.0, 103.0),
-                // add more BmeData objects here
-        };
+//        BmeData[] bmeDataArray = new BmeData[] {
+//                new BmeData(20.0, 50.0, 1013.0, 100.0, 100.0),
+//                new BmeData(25.0, 52.0, 1014.0, 110.0, 105.0),
+//                new BmeData(18.0, 58.0, 1019.0, 90.0, 102.0),
+//                new BmeData(27.0, 42.0, 1032.0, 95.0, 95.0),
+//                new BmeData(19.0, 49.0, 1002.0, 99.0, 99.0),
+//                new BmeData(22.0, 55.0, 1010.0, 102.0, 103.0),
+//                // add more BmeData objects here
+//        };
 
         // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
-        for (int i = 0; i < bmeDataArray.length; i++) {
+        for (int i = 0; i < bmeDataArrayList.size(); i++) {
             // bar chart to plot temperature readings
-            float temperature = (float) bmeDataArray[i].getTemperature();
-            temperatureReadings.add(new BarEntry(i, temperature));
+            float temperature = (float) bmeDataArrayList.get(i).getTemperature();
+            temperatureReadings.add(new Entry(i, temperature));
 
             // line chart to plot humidity readings
-            float humidity = (float) bmeDataArray[i].getHumidity();
+            float humidity = (float) bmeDataArrayList.get(i).getHumidity();
             humidityReadings.add(new Entry(i, humidity));
 
             // line chart to plot pressure readings
-            float pressure = (float) bmeDataArray[i].getPressure();
+            float pressure = (float) bmeDataArrayList.get(i).getPressure();
             pressureReadings.add(new Entry(i, pressure));
 
             // line chart to plot gas readings
-            float gas = (float) bmeDataArray[i].getGas();
+            float gas = (float) bmeDataArrayList.get(i).getGas();
             gasReadings.add(new Entry(i, gas));
 
             // line chart to plot altitude readings
-            float altitude = (float) bmeDataArray[i].getAltitude();
+            float altitude = (float) bmeDataArrayList.get(i).getAltitude();
             altitudeReadings.add(new Entry(i, altitude));
         }
 
         // declare datasets
-        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
+//        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
+        LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, "Temperature Data");
         LineDataSet humidityDataSet = new LineDataSet(humidityReadings, "Humidity Data");
         LineDataSet pressureDataSet = new LineDataSet(pressureReadings, "Pressure Data");
         LineDataSet gasDataSet = new LineDataSet(gasReadings, "Gas Data");
         LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, "Altitude Data");
 
         // for line charts, customizes DATASET appearance and behavior
+        customizeLineDataSet(temperatureDataSet);
         customizeLineDataSet(humidityDataSet);
         customizeLineDataSet(pressureDataSet);
         customizeLineDataSet(gasDataSet);
         customizeLineDataSet(altitudeDataSet);
 
         // set data objects for the charts with their corresponding data sets
-        BarData temperatureData = new BarData(temperatureDataSet);
-        temperatureChart.setData(temperatureData);
-        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
+//        BarData temperatureData = new BarData(temperatureDataSet);
+//        temperatureChart.setData(temperatureData);
+//        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
 
+        LineData temperatureData = new LineData(temperatureDataSet);
+        temperatureChart.setData(temperatureData);
+        temperatureChart.invalidate();
+        
         LineData humidityData = new LineData(humidityDataSet);
         humidityChart.setData(humidityData);
         humidityChart.invalidate();

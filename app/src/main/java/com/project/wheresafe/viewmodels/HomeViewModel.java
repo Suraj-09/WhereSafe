@@ -62,6 +62,7 @@ public class HomeViewModel extends ViewModel {
     public void detachListener() {
         registration.remove();
         Log.d(TAG, "Listener detached");
+
     }
 
     public LiveData<String> getText() {

@@ -85,6 +85,8 @@ public class FirestoreHelper {
     }
 
     public void getAllPersonalSensorData(FirestoreCallback firestoreCallback) {
+
+        ////
         sensorDataCollection
                 .orderBy("timestamp", Query.Direction.DESCENDING).limit(100)
                 .get()
@@ -103,6 +105,9 @@ public class FirestoreHelper {
                         System.out.println("error getting documents");
                     }
                 });
+
+
+        ///
     }
 
 }

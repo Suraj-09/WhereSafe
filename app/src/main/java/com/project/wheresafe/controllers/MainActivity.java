@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResultGet() {
                 ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getBmeDataArrayList();
                 // do stuff
+
+                //
             }
         });
 

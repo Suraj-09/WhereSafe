@@ -25,7 +25,6 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<String> mText;
     private final MutableLiveData<ArrayList<BmeData>> bmeArraylist;
     private final MutableLiveData<BmeData> latestBmeData;
-
     ListenerRegistration registration;
 
     public HomeViewModel() {

@@ -5,24 +5,30 @@
     android:id="@+id/fragment_personal_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="100dp"
+    android:paddingHorizontal="10dp"
+    android:layout_marginTop="60dp"
     tools:context=".ui.personal.PersonalFragment">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp">
 
         <TableLayout
             android:id="@+id/tblData"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:paddingHorizontal="10dp">
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true">
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="157dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Temperature"
+                            android:text="Temperature (°C): "
                             android:textSize="18sp" />
 
                         <TextView
@@ -35,12 +41,12 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Humidity"
+                            android:text="Humidity (%): "
                             android:textSize="18sp" />
 
                         <TextView
@@ -53,12 +59,12 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pressure"
+                            android:text="Pressure (hPa): "
                             android:textSize="18sp" />
 
                         <TextView
@@ -71,12 +77,12 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gas"
+                            android:text="Gas (Ω): "
                             android:textSize="18sp" />
 
                         <TextView
@@ -89,12 +95,12 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Altitude"
+                            android:text="Altitude (m): "
                             android:textSize="18sp" />
 
                         <TextView
@@ -107,7 +113,8 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -123,4 +130,18 @@
                 </TableRow>
 
         </TableLayout>
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/tblData"
+                android:paddingTop="10dp"
+                android:accessibilityLiveRegion="polite"
+                android:apiKey="AIzaSyDmsIq-0qDu2AAZpBPjjFJ8vG2ewVDEeGk"
+                android:contentDescription="Map showing location of the user"/>
+    </LinearLayout>
+
 </RelativeLayout>
+
+

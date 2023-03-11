@@ -19,17 +19,22 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.GattConfig;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
 
 public class BleEspService {
 
+    private static final String TAG = "BleEspService";
     private final String DEVICE_NAME = "WhereSafe";
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
@@ -51,7 +56,7 @@ public class BleEspService {
     BluetoothLeScanner scanner;
     ScanFilter scanFilter;
     ScanSettings scanSettings;
-
+    FirestoreHelper firestoreHelper;
     public BleEspService(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
@@ -59,6 +64,7 @@ public class BleEspService {
 
     public void run() {
         dbHelper = new DatabaseHelper(context);
+        firestoreHelper = new FirestoreHelper();
         BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -113,7 +119,16 @@ public class BleEspService {
 
                         @Override
                         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+
+//                            Log.d(TAG, "characteristic changed at " + LocalDateTime.now().toString() );
                             readCharacteristics(characteristic);
+                            //                            System.out.println(characteristic);
+//                            System.out.println(LocalDateTime.now().toString());
+
+                            //                            readCharacteristics(characteristic);
+//                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//                            LocalDateTime now = LocalDateTime.now();
+//                            System.out.println("readCharacteristics: " + now.toString());
                         }
                     });
                 }
@@ -142,6 +157,7 @@ public class BleEspService {
     }
 
     private void readCharacteristics(BluetoothGattCharacteristic characteristic) {
+
         byte[] data = characteristic.getValue();
         String dataStr = new String(data);
 
@@ -153,9 +169,10 @@ public class BleEspService {
         } else {
             gas = (Double.parseDouble(arrStr[1]) / 100.0);
             altitude = (Double.parseDouble(arrStr[2]) / 100.0);
-
+            Log.d(TAG, "BME680 Data received");
             // second part of data received, store object
-            storeData();
+//            storeData();
+            storeFirestore();
         }
     }
 
@@ -164,8 +181,21 @@ public class BleEspService {
             @Override
             public void run() {
                 BmeData bmeData = new BmeData(temperature, humidity, pressure, gas, altitude);
-                dbHelper.insertBmeData(bmeData);
+//                dbHelper.insertBmeData(bmeData);
+
+//                System.out.println(bmeData);
+
+
+                FirestoreHelper firestoreHelper = new FirestoreHelper();
+                System.out.println("store");
+                firestoreHelper.addBmeData(bmeData);
             }
         });
+    }
+
+    private void storeFirestore() {
+        BmeData bmeData = new BmeData(temperature, humidity, pressure, gas, altitude);
+        Log.d(TAG, bmeData.toString());
+        firestoreHelper.addBmeData(bmeData);
     }
 }

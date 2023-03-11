@@ -3,35 +3,35 @@ package com.project.wheresafe.models;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.FirestoreConfig;
+import com.project.wheresafe.utils.FirestoreData;
+import com.project.wheresafe.viewmodels.HomeViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FirestoreHelper {
-    private static final String TAG = "FirestoreHelper";
+    private static final String TAG = "FirestormHelper";
     FirebaseFirestore firebaseFirestore;
     CollectionReference usersCollection;
     DocumentReference userDocument;
     CollectionReference sensorDataCollection;
+    FirestoreData firestoreData;
+    HomeViewModel homeViewModel;
 
     public FirestoreHelper() {
         this.firebaseFirestore = FirebaseFirestore.getInstance();
@@ -39,73 +39,70 @@ public class FirestoreHelper {
         this.userDocument = usersCollection.document("25BcSPUgtlXysuAWJVvWqLvHjjm1");
         this.sensorDataCollection = userDocument.collection(FirestoreConfig.COLLECTION_SENSOR_DATA);
 
-        System.out.println(firebaseFirestore.getApp());
-        System.out.println(usersCollection.getId());
-        System.out.println(userDocument.getId());
-        System.out.println(sensorDataCollection.getId());
+        firestoreData = new FirestoreData();
+    }
 
+    public CollectionReference getSensorDataCollection() {
+        return sensorDataCollection;
+    }
+
+    public ArrayList<BmeData> getBmeDataArrayList() {
+        return firestoreData.getBmeDataArrayList();
+    }
+
+    public BmeData getBmeDataLatest() {
+        return firestoreData.getBmeDataLatest();
     }
 
     public void addBmeData(BmeData bmeData) {
-        Map<String, Object> data = bmeData.toMap();
+        Map<String, Object> bmeMap = bmeData.toMap();
 
-        sensorDataCollection.add(data)
-            .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
-            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        sensorDataCollection.add(bmeMap)
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
-    public BmeData getLatest() {
-        return null;
-    }
-
-    interface PersonalDataCallback {
-        void isPersonalDataExist(boolean exist);
-    }
-    // TODO: create callback function for getAllPersonalData()
-    public ArrayList<BmeData> getAllPersonalData() {
-        ArrayList<BmeData> bmeDataArrayList = new ArrayList<>();
+    public void getLatestPersonalSensorData(FirestoreCallback firestoreCallback) {
         sensorDataCollection
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        ArrayList<BmeData> bmeDataArrayList = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            bmeDataArrayList.add(new BmeData(document.getData()));
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                        };
+                            bmeDataArrayList.add(new BmeData(document.getId(), document.getData()));
+                        }
+
+                        firestoreData.setBmeDataLatest(bmeDataArrayList.get(0));
+                        firestoreCallback.onResultGet();
+
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                         System.out.println("error getting documents");
                     }
-                }
-            });
-
-        return bmeDataArrayList;
+                });
     }
 
-    private void addUserListener() {
-        userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+    public void getAllPersonalSensorData(FirestoreCallback firestoreCallback) {
+        sensorDataCollection
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(100)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<BmeData> bmeDataArrayList = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            bmeDataArrayList.add(new BmeData(document.getId(), document.getData()));
+                        }
 
-                String source = snapshot != null && snapshot.getMetadata().hasPendingWrites()
-                        ? "Local" : "Server";
+                        firestoreData.setBmeDataArrayList(bmeDataArrayList);
+                        firestoreCallback.onResultGet();
 
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, source + " data: " + snapshot.getData());
-                } else {
-                    Log.d(TAG, source + " data: null");
-                }
-            }
-        });
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        System.out.println("error getting documents");
+                    }
+                });
     }
-
-
 
 }

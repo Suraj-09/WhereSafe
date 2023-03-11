@@ -7,129 +7,129 @@
     android:layout_marginTop="80dp"
     tools:context=".controllers.PersonalFragment">
 
-        <TableLayout
-            android:id="@+id/tblData"
-            android:layout_width="match_parent"
-            android:layout_height="158dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="0dp"
-            android:paddingHorizontal="10dp"
-            android:stretchColumns="*">
+<!--        <TableLayout-->
+<!--            android:id="@+id/tblData"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="158dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginEnd="0dp"-->
+<!--            android:paddingHorizontal="10dp"-->
+<!--            android:stretchColumns="*">-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="157dp"
-                            android:layout_height="wrap_content"
-                            android:text="Temperature"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="157dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Temperature"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtTemperature"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtTemperature"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Humidity"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Humidity"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtHumidity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtHumidity"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pressure"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Pressure"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtPressure"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtPressure"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Gas"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Gas"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtGas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtGas"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Altitude"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Altitude"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtAltitude"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtAltitude"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <TableRow-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Timestamp"
-                            android:textSize="18sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Timestamp"-->
+<!--                            android:textSize="18sp" />-->
 
-                        <TextView
-                            android:id="@+id/txtTimestamp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="[value]"
-                            android:textSize="18sp" />
-                </TableRow>
+<!--                        <TextView-->
+<!--                            android:id="@+id/txtTimestamp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="[value]"-->
+<!--                            android:textSize="18sp" />-->
+<!--                </TableRow>-->
 
-        </TableLayout>
+<!--        </TableLayout>-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:layout_below="@+id/tblData">
+            android:fillViewport="true">
+<!--            android:layout_below="@+id/tblData">-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

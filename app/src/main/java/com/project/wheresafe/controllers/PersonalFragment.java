@@ -55,7 +55,7 @@ public class PersonalFragment extends Fragment {
         View root = binding.getRoot();
 
         paused = false;
-        runOnTimer();
+//        runOnTimer();
 
         return root;
     }
@@ -91,7 +91,7 @@ public class PersonalFragment extends Fragment {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            updateTextView();
+//                            updateTextView();
                         }
                     });
                 }
@@ -100,42 +100,42 @@ public class PersonalFragment extends Fragment {
         timer.schedule(timerTask, 0, 2000);
     }
 
-    @SuppressLint("DefaultLocale")
-    public void updateTextView() {
-        // get activity before getting TextViews
-        FragmentActivity mActivity = getActivity();
-
-        if (mActivity != null) {
-            // get data stored in database
-            BmeData bmeData = dbHelper.getBmeData();
-            if (bmeData != null) {
-                String temperatureStr = String.format("%.2f", bmeData.getTemperature());
-                String humidityStr = String.format("%.2f", bmeData.getHumidity());
-                String pressureStr = String.format("%.2f", bmeData.getPressure());
-                String gasStr = String.format("%.2f", bmeData.getGas());
-                String altitudeStr = String.format("%.2f", bmeData.getAltitude());
-                String timestamp = bmeData.getTimestamp();
-
-                TextView txtTemperature = mActivity.findViewById(R.id.txtTemperature);
-                txtTemperature.setText(temperatureStr);
-
-                TextView txtHumidity = mActivity.findViewById(R.id.txtHumidity);
-                txtHumidity.setText(humidityStr);
-
-                TextView txtPressure = mActivity.findViewById(R.id.txtPressure);
-                txtPressure.setText(pressureStr);
-
-                TextView txtGas = mActivity.findViewById(R.id.txtGas);
-                txtGas.setText(gasStr);
-
-                TextView txtAltitude = mActivity.findViewById(R.id.txtAltitude);
-                txtAltitude.setText(altitudeStr);
-
-                TextView txtTimestamp = mActivity.findViewById(R.id.txtTimestamp);
-                txtTimestamp.setText(timestamp);
-            }
-        }
-    }
+//    @SuppressLint("DefaultLocale")
+//    public void updateTextView() {
+//        // get activity before getting TextViews
+//        FragmentActivity mActivity = getActivity();
+//
+//        if (mActivity != null) {
+//            // get data stored in database
+//            BmeData bmeData = dbHelper.getBmeData();
+//            if (bmeData != null) {
+//                String temperatureStr = String.format("%.2f", bmeData.getTemperature());
+//                String humidityStr = String.format("%.2f", bmeData.getHumidity());
+//                String pressureStr = String.format("%.2f", bmeData.getPressure());
+//                String gasStr = String.format("%.2f", bmeData.getGas());
+//                String altitudeStr = String.format("%.2f", bmeData.getAltitude());
+//                String timestamp = bmeData.getTimestamp();
+//
+//                TextView txtTemperature = mActivity.findViewById(R.id.txtTemperature);
+//                txtTemperature.setText(temperatureStr);
+//
+//                TextView txtHumidity = mActivity.findViewById(R.id.txtHumidity);
+//                txtHumidity.setText(humidityStr);
+//
+//                TextView txtPressure = mActivity.findViewById(R.id.txtPressure);
+//                txtPressure.setText(pressureStr);
+//
+//                TextView txtGas = mActivity.findViewById(R.id.txtGas);
+//                txtGas.setText(gasStr);
+//
+//                TextView txtAltitude = mActivity.findViewById(R.id.txtAltitude);
+//                txtAltitude.setText(altitudeStr);
+//
+//                TextView txtTimestamp = mActivity.findViewById(R.id.txtTimestamp);
+//                txtTimestamp.setText(timestamp);
+//            }
+//        }
+//    }
 
     public void populateCharts(){
         // Populate charts!

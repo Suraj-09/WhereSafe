@@ -47,6 +47,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-auth'
 
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -66,10 +67,10 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'androidx.annotation:annotation:1.6.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+//    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
 
 
     androidTestImplementation 'androidx.test:rules:1.5.0'

@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,11 +22,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,12 +30,10 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
-import com.project.wheresafe.ui.login.LoginActivity;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String DEVICE_NAME = "WhereSafe";
@@ -60,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
+
         } else {
             System.out.println(currentUser.getEmail());
+            Toast.makeText(MainActivity.this, "Welcome, " + currentUser.getEmail() , Toast.LENGTH_SHORT).show();
         }
 
         setContentView(binding.getRoot());
@@ -105,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         BottomNavigationView navViewBottom = findViewById(R.id.nav_view_bottom);
         NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
         DrawerLayout drawer = binding.drawerLayout;
@@ -121,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         NavigationUI.setupWithNavController(navViewBottom, navController);
     }
+
+
+    @Override
+    protected void onStop() {
+        FirebaseAuth.getInstance().signOut();
+        super.onStop();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

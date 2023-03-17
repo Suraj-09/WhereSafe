@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -23,11 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.wheresafe.R;
-import com.project.wheresafe.ui.login.LoginViewModel;
-import com.project.wheresafe.ui.login.LoginViewModelFactory;
+import com.project.wheresafe.controllers.SignUpActivity;
 import com.project.wheresafe.databinding.ActivityLoginBinding;
 
-public class LoginActivity extends AppCompatActivity {
+public class Login_Activity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
@@ -41,6 +41,15 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+        Button btnSignUp = findViewById(R.id.go_sign_up);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;

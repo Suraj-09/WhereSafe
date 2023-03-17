@@ -23,4 +23,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string name="error_weak_password">"The given password is invalid. [ Password should be at least 6 characters ]"</string>
+    <string name="error_invalid_email">"The email address is badly formatted."</string>
+    <string name="error_user_exists">"User already exists"</string>
 </resources>

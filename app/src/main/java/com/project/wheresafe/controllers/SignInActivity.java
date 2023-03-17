@@ -16,50 +16,52 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.R;
 
-public class SignUpActivity extends AppCompatActivity {
-    final private String TAG = "SignUpActivity";
+public class SignInActivity extends AppCompatActivity {
+    final private String TAG = "SignInActivity";
     EditText email, password;
-    Button btnSignUp, btnGoToSignIn;
-    FirebaseAuth mAuth;
 
+    Button btnSignIn, btnGoToSignUp;
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email_sign_up);
-        password = findViewById(R.id.password_sign_up);
-        btnSignUp = findViewById(R.id.sign_up_button);
-        btnGoToSignIn = findViewById(R.id.go_to_sign_in);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        email = findViewById(R.id.email_sign_in);
+        password = findViewById(R.id.password_sign_in);
+
+        btnSignIn = findViewById(R.id.sign_in_button);
+        btnGoToSignUp = findViewById(R.id.go_to_sign_up);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp();
+                SignIn();
             }
         });
 
-        btnGoToSignIn.setOnClickListener(new View.OnClickListener() {
+        btnGoToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotToSignIn();
+                goToSignUp();
             }
         });
-
     }
 
-    private void gotToSignIn() {
-        Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+    private void goToSignUp() {
+        Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
     }
 
-    private void signUp() {
+    private void SignIn() {
         String user_email = email.getText().toString();
         String user_password = password.getText().toString();
 
@@ -70,38 +72,31 @@ public class SignUpActivity extends AppCompatActivity {
             password.setError("Password cannot be empty");
             password.requestFocus();
         } else {
-            mAuth.createUserWithEmailAndPassword(user_email, user_password)
+            mAuth.signInWithEmailAndPassword(user_email, user_password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
+                                Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 goToMainActivity();
-//                            updateUI(user);
                             } else {
                                 // handle the errors from invalid credentials
                                 try {
                                     throw task.getException();
-                                } catch (FirebaseAuthWeakPasswordException e) {
-                                    password.setError(task.getException().getMessage());
+                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                    password.setError("Invalid password");
                                     password.requestFocus();
-                                } catch (FirebaseAuthUserCollisionException e) {
-                                    email.setError(task.getException().getMessage());
+                                } catch (FirebaseAuthInvalidUserException e) {
+                                    email.setError("Invalid email.");
                                     email.requestFocus();
-                                } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    email.setError(task.getException().getMessage());
-                                    email.requestFocus();
-                                } catch (Exception e) {
+                                } catch(Exception e) {
                                     Log.e(TAG, e.getMessage());
                                 }
-
                             }
                         }
                     });
         }
-
 
     }
 

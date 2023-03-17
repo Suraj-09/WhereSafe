@@ -59,6 +59,7 @@ public class SignInActivity extends AppCompatActivity {
     private void goToSignUp() {
         Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void SignIn() {
@@ -103,5 +104,6 @@ public class SignInActivity extends AppCompatActivity {
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

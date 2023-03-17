@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,15 +38,32 @@ public class FirestoreHelper {
     public DocumentReference userDocument;
     public CollectionReference sensorDataCollection;
     public FirestoreData firestoreData;
+    private FirebaseAuth firebaseAuth;
 
     public FirestoreHelper() {
         this.firebaseFirestore = FirebaseFirestore.getInstance();
+        this.firebaseAuth = FirebaseAuth.getInstance();
         this.usersCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_USERS);
-        this.userDocument = usersCollection.document(USER_ID);
-        this.sensorDataCollection = userDocument.collection(FirestoreConfig.COLLECTION_SENSOR_DATA);
         this.teamsCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_TEAMS);
+        this.firestoreData = new FirestoreData();
 
-        firestoreData = new FirestoreData();
+        if (firebaseAuth.getCurrentUser() != null) {
+            initUserCollection();
+        }
+    }
+
+//    public FirestoreHelper(boolean newUser) {
+//        this.firebaseFirestore = FirebaseFirestore.getInstance();
+//        this.firebaseAuth = FirebaseAuth.getInstance();
+//        this.usersCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_USERS);
+//        this.teamsCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_TEAMS);
+//
+//        firestoreData = new FirestoreData();
+//    }
+
+    private void initUserCollection() {
+        this.userDocument = usersCollection.document(firebaseAuth.getCurrentUser().getUid());
+        this.sensorDataCollection = userDocument.collection(FirestoreConfig.COLLECTION_SENSOR_DATA);
     }
 
     public CollectionReference getSensorDataCollection() {
@@ -61,6 +80,26 @@ public class FirestoreHelper {
 
     public ArrayList<String> getTeamCodeArrayList() {
         return firestoreData.getTeamCodeArraylist();
+    }
+
+    public void addUser(FirebaseUser user, String name) {
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("name", name);
+
+        usersCollection.document(user.getUid())
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+                initUserCollection();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
     }
 
     public void addBmeData(BmeData bmeData) {
@@ -185,7 +224,7 @@ public class FirestoreHelper {
     public void createTeam(String teamName, String teamCode) {
         Map<String, Object> teamDoc = new HashMap<>();
         teamDoc.put("team_name", teamName);
-        teamDoc.put("members", Arrays.asList(USER_ID));
+        teamDoc.put("members", Arrays.asList(userDocument));
 
         teamsCollection.document(teamCode).set(teamDoc).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -219,7 +258,9 @@ public class FirestoreHelper {
     }
 
     public void addMember(String teamCode) {
-        teamsCollection.document(teamCode).update("members", FieldValue.arrayUnion(userDocument)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        teamsCollection.document(teamCode)
+                .update("members", FieldValue.arrayUnion(userDocument))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d(TAG, "DocumentSnapshot successfully updated!");

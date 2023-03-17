@@ -20,10 +20,11 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.R;
+import com.project.wheresafe.models.FirestoreHelper;
 
 public class SignUpActivity extends AppCompatActivity {
     final private String TAG = "SignUpActivity";
-    EditText email, password;
+    EditText email, password, name;
     Button btnSignUp, btnGoToSignIn;
     FirebaseAuth mAuth;
 
@@ -36,6 +37,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         email = findViewById(R.id.email_sign_up);
         password = findViewById(R.id.password_sign_up);
+        name = findViewById(R.id.name_sign_up);
+
         btnSignUp = findViewById(R.id.sign_up_button);
         btnGoToSignIn = findViewById(R.id.go_to_sign_in);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -57,13 +60,18 @@ public class SignUpActivity extends AppCompatActivity {
     private void gotToSignIn() {
         Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void signUp() {
+        String user_name = name.getText().toString();
         String user_email = email.getText().toString();
         String user_password = password.getText().toString();
 
-        if (user_email.isEmpty()) {
+        if (user_name.isEmpty()) {
+            name.setError("Name cannot be empty");
+            name.requestFocus();
+        } else if (user_email.isEmpty()) {
             email.setError("Email cannot be empty");
             email.requestFocus();
         } else if (user_password.isEmpty()) {
@@ -78,8 +86,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                goToMainActivity();
-//                            updateUI(user);
+                                if (user != null) {
+                                    FirestoreHelper firestoreHelper = new FirestoreHelper();
+                                    firestoreHelper.addUser(user, user_name);
+                                    goToMainActivity();
+                                }
                             } else {
                                 // handle the errors from invalid credentials
                                 try {
@@ -108,5 +119,6 @@ public class SignUpActivity extends AppCompatActivity {
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

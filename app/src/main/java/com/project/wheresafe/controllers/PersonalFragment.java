@@ -118,6 +118,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {
+
                 populateCharts(firestoreHelper.getBmeDataArrayList());
             }
         });
@@ -224,6 +225,10 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //    }
 
     public void populateCharts(ArrayList<BmeData> bmeDataArrayList){
+        if (bmeDataArrayList.isEmpty()) {
+            return;
+        }
+
         // Populate charts!
         FragmentActivity mActivity = getActivity();
 //        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);

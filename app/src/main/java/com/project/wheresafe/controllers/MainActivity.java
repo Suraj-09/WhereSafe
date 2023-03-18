@@ -54,47 +54,21 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             initFlag = false;
-            Intent intent = new Intent(this, SignInActivity.class);
-            startActivity(intent);
-            finish();
+            goToSignIn();
         } else {
             init();
         }
 
+    }
 
-
-
-
-
-
-//        FirestoreHelper firestoreHelper = new FirestoreHelper();
-//
-//        // get latest object stored
-//        firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                BmeData bmeData = firestoreHelper.getBmeDataLatest();
-//                // do stuff
-//            }
-//        });
-//
-//        // Get an Arraylist of BmeData
-//        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getBmeDataArrayList();
-//                // do stuff
-//
-//                //
-//            }
-//        });
-
+    private void goToSignIn() {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void init() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        System.out.println(currentUser.getEmail());
-//        Toast.makeText(MainActivity.this, "Welcome, " + currentUser.getEmail() , Toast.LENGTH_SHORT).show();
 
         checkBluetooth();
         checkLocation();
@@ -123,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
             BottomNavigationView navViewBottom = findViewById(R.id.nav_view_bottom);
             NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
             DrawerLayout drawer = binding.drawerLayout;
+
+
+            navigationView.getMenu().findItem(R.id.sign_out).setOnMenuItemClickListener(menuItem -> {
+                FirebaseAuth.getInstance().signOut();
+                goToSignIn();
+                return true;
+            });
 
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
@@ -155,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-            return (true);
-        }
+//        if (item.getItemId() == R.id.action_settings) {
+//            Intent intent = getIntent();
+//            finish();
+//            startActivity(intent);
+//            return (true);
+//        }
         return super.onOptionsItemSelected(item);
     }
 

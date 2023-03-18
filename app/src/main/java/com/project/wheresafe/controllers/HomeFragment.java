@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
             @Override
             public void onChanged(BmeData bmeData) {
+                System.out.println(bmeData);
                 circularProgressBar.setProgress((float) bmeData.getHumidity());
                 String humidityText = bmeData.getHumidity() + "%";
                 humidityValue.setText(humidityText);

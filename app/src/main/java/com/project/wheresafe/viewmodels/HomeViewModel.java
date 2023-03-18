@@ -48,11 +48,15 @@ public class HomeViewModel extends ViewModel {
                 if (snapshot != null) {
                     int lastIdx = snapshot.getDocumentChanges().size() - 1;
 
-                    DocumentSnapshot latestDoc = snapshot.getDocumentChanges().get(lastIdx).getDocument();
-                    Log.d(TAG, snapshot.getDocumentChanges().get(lastIdx).getDocument().getData().toString());
+                    System.out.println(lastIdx);
+                    if (lastIdx >= 0) {
+                        DocumentSnapshot latestDoc = snapshot.getDocumentChanges().get(lastIdx).getDocument();
+                        Log.d(TAG, snapshot.getDocumentChanges().get(lastIdx).getDocument().getData().toString());
 
-                    latestBmeData.setValue(new BmeData(latestDoc.getId(), Objects.requireNonNull(latestDoc.getData())));
-                    mText.setValue(Objects.requireNonNull(latestBmeData.getValue()).toBetterString());
+                        latestBmeData.setValue(new BmeData(latestDoc.getId(), Objects.requireNonNull(latestDoc.getData())));
+                        mText.setValue(Objects.requireNonNull(latestBmeData.getValue()).toBetterString());
+                    }
+
                 }
 
             };

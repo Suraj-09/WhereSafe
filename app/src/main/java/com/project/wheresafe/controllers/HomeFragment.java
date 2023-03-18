@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     HomeViewModel homeViewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
@@ -50,7 +52,7 @@ public class HomeFragment extends Fragment {
 
         int humidityRandomNumber = 75;
         circularProgressBar.setProgress(humidityRandomNumber); // set humidity to 75%
-        humidityValue.setText(humidityRandomNumber + "%");
+        humidityValue.setText("75 %");
 
         ArcGauge temperatureGauge = binding.temperatureGauge;
         temperatureGauge.setValue(30); // set temperature to 30 degrees Celsius
@@ -60,13 +62,23 @@ public class HomeFragment extends Fragment {
         pressureGauge.setValue(800); // set pressure to 800 hPa
         setPressureGaugeRange(pressureGauge); // set color ranges
 
-        // final TextView textView = binding.textHome;
-       // homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
+            @Override
+            public void onChanged(BmeData bmeData) {
+                circularProgressBar.setProgress((float) bmeData.getHumidity());
+                String humidityText = bmeData.getHumidity() + "%";
+                humidityValue.setText(humidityText);
+
+                temperatureGauge.setValue(bmeData.getTemperature());
+                pressureGauge.setValue(bmeData.getPressure());
+            }
+        };
+
+        homeViewModel.getLatestBmeData().observe(getViewLifecycleOwner(), latestBmeDataObserver);
 
         return root;
 
     }
-
 
     private void setTemperatureGaugeRange(ArcGauge temperatureGauge) {
         // set color ranges to gauge

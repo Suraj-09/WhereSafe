@@ -15,43 +15,44 @@
         android:id="@+id/email_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="410dp"
+        android:layout_marginBottom="16dp"
         android:autofillHints="@string/prompt_email"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/password_sign_in"
+        app:layout_constraintEnd_toEndOf="@+id/password_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/password_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <Button
         android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="0dp"
         android:layout_gravity="start"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="86dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="88dp"
         android:text="Sign In"
-        app:layout_constraintEnd_toEndOf="@+id/go_to_sign_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintStart_toStartOf="@+id/password_sign_in"
         app:layout_constraintTop_toBottomOf="@+id/password_sign_in" />
 
     <EditText
         android:id="@+id/password_sign_in"
-        android:layout_width="0dp"
+        android:layout_width="331dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
         android:autofillHints="@string/prompt_password"
         android:hint="@string/prompt_password"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_sign_in" />
 
     <ProgressBar
@@ -65,37 +66,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/go_to_sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginEnd="6dp"
-        android:text="Sign Up"
-        app:layout_constraintBaseline_toBaselineOf="@+id/txtNoAccount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtNoAccount" />
 
     <TextView
-        android:id="@+id/txtNoAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="61dp"
-        android:text="Don't have an account?"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/go_to_sign_up"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+        android:id="@+id/go_to_sign_up"
+        android:layout_width="76dp"
+        android:layout_height="36dp"
+        android:layout_gravity="start"
+        android:text="Sign Up"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="264dp"
+        tools:layout_editor_absoluteY="597dp" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="139dp"
-        android:layout_height="125dp"
-        android:layout_marginBottom="68dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="115dp"
+        android:layout_marginEnd="118dp"
+        android:layout_marginBottom="75dp"
         app:layout_constraintBottom_toTopOf="@+id/email_sign_in"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark"
-        tools:layout_editor_absoluteX="122dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="79dp"
+        android:layout_marginEnd="94dp"
+        android:text="Forgot password?"
+        app:layout_constraintEnd_toStartOf="@+id/go_to_sign_up"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="603dp" />
 
 
     <!--    <com.google.android.gms.common.SignInButton-->

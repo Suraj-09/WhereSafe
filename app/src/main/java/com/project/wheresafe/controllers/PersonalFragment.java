@@ -37,6 +37,7 @@ import com.project.wheresafe.viewmodels.PersonalViewModel;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -229,6 +230,13 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
             return;
         }
 
+        bmeDataArrayList.sort(new Comparator<BmeData>() {
+            @Override
+            public int compare(BmeData o1, BmeData o2) {
+                return o1.getTimestamp().compareTo(o2.getTimestamp());
+            }
+        });
+
         // Populate charts!
         FragmentActivity mActivity = getActivity();
 //        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
@@ -253,16 +261,6 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         List<Entry> pressureReadings = new ArrayList<>();
         List<Entry> gasReadings = new ArrayList<>();
         List<Entry> altitudeReadings = new ArrayList<>();
-
-//        BmeData[] bmeDataArray = new BmeData[] {
-//                new BmeData(20.0, 50.0, 1013.0, 100.0, 100.0),
-//                new BmeData(25.0, 52.0, 1014.0, 110.0, 105.0),
-//                new BmeData(18.0, 58.0, 1019.0, 90.0, 102.0),
-//                new BmeData(27.0, 42.0, 1032.0, 95.0, 95.0),
-//                new BmeData(19.0, 49.0, 1002.0, 99.0, 99.0),
-//                new BmeData(22.0, 55.0, 1010.0, 102.0, 103.0),
-//                // add more BmeData objects here
-//        };
 
         // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
         for (int i = 0; i < bmeDataArrayList.size(); i++) {

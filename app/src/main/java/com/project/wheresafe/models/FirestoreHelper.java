@@ -52,6 +52,9 @@ public class FirestoreHelper {
         }
     }
 
+    public FirestoreData getFirestoreData() {
+        return firestoreData;
+    }
 //    public FirestoreHelper(boolean newUser) {
 //        this.firebaseFirestore = FirebaseFirestore.getInstance();
 //        this.firebaseAuth = FirebaseAuth.getInstance();
@@ -98,6 +101,32 @@ public class FirestoreHelper {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(TAG, "Error writing document", e);
+            }
+        });
+    }
+
+    public void getUser(FirestoreCallback firestoreCallback) {
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        if (document.getData().containsKey("name")) {
+                            firestoreData.setName(document.getData().get("name").toString());
+                        }
+
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                        firestoreCallback.onResultGet();
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
     }

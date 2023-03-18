@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,10 +25,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
@@ -36,6 +42,7 @@ import com.project.wheresafe.utils.FirestoreCallback;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    final private String TAG = "MainActivity";
     private final String DEVICE_NAME = "WhereSafe";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     private boolean initFlag;
     @Override
@@ -51,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             initFlag = false;
             goToSignIn();
@@ -68,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         checkBluetooth();
@@ -81,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        setUserInfo();
 
         initFlag = true;
     }
@@ -119,6 +132,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setUserInfo() {
+        NavigationView navigationView = binding.navView;
+        View headerView = navigationView.getHeaderView(0);
+
+        TextView txtName = headerView.findViewById(R.id.drawerName);
+        TextView txtEmail = headerView.findViewById(R.id.drawerEmail);
+
+        if (currentUser.getDisplayName() != null) {
+            System.out.println("**************************");
+            System.out.println(currentUser.getDisplayName().toString());
+            System.out.println("**************************");
+            txtName.setText(currentUser.getDisplayName());
+            txtEmail.setText(currentUser.getEmail());
+        } else {
+            setDisplayName();
+        }
+
+
+    }
+
+    private void setDisplayName() {
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.getUser(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                String name = firestoreHelper.getFirestoreData().getName();
+
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build();
+
+                    currentUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "User profile updated.");
+                                        setUserInfo();
+                                    }
+                                }
+                            });
+            }
+        });
+    }
 
     @Override
     protected void onStop() {

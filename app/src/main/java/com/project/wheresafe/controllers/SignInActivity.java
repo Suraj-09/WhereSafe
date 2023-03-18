@@ -3,12 +3,16 @@ package com.project.wheresafe.controllers;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
     final private String TAG = "SignInActivity";
     EditText email, password;
 
-    Button btnSignIn, btnGoToSignUp;
+    Button btnSignIn, btnGoToSignUp, btnForgotPassword;
     FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class SignInActivity extends AppCompatActivity {
 
         btnSignIn = findViewById(R.id.btnSignIn);
         btnGoToSignUp = findViewById(R.id.btnGoSignUp);
+        btnForgotPassword = findViewById(R.id.btnForgotPassword);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,12 +56,13 @@ public class SignInActivity extends AppCompatActivity {
                 goToSignUp();
             }
         });
-    }
 
-    private void goToSignUp() {
-        Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-        startActivity(intent);
-        finish();
+        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetPassword();
+            }
+        });
     }
 
     private void SignIn() {
@@ -98,9 +104,54 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
+
+    private void goToSignUp() {
+        Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void resetPassword() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Forgot Password?");
+        builder.setMessage("Would you like to reset your password? Please enter your email address");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String emailAddress = input.getText().toString().trim();
+
+                mAuth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(SignInActivity.this, "Email sent." , Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "Email sent.");
+                                } else {
+                                    Toast.makeText(SignInActivity.this, "Error email could not be sent" , Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

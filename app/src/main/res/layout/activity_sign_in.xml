@@ -15,44 +15,60 @@
         android:id="@+id/email_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="39dp"
         android:autofillHints="@string/prompt_email"
-        android:hint="@string/prompt_email"
+        android:hint="example@email.com"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintBottom_toTopOf="@+id/password_sign_in"
-        app:layout_constraintEnd_toEndOf="@+id/password_sign_in"
-        app:layout_constraintStart_toStartOf="@+id/password_sign_in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="2dp"
+        android:text="Email"
+        android:textColor="#25CF41"
+        app:layout_constraintBottom_toTopOf="@+id/email_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/email_sign_in" />
 
     <Button
         android:id="@+id/sign_in_button"
         android:layout_width="179dp"
         android:layout_height="0dp"
         android:layout_gravity="start"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="88dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginBottom="119dp"
         android:text="Sign In"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
-        app:layout_constraintStart_toStartOf="@+id/password_sign_in"
+        app:layout_constraintBottom_toTopOf="@+id/go_to_sign_up"
+        app:layout_constraintEnd_toEndOf="@+id/go_to_sign_up"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/password_sign_in" />
 
     <EditText
         android:id="@+id/password_sign_in"
-        android:layout_width="331dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="21dp"
         android:autofillHints="@string/prompt_password"
-        android:hint="@string/prompt_password"
+        android:hint="••••••••••••••"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_sign_in" />
 
     <ProgressBar
@@ -67,39 +83,58 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
+    <Button
         android:id="@+id/go_to_sign_up"
-        android:layout_width="76dp"
-        android:layout_height="36dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_gravity="start"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="54dp"
+        android:background="#0000"
         android:text="Sign Up"
-        android:textSize="20dp"
-        tools:layout_editor_absoluteX="264dp"
-        tools:layout_editor_absoluteY="597dp" />
+        android:textColor="#25CF41"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="139dp"
         android:layout_height="0dp"
-        android:layout_marginTop="115dp"
-        android:layout_marginEnd="118dp"
-        android:layout_marginBottom="75dp"
+        android:layout_marginTop="191dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toTopOf="@+id/email_sign_in"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/email_sign_in"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
-    <TextView
+    <Button
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="79dp"
-        android:layout_marginEnd="94dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginEnd="47dp"
+        android:background="#0000"
         android:text="Forgot password?"
+        android:textColor="#25CF41"
+        android:textSize="10dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/go_to_sign_up"
         app:layout_constraintEnd_toStartOf="@+id/go_to_sign_up"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="603dp" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="Password"
+        android:textColor="#25CF41"
+        app:layout_constraintBottom_toTopOf="@+id/password_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/password_sign_in" />
 
 
     <!--    <com.google.android.gms.common.SignInButton-->

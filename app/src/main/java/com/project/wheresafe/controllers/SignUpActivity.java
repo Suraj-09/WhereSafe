@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,12 +34,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email_sign_up);
-        password = findViewById(R.id.password_sign_up);
-        name = findViewById(R.id.name_sign_up);
+        email = findViewById(R.id.edtEmailSignUp);
+        password = findViewById(R.id.edtPasswordSignUp);
+        name = findViewById(R.id.edtNameSignUp);
 
-        btnSignUp = findViewById(R.id.sign_up_button);
-        btnGoToSignIn = findViewById(R.id.go_to_sign_in);
+        btnSignUp = findViewById(R.id.btnSignUp);
+        btnGoToSignIn = findViewById(R.id.btnGoSignIn);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

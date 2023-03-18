@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -17,8 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.R;
 
@@ -35,11 +32,11 @@ public class SignInActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email_sign_in);
-        password = findViewById(R.id.password_sign_in);
+        email = findViewById(R.id.edtEmailSignIn);
+        password = findViewById(R.id.edtPasswordSignIn);
 
-        btnSignIn = findViewById(R.id.sign_in_button);
-        btnGoToSignUp = findViewById(R.id.go_to_sign_up);
+        btnSignIn = findViewById(R.id.btnSignIn);
+        btnGoToSignUp = findViewById(R.id.btnGoSignUp);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,12 +82,12 @@ public class SignInActivity extends AppCompatActivity {
                                 // handle the errors from invalid credentials
                                 try {
                                     throw task.getException();
-                                } catch(FirebaseAuthInvalidCredentialsException e) {
-                                    password.setError("Invalid password");
-                                    password.requestFocus();
                                 } catch (FirebaseAuthInvalidUserException e) {
                                     email.setError("Invalid email.");
                                     email.requestFocus();
+                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                    password.setError("Invalid password");
+                                    password.requestFocus();
                                 } catch(Exception e) {
                                     Log.e(TAG, e.getMessage());
                                 }

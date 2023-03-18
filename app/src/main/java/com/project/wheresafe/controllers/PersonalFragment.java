@@ -121,7 +121,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
                 populateCharts(firestoreHelper.getBmeDataArrayList());
             }
         });
-         // populates da charts
+
 
 
 //        // Initialize the MapView

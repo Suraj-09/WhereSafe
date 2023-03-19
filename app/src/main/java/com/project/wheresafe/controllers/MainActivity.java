@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
-    FirebaseUser currentFirebaseUser;
+    private FirebaseUser currentFirebaseUser;
+    private BleEspService bleEspService;
 
     private boolean initFlag;
 
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
+        bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
         bleEspService.run();
     }
 
@@ -307,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         FirebaseAuth.getInstance().signOut();
+        bleEspService.stop();
         super.onStop();
     }
 

@@ -48,6 +48,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void attachListener() {
+        Log.d(TAG, "Listener attached");
         CollectionReference sensorDataCollection = firestoreHelper.getSensorDataCollection();
         registration = sensorDataCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

@@ -143,6 +143,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        homeViewModel.detachListener();
+    }
+
+    @Override
     public void onDestroyView() {
         homeViewModel.detachListener();
         super.onDestroyView();

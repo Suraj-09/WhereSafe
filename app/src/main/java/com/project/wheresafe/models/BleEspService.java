@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
@@ -59,6 +60,10 @@ public class BleEspService {
     ScanFilter scanFilter;
     ScanSettings scanSettings;
     FirestoreHelper firestoreHelper;
+    BluetoothGatt bleGatt;
+
+    BmeData lastBmeData;
+
     public BleEspService(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
@@ -133,12 +138,14 @@ public class BleEspService {
                                     return;
                                 }
                                 gatt.discoverServices();
+
                             }
                         }
 
                         @Override
                         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                             if (status == BluetoothGatt.GATT_SUCCESS) {
+                                bleGatt = gatt;
                                 setCharacteristics(gatt);
                             }
                         }
@@ -196,10 +203,26 @@ public class BleEspService {
     private void storeFirestore() {
         BmeData bmeData = new BmeData(temperature, humidity, pressure, gas, altitude);
         Log.d(TAG, bmeData.toString());
-        firestoreHelper.addBmeData(bmeData);
+
+        if (!bmeData.equals(lastBmeData)) {
+            lastBmeData = bmeData;
+            firestoreHelper.addBmeData(bmeData);
+        }
+
     }
 
     private void saveMacAddress(String macAddress) {
         firestoreHelper.addMacAddress(macAddress);
+    }
+
+    public void stop() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            activity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+            return;
+        }
+        if (bleGatt != null) {
+            bleGatt.close();
+            Log.d(TAG, "Disconnecting Bluetooth Device Connection");
+        }
     }
 }

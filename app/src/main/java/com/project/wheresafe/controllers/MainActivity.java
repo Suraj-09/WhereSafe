@@ -142,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
         checkBluetoothScan();
         checkBluetoothConnect();
 
-        BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
-        bleEspService.run();
-
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -166,14 +163,36 @@ public class MainActivity extends AppCompatActivity {
                 // Bluetooth is disabled, show a message to the user and prompt them to enable it
                 Toast.makeText(MainActivity.this, "Bluetooth is currently disabled. Please enable it to use this app.", Toast.LENGTH_SHORT).show();
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // Permission is not granted, request it
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
-                    return;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
                 }
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
+
+        BleEspService bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
+        bleEspService.run();
     }
 
     @Override
@@ -183,10 +202,28 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 // Permission granted, enable Bluetooth
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // Permission is not granted, request it
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
-                    return;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // Permission is not granted, request it
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_BT_PERMISSION);
+                        return;
+                    }
                 }
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {

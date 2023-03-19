@@ -24,6 +24,7 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 
 import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.GattConfig;
 
 import java.time.LocalDateTime;
@@ -36,11 +37,13 @@ public class BleEspService {
 
     private static final String TAG = "BleEspService";
     private final String DEVICE_NAME = "WhereSafe";
-    private String DEVICE_MAC_ADDRESS = "30:ae:a4:58:3e:d8";
+    private String DEVICE_MAC_ADDRESS;
+    private final int MODE_DEVICE_MAC_ADDRESS = 0;
+    private final int MODE_DEVICE_NAME = 1;
 
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
-    private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
-    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3;
+    private static final int REQUEST_LOCATION_PERMISSION = 2;
+    private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 3;
+    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 4;
     public final static UUID UUID_ENVIRONMENTAL_SENSING = UUID.fromString(GattConfig.ENVIRONMENTAL_SENSING);
     public final static UUID UUID_BME680_DATA = UUID.fromString(GattConfig.BME680_DATA);
     public final static UUID UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(GattConfig.CLIENT_CHARACTERISTIC_CONFIG);
@@ -49,8 +52,6 @@ public class BleEspService {
     private double pressure;
     private double gas;
     private double altitude;
-
-    DatabaseHelper dbHelper;
 
     Context context;
     Activity activity;
@@ -64,7 +65,6 @@ public class BleEspService {
     }
 
     public void run() {
-        dbHelper = new DatabaseHelper(context);
         firestoreHelper = new FirestoreHelper();
         BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
@@ -78,9 +78,22 @@ public class BleEspService {
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                 .build();
 
-        scanConnect();
+        firestoreHelper.getUser(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                String macAddress = firestoreHelper.getFirestoreData().getUser().getMacAddress();
+                if (macAddress != null) {
+                    DEVICE_MAC_ADDRESS = macAddress;
+                    scanConnect(MODE_DEVICE_MAC_ADDRESS);
+                } else {
+                    scanConnect(MODE_DEVICE_NAME);
+                }
+            }
+        });
+
+
     }
-    private void scanConnect() {
+    private void scanConnect(int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             activity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BLUETOOTH_SCAN_PERMISSION);
             return;
@@ -96,9 +109,21 @@ public class BleEspService {
                     return;
                 }
 
-                // Check the MAC address of the discovered device
-                if (device.getAddress() != null && device.getAddress().equals(DEVICE_MAC_ADDRESS)) {
+                boolean connectionCondition = false;
+                if (mode == MODE_DEVICE_MAC_ADDRESS) {
+                    connectionCondition = device.getAddress() != null && device.getAddress().equals(DEVICE_MAC_ADDRESS);
+                } else {
+                    connectionCondition = device.getName() != null && device.getName().equals(DEVICE_NAME);
+                }
+
+                // Check the MAC address or name of the discovered device
+                if (connectionCondition) {
                     scanner.stopScan(this);
+
+                    if (device.getAddress() != null) {
+                        saveMacAddress(device.getAddress());
+                    }
+
                     device.connectGatt(context.getApplicationContext(), false, new BluetoothGattCallback() {
                         @Override
                         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -172,5 +197,9 @@ public class BleEspService {
         BmeData bmeData = new BmeData(temperature, humidity, pressure, gas, altitude);
         Log.d(TAG, bmeData.toString());
         firestoreHelper.addBmeData(bmeData);
+    }
+
+    private void saveMacAddress(String macAddress) {
+        firestoreHelper.addMacAddress(macAddress);
     }
 }

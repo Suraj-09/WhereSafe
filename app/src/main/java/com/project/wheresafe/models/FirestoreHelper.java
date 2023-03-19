@@ -230,6 +230,23 @@ public class FirestoreHelper {
         });
     }
 
+    public void addMacAddress(String macAddress) {
+        Map<String, Object> macInfo = new HashMap<>();
+        macInfo.put("mac_address", macAddress);
+
+        userDocument.update(macInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
+    }
+
     public void addTeamCode(String teamCode) {
         Map<String, Object> teamInfo = new HashMap<>();
         teamInfo.put("team_code", teamCode);

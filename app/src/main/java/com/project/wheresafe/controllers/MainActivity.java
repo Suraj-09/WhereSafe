@@ -40,10 +40,7 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
-import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     final private String TAG = "MainActivity";
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
-    FirebaseUser currentUser;
+    FirebaseUser currentFirebaseUser;
 
     private boolean initFlag;
 
@@ -69,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(bluetoothStateReceiver, filter);
 
         mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
+        currentFirebaseUser = mAuth.getCurrentUser();
+        if (currentFirebaseUser == null) {
             initFlag = false;
             goToSignIn();
         } else {
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        currentFirebaseUser = mAuth.getCurrentUser();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -243,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
             DrawerLayout drawer = binding.drawerLayout;
 
-
             navigationView.getMenu().findItem(R.id.sign_out).setOnMenuItemClickListener(menuItem -> {
                 FirebaseAuth.getInstance().signOut();
                 goToSignIn();
@@ -271,12 +267,12 @@ public class MainActivity extends AppCompatActivity {
         TextView txtName = headerView.findViewById(R.id.drawerName);
         TextView txtEmail = headerView.findViewById(R.id.drawerEmail);
 
-        if (currentUser.getDisplayName() != null) {
+        if (currentFirebaseUser.getDisplayName() != null) {
             System.out.println("**************************");
-            System.out.println(currentUser.getDisplayName().toString());
+            System.out.println(currentFirebaseUser.getDisplayName().toString());
             System.out.println("**************************");
-            txtName.setText(currentUser.getDisplayName());
-            txtEmail.setText(currentUser.getEmail());
+            txtName.setText(currentFirebaseUser.getDisplayName());
+            txtEmail.setText(currentFirebaseUser.getEmail());
         } else {
             setDisplayName();
         }
@@ -294,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                             .setDisplayName(name)
                             .build();
 
-                    currentUser.updateProfile(profileUpdates)
+                    currentFirebaseUser.updateProfile(profileUpdates)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

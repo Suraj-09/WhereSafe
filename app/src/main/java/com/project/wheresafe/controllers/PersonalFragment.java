@@ -120,7 +120,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
             @Override
             public void onResultGet() {
 
-                populateCharts(firestoreHelper.getBmeDataArrayList());
+                populateCharts(firestoreHelper.getFirestoreData().getBmeDataArrayList());
             }
         });
 

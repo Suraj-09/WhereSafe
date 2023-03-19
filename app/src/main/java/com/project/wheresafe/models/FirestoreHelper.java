@@ -170,24 +170,36 @@ public class FirestoreHelper {
 
     public void getAllPersonalSensorData(FirestoreCallback firestoreCallback) {
 
-        sensorDataCollection
-                .orderBy("timestamp", Query.Direction.DESCENDING).limit(20)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        ArrayList<BmeData> bmeDataArrayList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            bmeDataArrayList.add(new BmeData(document.getId(), document.getData()));
+        if (sensorDataCollection == null) {
+            if (firebaseAuth.getCurrentUser() != null) {
+                initUserCollection();
+            } else {
+                Log.d(TAG, "User not logged in");
+            }
+        }
+
+        if (sensorDataCollection != null) {
+            sensorDataCollection
+                    .orderBy("timestamp", Query.Direction.DESCENDING).limit(20)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            ArrayList<BmeData> bmeDataArrayList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                bmeDataArrayList.add(new BmeData(document.getId(), document.getData()));
+                            }
+
+                            firestoreData.setBmeDataArrayList(bmeDataArrayList);
+                            firestoreCallback.onResultGet();
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            System.out.println("error getting documents");
                         }
+                    });
+        }
 
-                        firestoreData.setBmeDataArrayList(bmeDataArrayList);
-                        firestoreCallback.onResultGet();
 
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                        System.out.println("error getting documents");
-                    }
-                });
 
     }
 

@@ -195,6 +195,12 @@ public class BleEspService {
             gas = (Double.parseDouble(arrStr[1]) / 100.0);
             altitude = (Double.parseDouble(arrStr[2]) / 100.0);
             Log.d(TAG, "BME680 Data received");
+
+            // filter faulty reading
+            if (temperature == 0 && humidity == 0 && pressure == 0) {
+                return;
+            }
+
             // second part of data received, store object
             storeFirestore();
         }

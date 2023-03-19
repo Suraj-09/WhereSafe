@@ -261,6 +261,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        bleEspService.run();
+    }
+
     private void setUserInfo() {
         NavigationView navigationView = binding.navView;
         View headerView = navigationView.getHeaderView(0);
@@ -307,9 +313,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        FirebaseAuth.getInstance().signOut();
-        bleEspService.stop();
         super.onStop();
+
+//        FirebaseAuth.getInstance().signOut();
+//        bleEspService.stop();
     }
 
 
@@ -341,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        FirebaseAuth.getInstance().signOut();
         unregisterReceiver(bluetoothStateReceiver);
     }
 

@@ -50,16 +50,16 @@ public class HomeFragment extends Fragment {
         CircularProgressBar circularProgressBar = binding.humidityProgressBar;
         TextView humidityValue = binding.humidityValue;  // textView above progress bar. "Humidity"
 
-        int humidityRandomNumber = 75;
+        int humidityRandomNumber = 0;
         circularProgressBar.setProgress(humidityRandomNumber); // set humidity to 75%
-        humidityValue.setText("75 %");
+        humidityValue.setText("0 %");
 
         ArcGauge temperatureGauge = binding.temperatureGauge;
-        temperatureGauge.setValue(30); // set temperature to 30 degrees Celsius
+        temperatureGauge.setValue(0); // set temperature to 30 degrees Celsius
         setTemperatureGaugeRange(temperatureGauge); // set color ranges
 
         ArcGauge pressureGauge = binding.pressureGauge;
-        pressureGauge.setValue(800); // set pressure to 800 hPa
+        pressureGauge.setValue(0); // set pressure to 800 hPa
         setPressureGaugeRange(pressureGauge); // set color ranges
 
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
@@ -140,6 +140,13 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        homeViewModel.attachListener();
+        homeViewModel.init();
     }
 
     @Override

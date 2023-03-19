@@ -38,7 +38,7 @@ public class HomeViewModel extends ViewModel {
         init();
     }
 
-    private void init() {
+    public void init() {
         firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {

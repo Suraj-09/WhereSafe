@@ -2,7 +2,8 @@ package com.project.wheresafe.utils;
 
 import java.util.HashMap;
 
-public class GattConfig {
+public class
+GattConfig {
     private static HashMap<String, String> attributes = new HashMap();
     public static String ENVIRONMENTAL_SENSING = "0000181A-0000-1000-8000-00805f9b34fb";
     public static String BME680_DATA = "605ddbf0-0540-4c6e-be65-62626797ffe9";

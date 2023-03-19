@@ -36,6 +36,7 @@ public class BleEspService {
 
     private static final String TAG = "BleEspService";
     private final String DEVICE_NAME = "WhereSafe";
+    private String DEVICE_MAC_ADDRESS = "30:ae:a4:58:3e:d8";
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
@@ -94,9 +95,9 @@ public class BleEspService {
                     activity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
                     return;
                 }
-                System.out.println("DEVICE_NAME = " + device.getName());
 
-                if (device.getName() != null && device.getName().equals(DEVICE_NAME)) {
+                // Check the MAC address of the discovered device
+                if (device.getAddress() != null && device.getAddress().equals(DEVICE_MAC_ADDRESS)) {
                     scanner.stopScan(this);
                     device.connectGatt(context.getApplicationContext(), false, new BluetoothGattCallback() {
                         @Override
@@ -134,8 +135,8 @@ public class BleEspService {
                 }
             }
         });
-
     }
+
     private void setCharacteristics(BluetoothGatt gatt) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             activity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);

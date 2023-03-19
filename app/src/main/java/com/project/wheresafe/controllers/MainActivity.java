@@ -1,10 +1,13 @@
 package com.project.wheresafe.controllers;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.navigation.NavController;
@@ -40,14 +44,22 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
     private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3;
+    private static final int REQUEST_ENABLE_BT = 4;
+    private static final int REQUEST_ENABLE_BT_PERMISSION = 5;
+
+
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
 
     private boolean initFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(bluetoothStateReceiver, filter);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -60,11 +72,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             init();
         }
-
-
-
-
-
 
 
 //        FirestoreHelper firestoreHelper = new FirestoreHelper();
@@ -89,7 +96,41 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+
+
     }
+
+    private BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        // Bluetooth is disabled, show a message to the user and prompt them to enable it
+                        Toast.makeText(MainActivity.this, "Bluetooth has been disabled. Please enable it to use this app.", Toast.LENGTH_SHORT).show();
+                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            // Permission is not granted, request it
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
+                            return;
+                        }
+                        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        // Bluetooth is turning off, do something here if needed
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        // Bluetooth is enabled, do something here if needed
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        // Bluetooth is turning on, do something here if needed
+                        break;
+                }
+            }
+        }
+    };
 
     private void init() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -109,7 +150,60 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
 
         initFlag = true;
+
+        // Register a broadcast receiver to listen for Bluetooth state changes
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(bluetoothStateReceiver, filter);
+
+        // Check Bluetooth state
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null) {
+            // Device doesn't support Bluetooth, show an error message to the user
+            Toast.makeText(MainActivity.this, "This device does not support Bluetooth.", Toast.LENGTH_SHORT).show();
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
+                // Bluetooth is disabled, show a message to the user and prompt them to enable it
+                Toast.makeText(MainActivity.this, "Bluetooth is currently disabled. Please enable it to use this app.", Toast.LENGTH_SHORT).show();
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
+                    return;
+                }
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ENABLE_BT_PERMISSION) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Permission granted, enable Bluetooth
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT_PERMISSION);
+                    return;
+                }
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            } else {
+                // Permission denied, show a message or handle the error
+                Toast.makeText(this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                // User enabled Bluetooth, do something here if needed
+            } else {
+                // User did not enable Bluetooth, prompt the user to turn it on again
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -171,14 +265,30 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(bluetoothStateReceiver);
+    }
 
     void checkBluetooth() {
-        // First, check if Bluetooth is supported and enabled
+        // First, check if Bluetooth is supported
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
+            // Bluetooth is not supported, show a message to the user
+            Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Register the BroadcastReceiver to listen for changes to the Bluetooth state
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(bluetoothStateReceiver, filter);
+
+        // Check if Bluetooth is currently enabled
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-            // Bluetooth is not supported or not enabled, show a message to the user
-            Toast.makeText(this, "Please enable Bluetooth and try again", Toast.LENGTH_SHORT).show();
+        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+            // Bluetooth is enabled, unregister the BroadcastReceiver
+            unregisterReceiver(bluetoothStateReceiver);
         }
     }
 

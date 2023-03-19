@@ -22,8 +22,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-    <com.ekn.gruzer.gaugelibrary.ArcGauge
+<!-- <com.ekn.gruzer.gaugelibrary.ArcGauge -->
+    <com.ekndev.gaugelibrary.ArcGauge
         android:id="@+id/temperatureGauge"
         android:layout_width="170dp"
         android:layout_height="150dp"
@@ -44,12 +44,13 @@
         app:cpb_progress="0"
         app:cpb_progressbar_color="#22B2FF"
         app:cpb_progressbar_width="10dp"
+        app:cpb_background_progressbar_width="7dp"
         app:cpb_start_angle="360"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.ekn.gruzer.gaugelibrary.ArcGauge
+    <com.ekndev.gaugelibrary.ArcGauge
         android:id="@+id/pressureGauge"
         android:layout_width="170dp"
         android:layout_height="150dp"
@@ -67,7 +68,7 @@
         android:layout_centerInParent="true"
         android:text="0%"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textColor="#000000"
+        android:textColor="#770D1515"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/humidityProgressBar"
         app:layout_constraintEnd_toEndOf="@+id/humidityProgressBar"
@@ -84,7 +85,7 @@
         android:layout_centerHorizontal="true"
         android:text="Humidity"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textColor="#000000"
+        android:textColor="#770D1515"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/humidityProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +102,7 @@
         android:layout_centerHorizontal="true"
         android:text="Pressure"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textColor="#000000"
+        android:textColor="#770D1515"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/pressureGauge"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +119,7 @@
         android:layout_centerHorizontal="true"
         android:text="Temperature"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textColor="#000000"
+        android:textColor="#770D1515"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/temperatureGauge"
         app:layout_constraintEnd_toEndOf="parent"

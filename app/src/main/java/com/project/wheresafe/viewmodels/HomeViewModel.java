@@ -26,17 +26,19 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<BmeData>> bmeArraylist;
     private final MutableLiveData<BmeData> latestBmeData;
     ListenerRegistration registration;
+    FirestoreHelper firestoreHelper;
 
     public HomeViewModel() {
         bmeArraylist = new MutableLiveData<>();
         latestBmeData = new MutableLiveData<>();
         mText = new MutableLiveData<>();
+
+        firestoreHelper = new FirestoreHelper();
         attachListener();
         init();
     }
 
     private void init() {
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {
@@ -46,7 +48,6 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void attachListener() {
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
         CollectionReference sensorDataCollection = firestoreHelper.getSensorDataCollection();
         registration = sensorDataCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

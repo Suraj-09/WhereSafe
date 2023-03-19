@@ -3,7 +3,6 @@ package com.project.wheresafe.models;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,14 +18,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.User;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.FirestoreConfig;
 import com.project.wheresafe.utils.FirestoreData;
-import com.project.wheresafe.viewmodels.HomeViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FirestoreHelper {
@@ -55,14 +55,6 @@ public class FirestoreHelper {
     public FirestoreData getFirestoreData() {
         return firestoreData;
     }
-//    public FirestoreHelper(boolean newUser) {
-//        this.firebaseFirestore = FirebaseFirestore.getInstance();
-//        this.firebaseAuth = FirebaseAuth.getInstance();
-//        this.usersCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_USERS);
-//        this.teamsCollection = firebaseFirestore.collection(FirestoreConfig.COLLECTION_TEAMS);
-//
-//        firestoreData = new FirestoreData();
-//    }
 
     private void initUserCollection() {
         this.userDocument = usersCollection.document(firebaseAuth.getCurrentUser().getUid());
@@ -113,9 +105,23 @@ public class FirestoreHelper {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        if (document.getData().containsKey("name")) {
-                            firestoreData.setName(document.getData().get("name").toString());
+                        User user = new User();
+                        user.setId(document.getId());
+
+                        if (document.getData() != null) {
+                            if (document.getData().containsKey("name")) {
+                                user.setName(document.getData().get("name").toString());
+                            }
+                            if (document.getData().containsKey("team_code")) {
+                                user.setTeamCode(document.getData().get("team_code").toString());
+                            }
+                            if (document.getData().containsKey("mac_address")) {
+                                user.setMacAddress(document.getData().get("mac_address").toString());
+                            }
+
                         }
+
+                        firestoreData.setUser(user);
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
@@ -185,42 +191,33 @@ public class FirestoreHelper {
 
     }
 
-    public void getTeamCode(FirestoreCallback firestoreCallback) {
-        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
+        teamsCollection
+                .document(teamCode)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        if (document.getData().containsKey("team_code")) {
-                            firestoreData.setTeamCode(document.getData().get("team_code").toString());
+                        if (document.getData() != null) {
+                            if (document.getData().containsKey("team_name")) {
+                                firestoreData.getUser().setTeamName(document.getData().get("team_name").toString());
+                            }
+
+                            if (document.getData().containsKey("members")) {
+                                ArrayList<DocumentReference> members = new ArrayList<>();
+                                for (DocumentReference docRef : (List<DocumentReference>) document.getData().get("members")) {
+                                    members.add(docRef);
+                                }
+                                firestoreData.getUser().setTeamMembers(members);
+                            }
+
+
                         }
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
-                        firestoreCallback.onResultGet();
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }
-
-    public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
-        teamsCollection.document(teamCode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        firestoreData.setTeamName(document.getData().get("team_name").toString());
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
                         firestoreCallback.onResultGet();
                     } else {
                         Log.d(TAG, "No such document");

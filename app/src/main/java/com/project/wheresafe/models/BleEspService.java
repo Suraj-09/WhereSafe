@@ -121,6 +121,7 @@ public class BleEspService {
                         @Override
                         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                             readCharacteristics(characteristic);
+                            System.out.println("data read");
                         }
                     });
                 }
@@ -163,7 +164,6 @@ public class BleEspService {
             altitude = (Double.parseDouble(arrStr[2]) / 100.0);
             Log.d(TAG, "BME680 Data received");
             // second part of data received, store object
-//            storeData();
             storeFirestore();
         }
     }

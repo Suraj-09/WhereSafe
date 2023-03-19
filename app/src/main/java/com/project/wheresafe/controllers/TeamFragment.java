@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.w3c.dom.Text;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentTeamBinding;
@@ -32,6 +33,7 @@ public class TeamFragment extends Fragment {
 
     private FragmentTeamBinding binding;
     private String teamName;
+    FirestoreHelper firestoreHelper;
 
     private TeamViewModel teamViewModel;
 
@@ -42,11 +44,11 @@ public class TeamFragment extends Fragment {
         View root = binding.getRoot();
 
 
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
-        firestoreHelper.getTeamCode(new FirestoreCallback() {
+        firestoreHelper = new FirestoreHelper();
+        firestoreHelper.getUser(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                String teamCode = firestoreHelper.firestoreData.getTeamCode();
+                String teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
                 if (teamCode != null) {
                     showTeamView(teamCode);
                 } else {
@@ -62,16 +64,19 @@ public class TeamFragment extends Fragment {
         binding.createTeamButton.setVisibility(View.GONE);
         binding.joinTeamButton.setVisibility(View.GONE);
 
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.getTeam(teamCode, new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                teamName = firestoreHelper.firestoreData.getTeamName();
+                teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
 
                 TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
                 textTeam.setText(teamName);
 
                 // TODO: populate view to show team stuff
+
+                for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
+                    System.out.println(docRef);
+                }
             }
         });
 
@@ -162,7 +167,6 @@ public class TeamFragment extends Fragment {
     }
 
     private void createTeam(String teamName) {
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.getTeamCodes(new FirestoreCallback() {
             @Override
             public void onResultGet() {
@@ -199,7 +203,6 @@ public class TeamFragment extends Fragment {
     }
 
     private void joinTeam(String teamCode) {
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.getTeamCodes(new FirestoreCallback() {
             @Override
             public void onResultGet() {

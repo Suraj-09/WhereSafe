@@ -119,16 +119,8 @@ public class BleEspService {
 
                         @Override
                         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-
-//                            Log.d(TAG, "characteristic changed at " + LocalDateTime.now().toString() );
                             readCharacteristics(characteristic);
-                            //                            System.out.println(characteristic);
-//                            System.out.println(LocalDateTime.now().toString());
-
-                            //                            readCharacteristics(characteristic);
-//                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//                            LocalDateTime now = LocalDateTime.now();
-//                            System.out.println("readCharacteristics: " + now.toString());
+                            System.out.println("data read");
                         }
                     });
                 }

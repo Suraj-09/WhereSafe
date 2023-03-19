@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         firestoreHelper.getUser(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                String name = firestoreHelper.getFirestoreData().getName();
+                String name = firestoreHelper.getFirestoreData().getUser().getName();
 
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(name)

@@ -4,23 +4,15 @@ import java.util.ArrayList;
 
 public class FirestoreData {
     BmeData bmeDataLatest;
-    String teamCode;
-    String teamName;
-
-    String name;
-
+    User user;
     ArrayList<BmeData> bmeDataArrayList;
     ArrayList<String> teamCodeArraylist;
-
-//    ArrayList<String> team
 
     public FirestoreData() {
         bmeDataLatest = null;
         bmeDataArrayList = null;
         teamCodeArraylist = null;
-        teamCode = null;
-        teamName = null;
-        name = null;
+        user = null;
     }
 
     public BmeData getBmeDataLatest() {
@@ -47,27 +39,11 @@ public class FirestoreData {
         this.teamCodeArraylist = teamCodeArraylist;
     }
 
-    public String getTeamCode() {
-        return teamCode;
+    public User getUser() {
+        return user;
     }
 
-    public void setTeamCode(String teamCode) {
-        this.teamCode = teamCode;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

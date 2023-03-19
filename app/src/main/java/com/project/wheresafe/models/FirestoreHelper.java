@@ -157,7 +157,12 @@ public class FirestoreHelper {
                             bmeDataArrayList.add(new BmeData(document.getId(), document.getData()));
                         }
 
-                        firestoreData.setBmeDataLatest(bmeDataArrayList.get(0));
+                        if (!bmeDataArrayList.isEmpty()) {
+                            firestoreData.setBmeDataLatest(bmeDataArrayList.get(0));
+                        } else {
+                            firestoreData.setBmeDataLatest(null);
+                        }
+
                         firestoreCallback.onResultGet();
 
                     } else {

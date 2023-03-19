@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.models.FirestoreHelper;
 
@@ -35,12 +35,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.email_sign_up);
-        password = findViewById(R.id.password_sign_up);
-        name = findViewById(R.id.name_sign_up);
+        email = findViewById(R.id.edtEmailSignUp);
+        password = findViewById(R.id.edtPasswordSignUp);
+        name = findViewById(R.id.edtNameSignUp);
 
-        btnSignUp = findViewById(R.id.sign_up_button);
-        btnGoToSignIn = findViewById(R.id.go_to_sign_in);
+        btnSignUp = findViewById(R.id.btnSignUp);
+        btnGoToSignIn = findViewById(R.id.btnGoSignIn);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 if (user != null) {
                                     FirestoreHelper firestoreHelper = new FirestoreHelper();
                                     firestoreHelper.addUser(user, user_name);
+                                    setUserProfile(user, user_name);
                                     goToMainActivity();
                                 }
                             } else {
@@ -120,5 +121,21 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void setUserProfile(FirebaseUser user, String name) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
     }
 }

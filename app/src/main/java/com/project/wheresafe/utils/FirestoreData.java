@@ -7,6 +7,8 @@ public class FirestoreData {
     String teamCode;
     String teamName;
 
+    String name;
+
     ArrayList<BmeData> bmeDataArrayList;
     ArrayList<String> teamCodeArraylist;
 
@@ -18,6 +20,7 @@ public class FirestoreData {
         teamCodeArraylist = null;
         teamCode = null;
         teamName = null;
+        name = null;
     }
 
     public BmeData getBmeDataLatest() {
@@ -58,5 +61,13 @@ public class FirestoreData {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

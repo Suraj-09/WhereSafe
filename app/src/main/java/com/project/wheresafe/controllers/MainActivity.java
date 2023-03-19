@@ -11,8 +11,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,10 +29,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
@@ -40,6 +46,7 @@ import com.project.wheresafe.utils.FirestoreCallback;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    final private String TAG = "MainActivity";
     private final String DEVICE_NAME = "WhereSafe";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 2;
@@ -47,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 4;
     private static final int REQUEST_ENABLE_BT_PERMISSION = 5;
 
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     private boolean initFlag;
 
@@ -63,41 +70,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             initFlag = false;
-            Intent intent = new Intent(this, SignInActivity.class);
-            startActivity(intent);
-            finish();
+            goToSignIn();
         } else {
             init();
         }
 
+    }
 
-//        FirestoreHelper firestoreHelper = new FirestoreHelper();
-//
-//        // get latest object stored
-//        firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                BmeData bmeData = firestoreHelper.getBmeDataLatest();
-//                // do stuff
-//            }
-//        });
-//
-//        // Get an Arraylist of BmeData
-//        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                ArrayList<BmeData> bmeDataArrayList = firestoreHelper.getBmeDataArrayList();
-//                // do stuff
-//
-//                //
-//            }
-//        });
-
-
-
+    private void goToSignIn() {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
@@ -133,9 +119,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void init() {
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        System.out.println(currentUser.getEmail());
-//        Toast.makeText(MainActivity.this, "Welcome, " + currentUser.getEmail() , Toast.LENGTH_SHORT).show();
 
         checkBluetooth();
         checkLocation();
@@ -145,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        setUserInfo();
 
         initFlag = true;
 
@@ -255,6 +244,13 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = binding.navView; // same thing as findViewById(R.id.nav_view);
             DrawerLayout drawer = binding.drawerLayout;
 
+
+            navigationView.getMenu().findItem(R.id.sign_out).setOnMenuItemClickListener(menuItem -> {
+                FirebaseAuth.getInstance().signOut();
+                goToSignIn();
+                return true;
+            });
+
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -269,6 +265,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setUserInfo() {
+        NavigationView navigationView = binding.navView;
+        View headerView = navigationView.getHeaderView(0);
+
+        TextView txtName = headerView.findViewById(R.id.drawerName);
+        TextView txtEmail = headerView.findViewById(R.id.drawerEmail);
+
+        if (currentUser.getDisplayName() != null) {
+            System.out.println("**************************");
+            System.out.println(currentUser.getDisplayName().toString());
+            System.out.println("**************************");
+            txtName.setText(currentUser.getDisplayName());
+            txtEmail.setText(currentUser.getEmail());
+        } else {
+            setDisplayName();
+        }
+
+    }
+
+    private void setDisplayName() {
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.getUser(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                String name = firestoreHelper.getFirestoreData().getName();
+
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build();
+
+                    currentUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "User profile updated.");
+                                        setUserInfo();
+                                    }
+                                }
+                            });
+            }
+        });
+    }
 
     @Override
     protected void onStop() {
@@ -286,12 +325,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-            return (true);
-        }
+//        if (item.getItemId() == R.id.action_settings) {
+//            Intent intent = getIntent();
+//            finish();
+//            startActivity(intent);
+//            return (true);
+//        }
         return super.onOptionsItemSelected(item);
     }
 

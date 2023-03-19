@@ -10,6 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_advanced_data">Advanced Data</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_sign_out">Sign Out</string>
     <string name="title_personal">Personal Metrics</string>
     <string name="title_team">Team Metrics</string>
     <!-- TODO: Remove or change this placeholder text -->

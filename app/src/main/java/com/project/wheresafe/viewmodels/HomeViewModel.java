@@ -32,6 +32,17 @@ public class HomeViewModel extends ViewModel {
         latestBmeData = new MutableLiveData<>();
         mText = new MutableLiveData<>();
         attachListener();
+        init();
+    }
+
+    private void init() {
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                latestBmeData.setValue(firestoreHelper.firestoreData.getBmeDataLatest());
+            }
+        });
     }
 
     public void attachListener() {

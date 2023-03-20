@@ -32,24 +32,16 @@ import java.util.UUID;
 
 public class BleEspService {
 
-    private static final String TAG = "BleEspService";
-    private final String DEVICE_NAME = "WhereSafe";
-    private String DEVICE_MAC_ADDRESS;
-    private final int MODE_DEVICE_MAC_ADDRESS = 0;
-    private final int MODE_DEVICE_NAME = 1;
-
-    private static final int REQUEST_LOCATION_PERMISSION = 2;
-    private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 3;
-    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 4;
     public final static UUID UUID_ENVIRONMENTAL_SENSING = UUID.fromString(GattConfig.ENVIRONMENTAL_SENSING);
     public final static UUID UUID_BME680_DATA = UUID.fromString(GattConfig.BME680_DATA);
     public final static UUID UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(GattConfig.CLIENT_CHARACTERISTIC_CONFIG);
-    private double temperature;
-    private double humidity;
-    private double pressure;
-    private double gas;
-    private double altitude;
-
+    private static final String TAG = "BleEspService";
+    private static final int REQUEST_LOCATION_PERMISSION = 2;
+    private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 3;
+    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 4;
+    private final String DEVICE_NAME = "WhereSafe";
+    private final int MODE_DEVICE_MAC_ADDRESS = 0;
+    private final int MODE_DEVICE_NAME = 1;
     Context context;
     Activity activity;
     BluetoothLeScanner scanner;
@@ -57,8 +49,13 @@ public class BleEspService {
     ScanSettings scanSettings;
     FirestoreHelper firestoreHelper;
     BluetoothGatt bleGatt;
-
     BmeData lastBmeData;
+    private String DEVICE_MAC_ADDRESS;
+    private double temperature;
+    private double humidity;
+    private double pressure;
+    private double gas;
+    private double altitude;
 
     public BleEspService(Context context, Activity activity) {
         this.context = context;
@@ -94,6 +91,7 @@ public class BleEspService {
 
 
     }
+
     private void scanConnect(int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             activity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BLUETOOTH_SCAN_PERMISSION);

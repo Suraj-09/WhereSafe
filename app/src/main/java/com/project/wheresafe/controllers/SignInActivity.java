@@ -29,6 +29,7 @@ public class SignInActivity extends AppCompatActivity {
 
     Button btnSignIn, btnGoToSignUp, btnForgotPassword;
     FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,10 +92,10 @@ public class SignInActivity extends AppCompatActivity {
                                 } catch (FirebaseAuthInvalidUserException e) {
                                     email.setError("Invalid email.");
                                     email.requestFocus();
-                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
                                     password.setError("Invalid password");
                                     password.requestFocus();
-                                } catch(Exception e) {
+                                } catch (Exception e) {
                                     Log.e(TAG, e.getMessage());
                                 }
                             }
@@ -136,10 +137,10 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(SignInActivity.this, "Email sent." , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignInActivity.this, "Email sent.", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "Email sent.");
                                 } else {
-                                    Toast.makeText(SignInActivity.this, "Error email could not be sent" , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignInActivity.this, "Error email could not be sent", Toast.LENGTH_SHORT).show();
                                 }
                                 dialog.dismiss();
                             }

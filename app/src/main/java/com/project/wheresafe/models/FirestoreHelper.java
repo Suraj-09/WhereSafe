@@ -84,17 +84,17 @@ public class FirestoreHelper {
         usersCollection.document(user.getUid())
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "DocumentSnapshot successfully written!");
-                initUserCollection();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
-            }
-        });
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        initUserCollection();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     public void getUser(FirestoreCallback firestoreCallback) {
@@ -205,46 +205,45 @@ public class FirestoreHelper {
         }
 
 
-
     }
 
     public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
         teamsCollection
                 .document(teamCode)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
 
-                        if (document.getData() != null) {
-                            if (document.getData().containsKey("team_name")) {
-                                firestoreData.getUser().setTeamName(document.getData().get("team_name").toString());
-                            }
+                                if (document.getData() != null) {
+                                    if (document.getData().containsKey("team_name")) {
+                                        firestoreData.getUser().setTeamName(document.getData().get("team_name").toString());
+                                    }
 
-                            if (document.getData().containsKey("members")) {
-                                ArrayList<DocumentReference> members = new ArrayList<>();
-                                for (DocumentReference docRef : (List<DocumentReference>) document.getData().get("members")) {
-                                    members.add(docRef);
+                                    if (document.getData().containsKey("members")) {
+                                        ArrayList<DocumentReference> members = new ArrayList<>();
+                                        for (DocumentReference docRef : (List<DocumentReference>) document.getData().get("members")) {
+                                            members.add(docRef);
+                                        }
+                                        firestoreData.getUser().setTeamMembers(members);
+                                    }
+
+
                                 }
-                                firestoreData.getUser().setTeamMembers(members);
+
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                firestoreCallback.onResultGet();
+                            } else {
+                                Log.d(TAG, "No such document");
                             }
 
-
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
                         }
-
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        firestoreCallback.onResultGet();
-                    } else {
-                        Log.d(TAG, "No such document");
                     }
-
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+                });
     }
 
     public void addMacAddress(String macAddress) {
@@ -321,16 +320,16 @@ public class FirestoreHelper {
         teamsCollection.document(teamCode)
                 .update("members", FieldValue.arrayUnion(userDocument))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "DocumentSnapshot successfully updated!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Error : " + e.getMessage());
-            }
-        });
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error : " + e.getMessage());
+                    }
+                });
 
     }
 

@@ -29,10 +29,9 @@ import java.util.ArrayList;
 
 public class TeamFragment extends Fragment {
 
+    FirestoreHelper firestoreHelper;
     private FragmentTeamBinding binding;
     private String teamName;
-    FirestoreHelper firestoreHelper;
-
     private TeamViewModel teamViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

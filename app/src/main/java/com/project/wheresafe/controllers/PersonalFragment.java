@@ -38,13 +38,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-
 public class PersonalFragment extends Fragment implements OnMapReadyCallback, LocationListener {
-    private FragmentPersonalBinding binding;
-    private boolean paused;
     DatabaseHelper dbHelper;
     Timer timer;
     TimerTask timerTask;
+    private FragmentPersonalBinding binding;
+    private boolean paused;
 
 //    private MapView mapView;
 //    private GoogleMap googleMap;
@@ -54,10 +53,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //    private double latitude;
 //    private double longitude;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        PersonalViewModel personalViewModel =
-                new ViewModelProvider(this).get(PersonalViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
@@ -101,7 +98,6 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
                 populateCharts(firestoreHelper.getFirestoreData().getBmeDataArrayList());
             }
         });
-
 
 
 //        // Initialize the MapView
@@ -203,7 +199,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //
 //    }
 
-    public void populateCharts(ArrayList<BmeData> bmeDataArrayList){
+    public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
         if (bmeDataArrayList.isEmpty()) {
             return;
         }
@@ -286,7 +282,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         LineData temperatureData = new LineData(temperatureDataSet);
         temperatureChart.setData(temperatureData);
         temperatureChart.invalidate();
-        
+
         LineData humidityData = new LineData(humidityDataSet);
         humidityChart.setData(humidityData);
         humidityChart.invalidate();
@@ -320,8 +316,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setGranularity(0.5f); // sets value for x-axis to be incremented
         //chart.setMarker(marker);      // could be implemented later...
-                                        // displays a customized pop-up whenever a value in the chart is clicked on
-                                        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
+        // displays a customized pop-up whenever a value in the chart is clicked on
+        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
         lineChart.invalidate();
     }
 
@@ -340,6 +336,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         rightAxis.setDrawLabels(false);
         barChart.invalidate();
     }
+
     private void customizeLineDataSet(LineDataSet lineDataSet) {
         // Customize DATASET appearance and behavior (for line charts)
         lineDataSet.setDrawIcons(false);

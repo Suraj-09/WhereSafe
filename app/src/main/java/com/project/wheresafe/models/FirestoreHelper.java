@@ -18,10 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.project.wheresafe.utils.BmeData;
-import com.project.wheresafe.utils.User;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.FirestoreConfig;
 import com.project.wheresafe.utils.FirestoreData;
+import com.project.wheresafe.utils.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -10,32 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.ekndev.gaugelibrary.ArcGauge;
 import com.ekndev.gaugelibrary.Range;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
-import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
-import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.viewmodels.HomeViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 

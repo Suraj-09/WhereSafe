@@ -15,16 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.w3c.dom.Text;
-
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentTeamBinding;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.TeamViewModel;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 

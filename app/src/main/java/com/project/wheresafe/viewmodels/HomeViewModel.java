@@ -42,7 +42,9 @@ public class HomeViewModel extends ViewModel {
         firestoreHelper.getLatestPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                latestBmeData.setValue(firestoreHelper.firestoreData.getBmeDataLatest());
+                if (firestoreHelper.getFirestoreData().getBmeDataLatest() != null) {
+                    latestBmeData.setValue(firestoreHelper.getFirestoreData().getBmeDataLatest());
+                }
             }
         });
     }

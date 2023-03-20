@@ -213,91 +213,94 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 
         // Populate charts!
         FragmentActivity mActivity = getActivity();
+
+        if (mActivity != null) {
 //        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
-        LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
-        LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
-        LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
-        LineChart gasChart = mActivity.findViewById(R.id.gasChart);
-        LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
+            LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
+            LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
+            LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
+            LineChart gasChart = mActivity.findViewById(R.id.gasChart);
+            LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
 
-        // Customize CHART appearance and behavior
+            // Customize CHART appearance and behavior
 //        initializeBarChart(temperatureChart);
-        initializeLineChart(temperatureChart);
-        initializeLineChart(humidityChart);
-        initializeLineChart(pressureChart);
-        initializeLineChart(gasChart);
-        initializeLineChart(altitudeChart);
+            initializeLineChart(temperatureChart);
+            initializeLineChart(humidityChart);
+            initializeLineChart(pressureChart);
+            initializeLineChart(gasChart);
+            initializeLineChart(altitudeChart);
 
-        // create ArrayLists for BarCharts & create Lists for LineCharts
+            // create ArrayLists for BarCharts & create Lists for LineCharts
 //        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
-        List<Entry> temperatureReadings = new ArrayList<>();
-        List<Entry> humidityReadings = new ArrayList<>();
-        List<Entry> pressureReadings = new ArrayList<>();
-        List<Entry> gasReadings = new ArrayList<>();
-        List<Entry> altitudeReadings = new ArrayList<>();
+            List<Entry> temperatureReadings = new ArrayList<>();
+            List<Entry> humidityReadings = new ArrayList<>();
+            List<Entry> pressureReadings = new ArrayList<>();
+            List<Entry> gasReadings = new ArrayList<>();
+            List<Entry> altitudeReadings = new ArrayList<>();
 
-        // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
-        for (int i = 0; i < bmeDataArrayList.size(); i++) {
-            // bar chart to plot temperature readings
-            float temperature = (float) bmeDataArrayList.get(i).getTemperature();
-            temperatureReadings.add(new Entry(i, temperature));
+            // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
+            for (int i = 0; i < bmeDataArrayList.size(); i++) {
+                // bar chart to plot temperature readings
+                float temperature = (float) bmeDataArrayList.get(i).getTemperature();
+                temperatureReadings.add(new Entry(i, temperature));
 
-            // line chart to plot humidity readings
-            float humidity = (float) bmeDataArrayList.get(i).getHumidity();
-            humidityReadings.add(new Entry(i, humidity));
+                // line chart to plot humidity readings
+                float humidity = (float) bmeDataArrayList.get(i).getHumidity();
+                humidityReadings.add(new Entry(i, humidity));
 
-            // line chart to plot pressure readings
-            float pressure = (float) bmeDataArrayList.get(i).getPressure();
-            pressureReadings.add(new Entry(i, pressure));
+                // line chart to plot pressure readings
+                float pressure = (float) bmeDataArrayList.get(i).getPressure();
+                pressureReadings.add(new Entry(i, pressure));
 
-            // line chart to plot gas readings
-            float gas = (float) bmeDataArrayList.get(i).getGas();
-            gasReadings.add(new Entry(i, gas));
+                // line chart to plot gas readings
+                float gas = (float) bmeDataArrayList.get(i).getGas();
+                gasReadings.add(new Entry(i, gas));
 
-            // line chart to plot altitude readings
-            float altitude = (float) bmeDataArrayList.get(i).getAltitude();
-            altitudeReadings.add(new Entry(i, altitude));
-        }
+                // line chart to plot altitude readings
+                float altitude = (float) bmeDataArrayList.get(i).getAltitude();
+                altitudeReadings.add(new Entry(i, altitude));
+            }
 
-        // declare datasets
+            // declare datasets
 //        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
-        LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, "Temperature Data");
-        LineDataSet humidityDataSet = new LineDataSet(humidityReadings, "Humidity Data");
-        LineDataSet pressureDataSet = new LineDataSet(pressureReadings, "Pressure Data");
-        LineDataSet gasDataSet = new LineDataSet(gasReadings, "Gas Data");
-        LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, "Altitude Data");
+            LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, "Temperature Data");
+            LineDataSet humidityDataSet = new LineDataSet(humidityReadings, "Humidity Data");
+            LineDataSet pressureDataSet = new LineDataSet(pressureReadings, "Pressure Data");
+            LineDataSet gasDataSet = new LineDataSet(gasReadings, "Gas Data");
+            LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, "Altitude Data");
 
-        // for line charts, customizes DATASET appearance and behavior
-        customizeLineDataSet(temperatureDataSet);
-        customizeLineDataSet(humidityDataSet);
-        customizeLineDataSet(pressureDataSet);
-        customizeLineDataSet(gasDataSet);
-        customizeLineDataSet(altitudeDataSet);
+            // for line charts, customizes DATASET appearance and behavior
+            customizeLineDataSet(temperatureDataSet);
+            customizeLineDataSet(humidityDataSet);
+            customizeLineDataSet(pressureDataSet);
+            customizeLineDataSet(gasDataSet);
+            customizeLineDataSet(altitudeDataSet);
 
-        // set data objects for the charts with their corresponding data sets
+            // set data objects for the charts with their corresponding data sets
 //        BarData temperatureData = new BarData(temperatureDataSet);
 //        temperatureChart.setData(temperatureData);
 //        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
 
-        LineData temperatureData = new LineData(temperatureDataSet);
-        temperatureChart.setData(temperatureData);
-        temperatureChart.invalidate();
+            LineData temperatureData = new LineData(temperatureDataSet);
+            temperatureChart.setData(temperatureData);
+            temperatureChart.invalidate();
 
-        LineData humidityData = new LineData(humidityDataSet);
-        humidityChart.setData(humidityData);
-        humidityChart.invalidate();
+            LineData humidityData = new LineData(humidityDataSet);
+            humidityChart.setData(humidityData);
+            humidityChart.invalidate();
 
-        LineData pressureData = new LineData(pressureDataSet);
-        pressureChart.setData(pressureData);
-        pressureChart.invalidate();
+            LineData pressureData = new LineData(pressureDataSet);
+            pressureChart.setData(pressureData);
+            pressureChart.invalidate();
 
-        LineData gasData = new LineData(gasDataSet);
-        gasChart.setData(gasData);
-        gasChart.invalidate();
+            LineData gasData = new LineData(gasDataSet);
+            gasChart.setData(gasData);
+            gasChart.invalidate();
 
-        LineData altitudeData = new LineData(altitudeDataSet);
-        altitudeChart.setData(altitudeData);
-        altitudeChart.invalidate();
+            LineData altitudeData = new LineData(altitudeDataSet);
+            altitudeChart.setData(altitudeData);
+            altitudeChart.invalidate();
+        }
     }
 
     private void initializeLineChart(LineChart lineChart) {

@@ -32,6 +32,7 @@ public class TeamFragment extends Fragment {
     FirestoreHelper firestoreHelper;
     private FragmentTeamBinding binding;
     private String teamName;
+    private String teamCode;
     private TeamViewModel teamViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class TeamFragment extends Fragment {
         firestoreHelper.getUser(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                String teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
+                teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
                 if (teamCode != null) {
                     showTeamView(teamCode);
                 } else {
@@ -67,7 +68,13 @@ public class TeamFragment extends Fragment {
                 teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
 
                 TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
-                textTeam.setText(teamName);
+                String teamText = "Team Name: " + teamName;
+                textTeam.setText(teamText);
+
+
+                TextView textCode = binding.getRoot().findViewById(R.id.code_team);
+                String codeText = "Team Code: " + teamCode;
+                textCode.setText(codeText);
 
                 // TODO: populate view to show team stuff
 

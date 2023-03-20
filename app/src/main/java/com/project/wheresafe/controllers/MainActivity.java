@@ -256,13 +256,13 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
             NavigationUI.setupWithNavController(navViewBottom, navController);
+
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        bleEspService.run();
     }
 
     private void setUserInfo() {

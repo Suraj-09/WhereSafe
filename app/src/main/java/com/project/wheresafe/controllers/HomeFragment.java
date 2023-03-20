@@ -14,8 +14,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ekn.gruzer.gaugelibrary.ArcGauge;
-import com.ekn.gruzer.gaugelibrary.Range;
+
+import com.ekndev.gaugelibrary.ArcGauge;
+import com.ekndev.gaugelibrary.Range;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -50,17 +51,12 @@ public class HomeFragment extends Fragment {
         CircularProgressBar circularProgressBar = binding.humidityProgressBar;
         TextView humidityValue = binding.humidityValue;  // textView above progress bar. "Humidity"
 
-        int humidityRandomNumber = 0;
-        circularProgressBar.setProgress(humidityRandomNumber); // set humidity to 75%
-        humidityValue.setText("0 %");
-
         ArcGauge temperatureGauge = binding.temperatureGauge;
-        temperatureGauge.setValue(0); // set temperature to 30 degrees Celsius
-        setTemperatureGaugeRange(temperatureGauge); // set color ranges
-
         ArcGauge pressureGauge = binding.pressureGauge;
-        pressureGauge.setValue(0); // set pressure to 800 hPa
-        setPressureGaugeRange(pressureGauge); // set color ranges
+
+        // set color ranges and other parameters for gauges
+        setTemperatureGauge(temperatureGauge);
+        setPressureGauge(pressureGauge);
 
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
             @Override
@@ -81,12 +77,13 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void setTemperatureGaugeRange(ArcGauge temperatureGauge) {
-        // set color ranges to gauge
-        // BME680 reads from -40 to 85 degrees C, but set this range from -40 to 50
+    private void setTemperatureGauge(ArcGauge temperatureGauge) {
+        // set color ranges to gauge and other parameters
+        temperatureGauge.setUnit("\u00B0C"); // degrees celsius
+        // BME680 reads from -40 to 85 degrees C, but set this range from -50 to 50
         Range range = new Range();
         range.setColor(Color.parseColor("#22B2FF")); // blue
-        range.setFrom(-40.0);
+        range.setFrom(-50.0);
         range.setTo(0.0);
 
         Range range2 = new Range();
@@ -97,7 +94,7 @@ public class HomeFragment extends Fragment {
         Range range3 = new Range();
         range3.setColor(Color.parseColor("#D22B2B")); // red
         range3.setFrom(25.0);
-        range3.setTo(60.0);
+        range3.setTo(50.0);
 
         // add color ranges to gauge
         temperatureGauge.addRange(range);
@@ -105,36 +102,26 @@ public class HomeFragment extends Fragment {
         temperatureGauge.addRange(range3);
 
         //set min and max
-        temperatureGauge.setMinValue(-40.0);
+        temperatureGauge.setMinValue(-50.0);
         temperatureGauge.setMaxValue(50.0);
     }
-    private void setPressureGaugeRange(ArcGauge pressureGauge) {
-        // set color ranges to gauge
+    private void setPressureGauge(ArcGauge pressureGauge) {
+        // set color ranges to gauge and other parameters
+        pressureGauge.setUnit("hPa");
         // BME680 reads altitude from 300 to 1100 hPa
+        // average atmospheric pressure at sea level is 1013.25 hPa
+        // 300 hPa would be approx pressure on top of Mount Everest
+        // Set range from 300 - 2000 hPa
         Range range = new Range();
-        range.setColor(Color.parseColor("#FFBF00")); // orange
+        range.setColor(Color.parseColor("#FF4CAF50")); // green
         range.setFrom(300.0);
-        range.setTo(1100.0);
+        range.setTo(2000.0);
 
-      //  TODO: add altitude ranges
-      //  Range range2 = new Range();
-      //  range2.setColor(Color.parseColor("#FFBF00")); // orange
-      //  range2.setFrom(0.0);
-      //  range2.setTo(25.0);
-
-     //   Range range3 = new Range();
-     //   range3.setColor(Color.parseColor("#D22B2B")); // red
-     //   range3.setFrom(25.0);
-     //   range3.setTo(60.0);
-
-        // add color ranges to gauge
         pressureGauge.addRange(range);
-    //    pressureGauge.addRange(range2);
-    //    pressureGauge.addRange(range3);
 
         //set min and max
         pressureGauge.setMinValue(300.0);
-        pressureGauge.setMaxValue(1100.0);
+        pressureGauge.setMaxValue(1700.0);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

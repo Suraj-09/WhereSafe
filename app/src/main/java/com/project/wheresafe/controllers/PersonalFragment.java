@@ -1,14 +1,12 @@
 package com.project.wheresafe.controllers;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,52 +18,32 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.project.wheresafe.models.FirestoreHelper;
-import com.project.wheresafe.utils.BmeData;
-import com.project.wheresafe.models.DatabaseHelper;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
+import com.project.wheresafe.models.DatabaseHelper;
+import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.PersonalViewModel;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.widget.Toast;
-import androidx.core.app.ActivityCompat;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.maps.SupportMapFragment;
-
-
 
 public class PersonalFragment extends Fragment implements OnMapReadyCallback, LocationListener {
-    private FragmentPersonalBinding binding;
-    private boolean paused;
     DatabaseHelper dbHelper;
     Timer timer;
     TimerTask timerTask;
+    private FragmentPersonalBinding binding;
+    private boolean paused;
 
 //    private MapView mapView;
 //    private GoogleMap googleMap;
@@ -75,10 +53,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //    private double latitude;
 //    private double longitude;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        PersonalViewModel personalViewModel =
-                new ViewModelProvider(this).get(PersonalViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
@@ -118,10 +94,10 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                populateCharts(firestoreHelper.getBmeDataArrayList());
+
+                populateCharts(firestoreHelper.getFirestoreData().getBmeDataArrayList());
             }
         });
-         // populates da charts
 
 
 //        // Initialize the MapView
@@ -223,7 +199,18 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //
 //    }
 
-    public void populateCharts(ArrayList<BmeData> bmeDataArrayList){
+    public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
+        if (bmeDataArrayList.isEmpty()) {
+            return;
+        }
+
+        bmeDataArrayList.sort(new Comparator<BmeData>() {
+            @Override
+            public int compare(BmeData o1, BmeData o2) {
+                return o1.getTimestamp().compareTo(o2.getTimestamp());
+            }
+        });
+
         // Populate charts!
         FragmentActivity mActivity = getActivity();
 //        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
@@ -248,16 +235,6 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         List<Entry> pressureReadings = new ArrayList<>();
         List<Entry> gasReadings = new ArrayList<>();
         List<Entry> altitudeReadings = new ArrayList<>();
-
-//        BmeData[] bmeDataArray = new BmeData[] {
-//                new BmeData(20.0, 50.0, 1013.0, 100.0, 100.0),
-//                new BmeData(25.0, 52.0, 1014.0, 110.0, 105.0),
-//                new BmeData(18.0, 58.0, 1019.0, 90.0, 102.0),
-//                new BmeData(27.0, 42.0, 1032.0, 95.0, 95.0),
-//                new BmeData(19.0, 49.0, 1002.0, 99.0, 99.0),
-//                new BmeData(22.0, 55.0, 1010.0, 102.0, 103.0),
-//                // add more BmeData objects here
-//        };
 
         // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
         for (int i = 0; i < bmeDataArrayList.size(); i++) {
@@ -305,7 +282,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         LineData temperatureData = new LineData(temperatureDataSet);
         temperatureChart.setData(temperatureData);
         temperatureChart.invalidate();
-        
+
         LineData humidityData = new LineData(humidityDataSet);
         humidityChart.setData(humidityData);
         humidityChart.invalidate();
@@ -339,8 +316,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setGranularity(0.5f); // sets value for x-axis to be incremented
         //chart.setMarker(marker);      // could be implemented later...
-                                        // displays a customized pop-up whenever a value in the chart is clicked on
-                                        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
+        // displays a customized pop-up whenever a value in the chart is clicked on
+        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
         lineChart.invalidate();
     }
 
@@ -359,6 +336,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         rightAxis.setDrawLabels(false);
         barChart.invalidate();
     }
+
     private void customizeLineDataSet(LineDataSet lineDataSet) {
         // Customize DATASET appearance and behavior (for line charts)
         lineDataSet.setDrawIcons(false);

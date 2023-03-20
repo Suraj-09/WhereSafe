@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controllers.SignUpActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vert_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vert_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="center"
+        android:scaleX="3"
+        android:scaleY="3"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_30"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_05"
+        app:srcCompat="@mipmap/ic_launcher_foreground" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textColor="#25CF41"
+        app:layout_constraintBottom_toTopOf="@+id/edtNameSignUp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintTop_toBottomOf="@id/guideline_30" />
+
+    <EditText
+        android:id="@+id/edtNameSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/txtEmail"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_right"
+        app:layout_constraintTop_toBottomOf="@id/txtName"  />
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textColor="#25CF41"
+        app:layout_constraintBottom_toTopOf="@+id/edtEmailSignUp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintTop_toBottomOf="@id/guideline_30" />
+
+    <EditText
+        android:id="@+id/edtEmailSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/prompt_email"
+        android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/txtPassword"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_right"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail" />
+
+    <TextView
+        android:id="@+id/txtPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textColor="#25CF41"
+        app:layout_constraintBottom_toTopOf="@+id/edtPasswordSignUp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintTop_toBottomOf="@id/edtEmailSignUp" />
+
+    <EditText
+        android:id="@+id/edtPasswordSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/prompt_password"
+        android:hint="@string/prompt_password"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_right"
+        app:layout_constraintTop_toBottomOf="@id/txtPassword"  />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_right"
+        app:layout_constraintTop_toBottomOf="@id/txtPassword"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_75"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_right"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUp" >
+
+        <TextView
+            android:id="@+id/txtNoAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btnGoSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0000"
+            android:textColor="#25CF41"
+            android:textSize="14sp"
+            android:text="Sign In" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_75"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

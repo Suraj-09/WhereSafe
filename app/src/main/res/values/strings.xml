@@ -14,4 +14,17 @@
     <string name="title_team">Team Metrics</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="temperature">Temperature</string>
+    <string name="create_team">Create Team</string>
+    <string name="join_team">Join Team</string>
+    <string name="temperature_data">Temperature Data</string>
+    <string name="humidity_data">Humidity Data</string>
+    <string name="pressure_data">Pressure Data</string>
+    <string name="gas_data">Gas Data</string>
+    <string name="altitude_data">Altitude Data</string>
+    <string name="select_language">Select Language</string>
+
 </resources>

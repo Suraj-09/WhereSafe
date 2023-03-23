@@ -36,6 +36,7 @@ import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
+import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;

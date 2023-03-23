@@ -1,0 +1,29 @@
+<resources>
+<string name="app_name">WhereSafe</string>
+<string name="navigation_drawer_open">Open navigation drawer</string>
+<string name="navigation_drawer_close">Close navigation drawer</string>
+<string name="nav_header_title">WhereSafe</string>
+<string name="nav_header_subtitle">android.studio@android.com</string>
+<string name="nav_header_desc">Navigation header</string>
+<string name="action_settings">Rafraîchir</string>
+
+<string name="menu_home">Page d\'Accueil</string>
+<string name="menu_advanced_data">Données Détaillées</string>
+<string name="menu_settings">Paramètres</string>
+<string name="title_personal">Mesures Personnelles</string>
+<string name="title_team">Métriques d\'Équipe</string>
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="humidity">Humidité</string>
+    <string name="pressure">Pression</string>
+    <string name="temperature">Température</string>
+    <string name="create_team">Créer une Équipe</string>
+    <string name="join_team">Rejoindre une Équipe</string>
+    <string name="temperature_data">Données de température</string>
+    <string name="humidity_data">Données d\'humidité</string>
+    <string name="pressure_data">Données de pression</string>
+    <string name="gas_data">Données de gaz</string>
+    <string name="altitude_data">Données d\'altitude</string>
+    <string name="select_language">Choisir la langue</string>
+</resources>

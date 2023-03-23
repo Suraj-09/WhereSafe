@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.project.wheresafe.utils.DbConfig;
 import com.project.wheresafe.utils.BmeData;
+import com.project.wheresafe.utils.DbConfig;
 
 import java.util.Date;
 import java.util.Locale;
@@ -20,8 +20,8 @@ import java.util.Locale;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd @ HH:mm:ss", Locale.getDefault());
     private Context context = null;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd @ HH:mm:ss",Locale.getDefault());
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DbConfig.DATABASE_NAME, null, DATABASE_VERSION);

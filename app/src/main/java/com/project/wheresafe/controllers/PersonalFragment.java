@@ -1,14 +1,12 @@
 package com.project.wheresafe.controllers;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,52 +18,32 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.project.wheresafe.models.FirestoreHelper;
-import com.project.wheresafe.utils.BmeData;
-import com.project.wheresafe.models.DatabaseHelper;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
+import com.project.wheresafe.models.DatabaseHelper;
+import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.PersonalViewModel;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.widget.Toast;
-import androidx.core.app.ActivityCompat;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.maps.SupportMapFragment;
-
-
 
 public class PersonalFragment extends Fragment implements OnMapReadyCallback, LocationListener {
-    private FragmentPersonalBinding binding;
-    private boolean paused;
     DatabaseHelper dbHelper;
     Timer timer;
     TimerTask timerTask;
+    private FragmentPersonalBinding binding;
+    private boolean paused;
 
 //    private MapView mapView;
 //    private GoogleMap googleMap;
@@ -75,10 +53,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //    private double latitude;
 //    private double longitude;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        PersonalViewModel personalViewModel =
-                new ViewModelProvider(this).get(PersonalViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
@@ -118,10 +94,10 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                populateCharts(firestoreHelper.getBmeDataArrayList());
+
+                populateCharts(firestoreHelper.getFirestoreData().getBmeDataArrayList());
             }
         });
-
 
 
 //        // Initialize the MapView
@@ -223,66 +199,69 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //
 //    }
 
-    public void populateCharts(ArrayList<BmeData> bmeDataArrayList){
-        // Populate charts!
-        FragmentActivity mActivity = getActivity();
-//        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
-        LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
-        LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
-        LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
-        LineChart gasChart = mActivity.findViewById(R.id.gasChart);
-        LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
-
-        // Customize CHART appearance and behavior
-//        initializeBarChart(temperatureChart);
-        initializeLineChart(temperatureChart);
-        initializeLineChart(humidityChart);
-        initializeLineChart(pressureChart);
-        initializeLineChart(gasChart);
-        initializeLineChart(altitudeChart);
-
-        // create ArrayLists for BarCharts & create Lists for LineCharts
-//        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
-        List<Entry> temperatureReadings = new ArrayList<>();
-        List<Entry> humidityReadings = new ArrayList<>();
-        List<Entry> pressureReadings = new ArrayList<>();
-        List<Entry> gasReadings = new ArrayList<>();
-        List<Entry> altitudeReadings = new ArrayList<>();
-
-//        BmeData[] bmeDataArray = new BmeData[] {
-//                new BmeData(20.0, 50.0, 1013.0, 100.0, 100.0),
-//                new BmeData(25.0, 52.0, 1014.0, 110.0, 105.0),
-//                new BmeData(18.0, 58.0, 1019.0, 90.0, 102.0),
-//                new BmeData(27.0, 42.0, 1032.0, 95.0, 95.0),
-//                new BmeData(19.0, 49.0, 1002.0, 99.0, 99.0),
-//                new BmeData(22.0, 55.0, 1010.0, 102.0, 103.0),
-//                // add more BmeData objects here
-//        };
-
-        // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
-        for (int i = 0; i < bmeDataArrayList.size(); i++) {
-            // bar chart to plot temperature readings
-            float temperature = (float) bmeDataArrayList.get(i).getTemperature();
-            temperatureReadings.add(new Entry(i, temperature));
-
-            // line chart to plot humidity readings
-            float humidity = (float) bmeDataArrayList.get(i).getHumidity();
-            humidityReadings.add(new Entry(i, humidity));
-
-            // line chart to plot pressure readings
-            float pressure = (float) bmeDataArrayList.get(i).getPressure();
-            pressureReadings.add(new Entry(i, pressure));
-
-            // line chart to plot gas readings
-            float gas = (float) bmeDataArrayList.get(i).getGas();
-            gasReadings.add(new Entry(i, gas));
-
-            // line chart to plot altitude readings
-            float altitude = (float) bmeDataArrayList.get(i).getAltitude();
-            altitudeReadings.add(new Entry(i, altitude));
+    public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
+        if (bmeDataArrayList.isEmpty()) {
+            return;
         }
 
-        // declare datasets
+        bmeDataArrayList.sort(new Comparator<BmeData>() {
+            @Override
+            public int compare(BmeData o1, BmeData o2) {
+                return o1.getTimestamp().compareTo(o2.getTimestamp());
+            }
+        });
+
+        // Populate charts!
+        FragmentActivity mActivity = getActivity();
+
+        if (mActivity != null) {
+//        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
+            LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
+            LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
+            LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
+            LineChart gasChart = mActivity.findViewById(R.id.gasChart);
+            LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
+
+            // Customize CHART appearance and behavior
+//        initializeBarChart(temperatureChart);
+            initializeLineChart(temperatureChart);
+            initializeLineChart(humidityChart);
+            initializeLineChart(pressureChart);
+            initializeLineChart(gasChart);
+            initializeLineChart(altitudeChart);
+
+            // create ArrayLists for BarCharts & create Lists for LineCharts
+//        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
+            List<Entry> temperatureReadings = new ArrayList<>();
+            List<Entry> humidityReadings = new ArrayList<>();
+            List<Entry> pressureReadings = new ArrayList<>();
+            List<Entry> gasReadings = new ArrayList<>();
+            List<Entry> altitudeReadings = new ArrayList<>();
+
+            // loops through bmeDataArray, reads a given data metric to be plotted (temp, humidity, etc)
+            for (int i = 0; i < bmeDataArrayList.size(); i++) {
+                // bar chart to plot temperature readings
+                float temperature = (float) bmeDataArrayList.get(i).getTemperature();
+                temperatureReadings.add(new Entry(i, temperature));
+
+                // line chart to plot humidity readings
+                float humidity = (float) bmeDataArrayList.get(i).getHumidity();
+                humidityReadings.add(new Entry(i, humidity));
+
+                // line chart to plot pressure readings
+                float pressure = (float) bmeDataArrayList.get(i).getPressure();
+                pressureReadings.add(new Entry(i, pressure));
+
+                // line chart to plot gas readings
+                float gas = (float) bmeDataArrayList.get(i).getGas();
+                gasReadings.add(new Entry(i, gas));
+
+                // line chart to plot altitude readings
+                float altitude = (float) bmeDataArrayList.get(i).getAltitude();
+                altitudeReadings.add(new Entry(i, altitude));
+            }
+
+            // declare datasets
 //        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
         LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings,  getString(R.string.temperature_data));
         LineDataSet humidityDataSet = new LineDataSet(humidityReadings,  getString(R.string.humidity_data));
@@ -290,37 +269,38 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         LineDataSet gasDataSet = new LineDataSet(gasReadings,  getString(R.string.gas_data));
         LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings,  getString(R.string.altitude_data));
 
-        // for line charts, customizes DATASET appearance and behavior
-        customizeLineDataSet(temperatureDataSet);
-        customizeLineDataSet(humidityDataSet);
-        customizeLineDataSet(pressureDataSet);
-        customizeLineDataSet(gasDataSet);
-        customizeLineDataSet(altitudeDataSet);
+            // for line charts, customizes DATASET appearance and behavior
+            customizeLineDataSet(temperatureDataSet);
+            customizeLineDataSet(humidityDataSet);
+            customizeLineDataSet(pressureDataSet);
+            customizeLineDataSet(gasDataSet);
+            customizeLineDataSet(altitudeDataSet);
 
-        // set data objects for the charts with their corresponding data sets
+            // set data objects for the charts with their corresponding data sets
 //        BarData temperatureData = new BarData(temperatureDataSet);
 //        temperatureChart.setData(temperatureData);
 //        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
 
-        LineData temperatureData = new LineData(temperatureDataSet);
-        temperatureChart.setData(temperatureData);
-        temperatureChart.invalidate();
-        
-        LineData humidityData = new LineData(humidityDataSet);
-        humidityChart.setData(humidityData);
-        humidityChart.invalidate();
+            LineData temperatureData = new LineData(temperatureDataSet);
+            temperatureChart.setData(temperatureData);
+            temperatureChart.invalidate();
 
-        LineData pressureData = new LineData(pressureDataSet);
-        pressureChart.setData(pressureData);
-        pressureChart.invalidate();
+            LineData humidityData = new LineData(humidityDataSet);
+            humidityChart.setData(humidityData);
+            humidityChart.invalidate();
 
-        LineData gasData = new LineData(gasDataSet);
-        gasChart.setData(gasData);
-        gasChart.invalidate();
+            LineData pressureData = new LineData(pressureDataSet);
+            pressureChart.setData(pressureData);
+            pressureChart.invalidate();
 
-        LineData altitudeData = new LineData(altitudeDataSet);
-        altitudeChart.setData(altitudeData);
-        altitudeChart.invalidate();
+            LineData gasData = new LineData(gasDataSet);
+            gasChart.setData(gasData);
+            gasChart.invalidate();
+
+            LineData altitudeData = new LineData(altitudeDataSet);
+            altitudeChart.setData(altitudeData);
+            altitudeChart.invalidate();
+        }
     }
 
     private void initializeLineChart(LineChart lineChart) {
@@ -339,8 +319,8 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setGranularity(0.5f); // sets value for x-axis to be incremented
         //chart.setMarker(marker);      // could be implemented later...
-                                        // displays a customized pop-up whenever a value in the chart is clicked on
-                                        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
+        // displays a customized pop-up whenever a value in the chart is clicked on
+        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
         lineChart.invalidate();
     }
 
@@ -359,6 +339,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         rightAxis.setDrawLabels(false);
         barChart.invalidate();
     }
+
     private void customizeLineDataSet(LineDataSet lineDataSet) {
         // Customize DATASET appearance and behavior (for line charts)
         lineDataSet.setDrawIcons(false);

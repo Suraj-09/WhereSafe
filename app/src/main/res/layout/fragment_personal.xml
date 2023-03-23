@@ -57,14 +57,14 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="Temperature Data (°C)" />
+            android:text="@string/temperature_data" />
 
         <TextView
             android:id="@+id/txtTemperatureSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Last 20 temperature readings" />
+            android:text="@string/last_20_temperature_readings" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/temperatureChart"
@@ -87,14 +87,14 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="Humidity Data (%)" />
+            android:text="@string/humidity_data" />
 
         <TextView
             android:id="@+id/txtHumiditySubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Last 20 humidity readings" />
+            android:text="@string/last_20_humidity_readings" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/humidityChart"
@@ -114,14 +114,14 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="Preassure Data (hPa)" />
+            android:text="@string/pressure_data" />
 
         <TextView
             android:id="@+id/txtPressureSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Last 20 pressure readings" />
+            android:text="@string/last_20_pressure_readings" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/pressureChart"
@@ -141,14 +141,14 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="Altitude Data (m)" />
+            android:text="@string/altitude_data" />
 
         <TextView
             android:id="@+id/txtAltitudeSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Last 20 altitude readings" />
+            android:text="@string/last_20_altitude_readings" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/altitudeChart"
@@ -169,14 +169,14 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="VOC Data Trendline" />
+            android:text="@string/voc_data_trendline" />
 
         <TextView
             android:id="@+id/txtGasSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Last 20 VOC readings" />
+            android:text="@string/last_20_voc_readings" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/gasChart"

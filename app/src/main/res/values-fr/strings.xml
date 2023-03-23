@@ -10,6 +10,7 @@
 <string name="menu_home">Page d\'Accueil</string>
 <string name="menu_advanced_data">Données Détaillées</string>
 <string name="menu_settings">Paramètres</string>
+    <string name="menu_sign_out">Déconnexion</string>
 <string name="title_personal">Mesures Personnelles</string>
 <string name="title_team">Métriques d\'Équipe</string>
 <!-- TODO: Remove or change this placeholder text -->
@@ -20,10 +21,31 @@
     <string name="temperature">Température</string>
     <string name="create_team">Créer une Équipe</string>
     <string name="join_team">Rejoindre une Équipe</string>
-    <string name="temperature_data">Données de température</string>
-    <string name="humidity_data">Données d\'humidité</string>
-    <string name="pressure_data">Données de pression</string>
+    <string name="temperature_data">Données de température (°C)</string>
+    <string name="humidity_data">Données d\'humidité (%)</string>
+    <string name="pressure_data">Données de pression (hPa)</string>
     <string name="gas_data">Données de gaz</string>
-    <string name="altitude_data">Données d\'altitude</string>
+    <string name="altitude_data">Données d\'altitude (m)</string>
     <string name="select_language">Choisir la langue</string>
+
+    <string name="title_activity_login">Connexion</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Se connecter ou s\'inscrire</string>
+    <string name="action_sign_in_short">Se connecter</string>
+    <string name="welcome">"Bienvenue !"</string>
+    <string name="invalid_username">Nom d\'utilisateur invalide</string>
+    <string name="invalid_password">Le mot de passe doit contenir >5 caractères</string>
+    <string name="login_failed">"Échec de la connexion"</string>
+    <string name="error_weak_password">"Le mot de passe fourni est invalide. [ Le mot de passe doit contenir au moins 6 caractères ]"</string>
+    <string name="error_invalid_email">"L'adresse e-mail est mal formatée."</string>
+    <string name="error_user_exists">"L'utilisateur existe déjà"</string>
+
+    <string name="last_20_temperature_readings">20 dernières mesures de température</string>
+    <string name="last_20_humidity_readings">20 dernières mesures d\'humidité</string>
+    <string name="last_20_pressure_readings">20 dernières mesures de pression</string>
+    <string name="last_20_altitude_readings">20 dernières mesures d\'altitude</string>
+    <string name="voc_data_trendline">Courbe de tendance des données COV</string>
+    <string name="last_20_voc_readings">20 dernières mesures de COV</string>
+
 </resources>

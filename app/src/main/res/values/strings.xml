@@ -21,11 +21,11 @@
     <string name="temperature">Temperature</string>
     <string name="create_team">Create Team</string>
     <string name="join_team">Join Team</string>
-    <string name="temperature_data">Temperature Data</string>
-    <string name="humidity_data">Humidity Data</string>
-    <string name="pressure_data">Pressure Data</string>
+    <string name="temperature_data">Temperature Data (°C)</string>
+    <string name="humidity_data">Humidity Data (%)</string>
+    <string name="pressure_data">Pressure Data (hPa)</string>
     <string name="gas_data">Gas Data</string>
-    <string name="altitude_data">Altitude Data</string>
+    <string name="altitude_data">Altitude Data (m)</string>
     <string name="select_language">Select Language</string>
 
     <string name="title_activity_login">LoginActivity</string>
@@ -41,4 +41,10 @@
     <string name="error_weak_password">"The given password is invalid. [ Password should be at least 6 characters ]"</string>
     <string name="error_invalid_email">"The email address is badly formatted."</string>
     <string name="error_user_exists">"User already exists"</string>
+    <string name="last_20_temperature_readings">Last 20 temperature readings</string>
+    <string name="last_20_humidity_readings">Last 20 humidity readings</string>
+    <string name="last_20_pressure_readings">Last 20 pressure readings</string>
+    <string name="last_20_altitude_readings">Last 20 altitude readings</string>
+    <string name="voc_data_trendline">VOC Data Trendline</string>
+    <string name="last_20_voc_readings">Last 20 VOC readings</string>
 </resources>

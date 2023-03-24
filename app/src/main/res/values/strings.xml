@@ -47,4 +47,16 @@
     <string name="last_20_altitude_readings">Last 20 altitude readings</string>
     <string name="voc_data_trendline">VOC Data Trendline</string>
     <string name="last_20_voc_readings">Last 20 VOC readings</string>
+
+    <!--  SharedPreferences  -->
+    <string name="user_preference_file_key">wheresafe_user</string>
+    <string name="user_name_key">user_name_key</string>
+    <string name="user_id_key">user_id_key</string>
+    <string name="user_team_code_key">user_team_code_key</string>
+    <string name="user_team_name_key">user_team_name_key</string>
+    <string name="user_mac_key">user_mac_key</string>
+    <string name="user_language_key">user_language_key</string>
+
+
+
 </resources>

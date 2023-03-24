@@ -38,6 +38,7 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentFirebaseUser;
     private BleEspService bleEspService;
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
     private boolean initFlag;
 
@@ -64,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
+        sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
+
         if (currentFirebaseUser == null) {
             initFlag = false;
             goToSignIn();
@@ -118,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "init()");
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
+        sharedPreferenceHelper.saveUser(currentFirebaseUser);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -290,7 +295,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDisplayName() {
         FirestoreHelper firestoreHelper = new FirestoreHelper();
-        firestoreHelper.getUser(new FirestoreCallback() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        firestoreHelper.getUser(user.getUid(), new FirestoreCallback() {
             @Override
             public void onResultGet() {
                 String name = firestoreHelper.getFirestoreData().getUser().getName();

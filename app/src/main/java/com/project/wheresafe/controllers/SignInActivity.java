@@ -1,8 +1,12 @@
 package com.project.wheresafe.controllers;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -22,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.R;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 
 public class SignInActivity extends AppCompatActivity {
     final private String TAG = "SignInActivity";
@@ -84,6 +89,12 @@ public class SignInActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+                                    sharedPreferenceHelper.saveUser(user);
+                                }
+
                                 goToMainActivity();
                             } else {
                                 // handle the errors from invalid credentials

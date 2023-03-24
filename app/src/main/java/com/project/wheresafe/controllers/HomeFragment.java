@@ -1,5 +1,6 @@
 package com.project.wheresafe.controllers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.ekndev.gaugelibrary.ArcGauge;
 import com.ekndev.gaugelibrary.Range;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.viewmodels.HomeViewModel;
 
@@ -24,6 +26,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     HomeViewModel homeViewModel;
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -57,6 +60,13 @@ public class HomeFragment extends Fragment {
         homeViewModel.getLatestBmeData().observe(getViewLifecycleOwner(), latestBmeDataObserver);
 
         return root;
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sharedPreferenceHelper = new SharedPreferenceHelper(context);
 
     }
 

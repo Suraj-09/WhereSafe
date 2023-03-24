@@ -39,6 +39,7 @@ import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
+import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
     final private String TAG = "MainActivity";
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "onCreate()");
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
 
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void init() {
+        Log.d(TAG, "init()");
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
 
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart()");
 
         if (!initFlag) {
             init();
@@ -263,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume()");
     }
 
     private void setUserInfo() {
@@ -347,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FirebaseAuth.getInstance().signOut();
+//        FirebaseAuth.getInstance().signOut();
         unregisterReceiver(bluetoothStateReceiver);
     }
 

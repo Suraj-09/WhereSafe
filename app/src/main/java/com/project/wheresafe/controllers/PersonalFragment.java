@@ -263,11 +263,11 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 
             // declare datasets
 //        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
-            LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, "Temperature Data");
-            LineDataSet humidityDataSet = new LineDataSet(humidityReadings, "Humidity Data");
-            LineDataSet pressureDataSet = new LineDataSet(pressureReadings, "Pressure Data");
-            LineDataSet gasDataSet = new LineDataSet(gasReadings, "Gas Data");
-            LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, "Altitude Data");
+        LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings,  getString(R.string.temperature_data));
+        LineDataSet humidityDataSet = new LineDataSet(humidityReadings,  getString(R.string.humidity_data));
+        LineDataSet pressureDataSet = new LineDataSet(pressureReadings,  getString(R.string.pressure_data));
+        LineDataSet gasDataSet = new LineDataSet(gasReadings,  getString(R.string.gas_data));
+        LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings,  getString(R.string.altitude_data));
 
             // for line charts, customizes DATASET appearance and behavior
             customizeLineDataSet(temperatureDataSet);

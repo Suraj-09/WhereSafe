@@ -58,6 +58,7 @@ public class FirestoreHelper {
     public void addUser(FirebaseUser user, String name) {
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("name", name);
+        newUser.put("language_code", "en");
 
         usersCollection.document(user.getUid())
                 .set(newUser)
@@ -97,6 +98,18 @@ public class FirestoreHelper {
                                     }
                                     if (document.getData().containsKey("mac_address")) {
                                         user.setMacAddress(document.getData().get("mac_address").toString());
+                                    }
+
+                                    if (document.getData().containsKey("device_name")) {
+                                        user.setDeviceName(document.getData().get("device_name").toString());
+                                    } else {
+                                        user.setDeviceName("WhereSafe");
+                                    }
+
+                                    if (document.getData().containsKey("language_code")) {
+                                        user.setLanguageCode(document.getData().get("language_code").toString());
+                                    } else {
+                                        user.setLanguageCode("en");
                                     }
 
                                 }
@@ -303,6 +316,23 @@ public class FirestoreHelper {
                     }
                 });
 
+    }
+
+    public void updateLanguage(String uid, String languageCode) {
+        Map<String, Object> langInfo = new HashMap<>();
+        langInfo.put("language_code", languageCode);
+
+        usersCollection.document(uid).update(langInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
     }
 
 }

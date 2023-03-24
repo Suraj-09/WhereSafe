@@ -33,6 +33,9 @@
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Se connecter ou s\'inscrire</string>
     <string name="action_sign_in_short">Se connecter</string>
+    <string name="action_sign_up">s\'inscrire</string>
+    <string name="already_account">déjà un compte?</string>
+    <string name="action_forgot_pass">Mot de pass oublié?</string>
     <string name="welcome">"Bienvenue !"</string>
     <string name="invalid_username">Nom d\'utilisateur invalide</string>
     <string name="invalid_password">Le mot de passe doit contenir >5 caractères</string>

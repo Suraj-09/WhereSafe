@@ -1,5 +1,6 @@
 package com.project.wheresafe.controllers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentSettingsBinding;
+import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 import com.project.wheresafe.viewmodels.SettingsViewModel;
 
@@ -24,6 +27,7 @@ import java.util.Locale;
 public class SettingsFragment extends Fragment implements LanguageSelectionDialogFragment.LanguageSelectionListener {
 
     private FragmentSettingsBinding binding;
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,11 +51,21 @@ public class SettingsFragment extends Fragment implements LanguageSelectionDialo
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sharedPreferenceHelper = new SharedPreferenceHelper(context);
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
     public void onLanguageSelected(String languageCode) {
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.updateLanguage(sharedPreferenceHelper.getUid(), languageCode);
+
         setLocale(languageCode);
         // Restart MainActivity after changing the language
         Intent intent = new Intent(requireActivity(), MainActivity.class);

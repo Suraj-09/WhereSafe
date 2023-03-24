@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +41,9 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+//        Log.d(TAG, AppCompatDelegate.getApplicationLocales().toLanguageTags());
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(AppCompatDelegate.getApplicationLocales().toLanguageTags());
+        AppCompatDelegate.setApplicationLocales(appLocale);
 
         mAuth = FirebaseAuth.getInstance();
 

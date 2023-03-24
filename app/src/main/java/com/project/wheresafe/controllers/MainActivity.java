@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.core.os.LocaleListCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,6 +40,7 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
+//import com.project.wheresafe.models.LocaleHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
@@ -55,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     private FirebaseUser currentFirebaseUser;
+    private FirestoreHelper firestoreHelper;
     private BleEspService bleEspService;
     private SharedPreferenceHelper sharedPreferenceHelper;
 
+//    private LocaleHelper localeHelper;
     private boolean initFlag;
 
     @Override
@@ -66,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
+        firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+
+        String lang = sharedPreferenceHelper.getLanguageCode();
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
+        AppCompatDelegate.setApplicationLocales(appLocale);
 
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
@@ -118,11 +128,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     private void init() {
         Log.d(TAG, "init()");
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
         sharedPreferenceHelper.saveUser(currentFirebaseUser);
+
+        String lang = sharedPreferenceHelper.getLanguageCode();
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
+        AppCompatDelegate.setApplicationLocales(appLocale);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -272,6 +287,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
+        String lang = sharedPreferenceHelper.getLanguageCode();
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
+        AppCompatDelegate.setApplicationLocales(appLocale);
     }
 
     private void setUserInfo() {

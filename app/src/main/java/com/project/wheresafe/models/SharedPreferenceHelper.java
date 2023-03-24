@@ -3,6 +3,10 @@ package com.project.wheresafe.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.R;
@@ -10,6 +14,7 @@ import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.User;
 
 public class SharedPreferenceHelper {
+    private String TAG = "SharedPreferenceHelper";
     private SharedPreferences sharedPreferences;
     private Context context;
 
@@ -39,7 +44,12 @@ public class SharedPreferenceHelper {
 
                 editor.putString(context.getResources().getString(R.string.user_team_code_key), curUser.getTeamCode());
                 editor.putString(context.getResources().getString(R.string.user_mac_key), curUser.getMacAddress());
-                editor.apply();
+                editor.putString(context.getResources().getString(R.string.user_language_key), curUser.getLanguageCode());
+                editor.commit();
+
+                // update language changes
+                LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(curUser.getLanguageCode());
+                AppCompatDelegate.setApplicationLocales(appLocale);
             }
         });
     }
@@ -59,6 +69,16 @@ public class SharedPreferenceHelper {
 
     public String getTeamCode() {
         return sharedPreferences.getString(context.getResources().getString(R.string.user_team_code_key), null);
+    }
+
+    public String getLanguageCode() {
+        return sharedPreferences.getString(context.getResources().getString(R.string.user_language_key), "en");
+    }
+
+    public void setLanguageCode(String languageCode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.user_language_key), languageCode);
+        editor.commit();
     }
 
 

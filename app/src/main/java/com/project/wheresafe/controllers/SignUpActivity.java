@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 
 public class SignUpActivity extends AppCompatActivity {
     final private String TAG = "SignUpActivity";
@@ -90,6 +91,10 @@ public class SignUpActivity extends AppCompatActivity {
                                     FirestoreHelper firestoreHelper = new FirestoreHelper();
                                     firestoreHelper.addUser(user, user_name);
                                     setUserProfile(user, user_name);
+
+                                    SharedPreferenceHelper sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+                                    sharedPreferenceHelper.saveUser(user);
+
                                     goToMainActivity();
                                 }
                             } else {

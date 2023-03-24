@@ -1,5 +1,6 @@
 package com.project.wheresafe.controllers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,6 +28,7 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
 import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.PersonalViewModel;
@@ -43,6 +45,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
     Timer timer;
     TimerTask timerTask;
     private FragmentPersonalBinding binding;
+    private SharedPreferenceHelper sharedPreferenceHelper;
     private boolean paused;
 
 //    private MapView mapView;
@@ -88,10 +91,17 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sharedPreferenceHelper = new SharedPreferenceHelper(context);
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirestoreHelper firestoreHelper = new FirestoreHelper();
-        firestoreHelper.getAllPersonalSensorData(new FirestoreCallback() {
+        firestoreHelper.getAllPersonalSensorData(sharedPreferenceHelper.getUid(), new FirestoreCallback() {
             @Override
             public void onResultGet() {
 

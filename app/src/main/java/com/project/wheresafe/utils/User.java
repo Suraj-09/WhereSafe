@@ -9,6 +9,8 @@ public class User {
     private String name;
     private String teamCode;
     private String macAddress;
+    private String deviceName;
+    private String languageCode;
     private String teamName;
     private ArrayList<DocumentReference> teamMembers;
 
@@ -51,6 +53,22 @@ public class User {
 
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getTeamName() {

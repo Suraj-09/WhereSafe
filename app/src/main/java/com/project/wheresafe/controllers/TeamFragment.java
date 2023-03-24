@@ -1,6 +1,7 @@
 package com.project.wheresafe.controllers;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentTeamBinding;
 import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.TeamViewModel;
 
@@ -34,6 +36,7 @@ public class TeamFragment extends Fragment {
     private String teamName;
     private String teamCode;
     private TeamViewModel teamViewModel;
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
@@ -41,21 +44,36 @@ public class TeamFragment extends Fragment {
         binding = FragmentTeamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
         firestoreHelper = new FirestoreHelper();
-        firestoreHelper.getUser(new FirestoreCallback() {
-            @Override
-            public void onResultGet() {
-                teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
-                if (teamCode != null) {
-                    showTeamView(teamCode);
-                } else {
-                    showCreateJoinView();
-                }
-            }
-        });
+        String teamCode = sharedPreferenceHelper.getTeamCode();
+        if (teamCode != null) {
+            showTeamView(teamCode);
+        } else {
+            showCreateJoinView();
+        }
+
+//        sharedPreferenceHelper = new SharedPreferenceHelper(getActivity().getApplicationContext());
+
+////        firestoreHelper.getUser(new FirestoreCallback() {
+////            @Override
+////            public void onResultGet() {
+////                teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
+////                if (teamCode != null) {
+////                    showTeamView(teamCode);
+////                } else {
+////                    showCreateJoinView();
+////                }
+////            }
+////        });
 
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sharedPreferenceHelper = new SharedPreferenceHelper(context);
+
     }
 
     private void showTeamView(String teamCode) {
@@ -67,20 +85,23 @@ public class TeamFragment extends Fragment {
             public void onResultGet() {
                 teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
 
-                TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
-                String teamText = "Team Name: " + teamName;
-                textTeam.setText(teamText);
+                if (binding != null) {
+                    TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
+                    String teamText = "Team Name: " + teamName;
+                    textTeam.setText(teamText);
 
 
-                TextView textCode = binding.getRoot().findViewById(R.id.code_team);
-                String codeText = "Team Code: " + teamCode;
-                textCode.setText(codeText);
+                    TextView textCode = binding.getRoot().findViewById(R.id.code_team);
+                    String codeText = "Team Code: " + teamCode;
+                    textCode.setText(codeText);
 
-                // TODO: populate view to show team stuff
+                    // TODO: populate view to show team stuff
 
-                for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
-                    System.out.println(docRef);
+                    for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
+                        System.out.println(docRef);
+                    }
                 }
+
             }
         });
 
@@ -175,7 +196,7 @@ public class TeamFragment extends Fragment {
             @Override
             public void onResultGet() {
 
-                ArrayList<String> teamCodes = firestoreHelper.firestoreData.getTeamCodeArraylist();
+                ArrayList<String> teamCodes = firestoreHelper.getFirestoreData().getTeamCodeArraylist();
 
                 String teamCode = "";
                 boolean exists = true;
@@ -185,8 +206,8 @@ public class TeamFragment extends Fragment {
                     exists = teamCodes.contains(teamCode);
                 }
 
-                firestoreHelper.createTeam(teamName, teamCode);
-                firestoreHelper.addTeamCode(teamCode);
+                firestoreHelper.createTeam(sharedPreferenceHelper.getUid(), teamName, teamCode);
+                firestoreHelper.addTeamCode(sharedPreferenceHelper.getUid(), teamCode);
 
                 // Create a new AlertDialog to display the team code
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -211,11 +232,11 @@ public class TeamFragment extends Fragment {
             @Override
             public void onResultGet() {
 
-                ArrayList<String> teamCodes = firestoreHelper.firestoreData.getTeamCodeArraylist();
+                ArrayList<String> teamCodes = firestoreHelper.getFirestoreData().getTeamCodeArraylist();
 
                 if (teamCodes.contains(teamCode)) {
-                    firestoreHelper.addTeamCode(teamCode);
-                    firestoreHelper.addMember(teamCode);
+                    firestoreHelper.addTeamCode(sharedPreferenceHelper.getUid(), teamCode);
+                    firestoreHelper.addMember(sharedPreferenceHelper.getUid(), teamCode);
 
                     // change view
                     showTeamView(teamCode);

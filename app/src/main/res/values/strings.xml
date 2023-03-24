@@ -33,6 +33,9 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_forgot_pass">Forgot password?</string>
+    <string name="already_account">Already have an account?</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
@@ -47,4 +50,16 @@
     <string name="last_20_altitude_readings">Last 20 altitude readings</string>
     <string name="voc_data_trendline">VOC Data Trendline</string>
     <string name="last_20_voc_readings">Last 20 VOC readings</string>
+
+    <!--  SharedPreferences  -->
+    <string name="user_preference_file_key">wheresafe_user</string>
+    <string name="user_name_key">user_name_key</string>
+    <string name="user_id_key">user_id_key</string>
+    <string name="user_team_code_key">user_team_code_key</string>
+    <string name="user_team_name_key">user_team_name_key</string>
+    <string name="user_mac_key">user_mac_key</string>
+    <string name="user_language_key">user_language_key</string>
+
+
+
 </resources>

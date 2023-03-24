@@ -23,6 +23,7 @@ import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.GattConfig;
@@ -57,6 +58,8 @@ public class BleEspService {
     private double gas;
     private double altitude;
 
+    private SharedPreferenceHelper sharedPreferenceHelper;
+
     public BleEspService(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
@@ -64,6 +67,7 @@ public class BleEspService {
 
     public void run() {
         firestoreHelper = new FirestoreHelper();
+        sharedPreferenceHelper = new SharedPreferenceHelper(context);
         BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -76,18 +80,27 @@ public class BleEspService {
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                 .build();
 
-        firestoreHelper.getUser(new FirestoreCallback() {
-            @Override
-            public void onResultGet() {
-                String macAddress = firestoreHelper.getFirestoreData().getUser().getMacAddress();
-                if (macAddress != null) {
-                    DEVICE_MAC_ADDRESS = macAddress;
-                    scanConnect(MODE_DEVICE_MAC_ADDRESS);
-                } else {
-                    scanConnect(MODE_DEVICE_NAME);
-                }
-            }
-        });
+        String macAddress = sharedPreferenceHelper.getMacAddress();
+
+        if (macAddress != null) {
+            DEVICE_MAC_ADDRESS = macAddress;
+            scanConnect(MODE_DEVICE_MAC_ADDRESS);
+        } else {
+            scanConnect(MODE_DEVICE_NAME);
+        }
+
+//        firestoreHelper.getUser(new FirestoreCallback() {
+//            @Override
+//            public void onResultGet() {
+//                String macAddress = firestoreHelper.getFirestoreData().getUser().getMacAddress();
+//                if (macAddress != null) {
+//                    DEVICE_MAC_ADDRESS = macAddress;
+//                    scanConnect(MODE_DEVICE_MAC_ADDRESS);
+//                } else {
+//                    scanConnect(MODE_DEVICE_NAME);
+//                }
+//            }
+//        });
 
 
     }
@@ -206,13 +219,13 @@ public class BleEspService {
 
         if (!bmeData.equals(lastBmeData)) {
             lastBmeData = bmeData;
-            firestoreHelper.addBmeData(bmeData);
+            firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
         }
 
     }
 
     private void saveMacAddress(String macAddress) {
-        firestoreHelper.addMacAddress(macAddress);
+        firestoreHelper.addMacAddress(sharedPreferenceHelper.getUid(), macAddress);
     }
 
     public void stop() {

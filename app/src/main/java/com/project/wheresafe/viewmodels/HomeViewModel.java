@@ -72,7 +72,6 @@ public class HomeViewModel extends AndroidViewModel {
                 if (snapshot != null) {
                     int lastIdx = snapshot.getDocumentChanges().size() - 1;
 
-                    System.out.println(lastIdx);
                     if (lastIdx >= 0) {
                         DocumentSnapshot latestDoc = snapshot.getDocumentChanges().get(lastIdx).getDocument();
                         Log.d(TAG, snapshot.getDocumentChanges().get(lastIdx).getDocument().getData().toString());

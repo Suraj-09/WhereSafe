@@ -282,10 +282,7 @@ public class MainActivity extends AppCompatActivity {
         TextView txtEmail = headerView.findViewById(R.id.drawerEmail);
 
         if (currentFirebaseUser.getDisplayName() != null) {
-            System.out.println("**************************");
-            System.out.println(currentFirebaseUser.getDisplayName().toString());
-            System.out.println("**************************");
-            txtName.setText(currentFirebaseUser.getDisplayName());
+             txtName.setText(currentFirebaseUser.getDisplayName());
             txtEmail.setText(currentFirebaseUser.getEmail());
         } else {
             setDisplayName();

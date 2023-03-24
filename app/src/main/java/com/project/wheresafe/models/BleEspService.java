@@ -80,8 +80,6 @@ public class BleEspService {
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                 .build();
 
-
-
         String macAddress = sharedPreferenceHelper.getMacAddress();
 
         if (macAddress != null) {

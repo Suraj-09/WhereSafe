@@ -45,7 +45,7 @@ public class SharedPreferenceHelper {
     }
 
     public String getUserName() {
-        return sharedPreferences.getString(context.getResources().getString(R.string.user_name_key), "no name");
+        return sharedPreferences.getString(context.getResources().getString(R.string.user_name_key), "");
     }
 
     public String getUid() {

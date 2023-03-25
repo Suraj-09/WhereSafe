@@ -21,7 +21,12 @@
         android:id="@+id/navigation_settings"
         android:name="com.project.wheresafe.controllers.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_deviceSettingsFragment"
+            app:destination="@id/deviceSettingsFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_personal"
@@ -35,7 +40,27 @@
         android:label="@string/title_team"
         tools:layout="@layout/fragment_team" />
 
+    <fragment
+        android:id="@+id/deviceSettingsFragment"
+        android:name="com.project.wheresafe.controllers.DeviceSettingsFragment"
+        android:label="Device Settings"
+        tools:layout="@layout/fragment_device_settings" >
+        <action
+            android:id="@+id/action_deviceSettingsFragment_to_deviceListFragment"
+            app:destination="@id/deviceListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceListFragment"
+        android:name="com.project.wheresafe.controllers.DeviceListFragment"
+        android:label="@string/device_list_fragment_label"
+        tools:layout="@layout/fragment_device_list" >
+    <action
+        android:id="@+id/action_deviceListFragment_to_deviceSettingsFragment"
+        app:destination="@id/deviceListFragment" />
+    </fragment>
+
 </navigation>
+
 
 
 

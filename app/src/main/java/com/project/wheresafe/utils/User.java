@@ -12,6 +12,8 @@ public class User {
     private String teamName;
     private ArrayList<DocumentReference> teamMembers;
 
+    private String deviceName;
+
     public User() {
         id = null;
         name = null;
@@ -68,4 +70,12 @@ public class User {
     public void setTeamMembers(ArrayList<DocumentReference> teamMembers) {
         this.teamMembers = teamMembers;
     }
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
 }

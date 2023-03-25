@@ -13,6 +13,7 @@
     <string name="menu_sign_out">Sign Out</string>
     <string name="title_personal">Personal Metrics</string>
     <string name="title_team">Team Metrics</string>
+    <string name="device_list_fragment_label">Device List</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>

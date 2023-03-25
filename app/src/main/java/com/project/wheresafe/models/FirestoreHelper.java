@@ -262,6 +262,39 @@ public class FirestoreHelper {
             }
         });
     }
+    public void updateDeviceName(String deviceName) {
+        Map<String, Object> deviceInfo = new HashMap<>();
+        deviceInfo.put("device_name", deviceName);
+
+        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Device name successfully updated!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error updating device name", e);
+            }
+        });
+    }
+
+    public void removeMacAddress() {
+        Map<String, Object> macInfo = new HashMap<>();
+        macInfo.put("mac_address", FieldValue.delete());
+
+        userDocument.update(macInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "MAC address successfully removed!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error removing MAC address", e);
+            }
+        });
+    }
 
     public void addTeamCode(String teamCode) {
         Map<String, Object> teamInfo = new HashMap<>();

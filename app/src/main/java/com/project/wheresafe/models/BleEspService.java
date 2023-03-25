@@ -38,7 +38,7 @@ public class BleEspService {
     private static final String TAG = "BleEspService";
     private static final int REQUEST_LOCATION_PERMISSION = 2;
     private static final int REQUEST_BLUETOOTH_SCAN_PERMISSION = 3;
-    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 4;
+    public static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 4;
     private final String DEVICE_NAME = "WhereSafe";
     private final int MODE_DEVICE_MAC_ADDRESS = 0;
     private final int MODE_DEVICE_NAME = 1;
@@ -225,4 +225,10 @@ public class BleEspService {
             Log.d(TAG, "Disconnecting Bluetooth Device Connection");
         }
     }
+
+    public BluetoothGatt getBluetoothGatt() {
+        return bleGatt;
+    }
+
+
 }

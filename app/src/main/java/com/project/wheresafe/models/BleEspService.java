@@ -22,8 +22,12 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.google.common.io.Resources;
 import com.google.firebase.auth.FirebaseUser;
+import com.project.wheresafe.R;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.GattConfig;
@@ -220,6 +224,7 @@ public class BleEspService {
         if (!bmeData.equals(lastBmeData)) {
             lastBmeData = bmeData;
             firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
+            handleNotifications();
         }
 
     }
@@ -237,5 +242,38 @@ public class BleEspService {
             bleGatt.close();
             Log.d(TAG, "Disconnecting Bluetooth Device Connection");
         }
+    }
+
+    private void handleNotifications() {
+        String textTitle = "";
+        String textContent = "";
+
+        if (lastBmeData.getTemperature() > 20) {
+            textTitle = "test";
+            textContent = "test";
+        }
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getResources().getString(R.string.channel_id))
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle(textTitle)
+                .setContentText(textContent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        // notificationId is a unique int for each notification that you must define
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(0, builder.build());
+        System.out.println("notify");
     }
 }

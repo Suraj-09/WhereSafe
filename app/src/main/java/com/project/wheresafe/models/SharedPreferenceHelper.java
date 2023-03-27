@@ -81,6 +81,18 @@ public class SharedPreferenceHelper {
         editor.commit();
     }
 
+    public User getCurrentUser() {
+        User currentUser = new User();
+
+        currentUser.setName(getUserName());
+        currentUser.setId(getUid());
+        currentUser.setTeamCode(getTeamCode());
+        currentUser.setMacAddress(getMacAddress());
+        currentUser.setLanguageCode(getLanguageCode());
+
+
+        return currentUser;
+    }
 
 //
 //    public void saveSettings(String cntName1, String cntName2, String cntName3, int maxCount) {

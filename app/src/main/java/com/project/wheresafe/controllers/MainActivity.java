@@ -7,12 +7,15 @@ import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.os.LocaleListCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -40,6 +45,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
+import com.project.wheresafe.models.BleEspForegroundService;
 import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 //import com.project.wheresafe.models.LocaleHelper;
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
-
+//        createNotificationChannel();
         if (currentFirebaseUser == null) {
             initFlag = false;
             goToSignIn();
@@ -90,6 +96,60 @@ public class MainActivity extends AppCompatActivity {
             init();
         }
 
+    }
+    // *********************************************************************************************
+    private BleEspForegroundService mBleEspService;
+
+    private void startBleEspService() {
+        Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
+        startForegroundService(serviceIntent);
+        bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            BleEspForegroundService.LocalBinder binder = (BleEspForegroundService.LocalBinder) iBinder;
+            mBleEspService = binder.getService();
+            mBleEspService.onStartCommand(null, 0, 0);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBleEspService = null;
+        }
+    };
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        startBleEspService();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        if (mBleEspService != null) {
+//            unbindService(mServiceConnection);
+//            mBleEspService = null;
+//        }
+//    }
+
+    // *********************************************************************************************
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+        NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private void goToSignIn() {
@@ -136,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
         sharedPreferenceHelper.saveUser(currentFirebaseUser);
+        createNotificationChannel();
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
@@ -199,8 +260,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
-        bleEspService.run();
+        startBleEspService();
+
+//        bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
+//        bleEspService.run();
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getResources().getString(R.string.channel_id))
+//            .setSmallIcon(R.mipmap.ic_launcher_round)
+//            .setContentTitle("textTitle")
+//            .setContentText("textContent")
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+////            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_POST_NOTIFICATIONS);
+//            return;
+//        }
+//        notificationManager.notify(1, builder.build());
+//        System.out.println("notify");
     }
 
     @Override
@@ -285,20 +362,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
-        NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
 
     @Override
     protected void onResume() {

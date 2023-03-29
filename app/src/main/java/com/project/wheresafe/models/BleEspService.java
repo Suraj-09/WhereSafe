@@ -2,6 +2,8 @@ package com.project.wheresafe.models;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -93,19 +95,6 @@ public class BleEspService {
             scanConnect(MODE_DEVICE_NAME);
         }
 
-//        firestoreHelper.getUser(new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                String macAddress = firestoreHelper.getFirestoreData().getUser().getMacAddress();
-//                if (macAddress != null) {
-//                    DEVICE_MAC_ADDRESS = macAddress;
-//                    scanConnect(MODE_DEVICE_MAC_ADDRESS);
-//                } else {
-//                    scanConnect(MODE_DEVICE_NAME);
-//                }
-//            }
-//        });
-
 
     }
 
@@ -134,6 +123,7 @@ public class BleEspService {
 
                 // Check the MAC address or name of the discovered device
                 if (connectionCondition) {
+                    Log.d(TAG, "scanner.stopScan()");
                     scanner.stopScan(this);
 
                     if (device.getAddress() != null) {
@@ -149,7 +139,7 @@ public class BleEspService {
                                     return;
                                 }
                                 gatt.discoverServices();
-
+                                Log.d(TAG, "onConnectionStateChange() + newState = " + newState);
                             }
                         }
 
@@ -248,32 +238,102 @@ public class BleEspService {
         String textTitle = "";
         String textContent = "";
 
-        if (lastBmeData.getTemperature() > 20) {
-            textTitle = "test";
-            textContent = "test";
+        if (lastBmeData.getTemperature() > 30) {
+            textTitle = "High Temperature";
+            textContent = "The surrounding temperature is " + lastBmeData.getTemperature()  + " °C";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        }
+
+        if (lastBmeData.getTemperature() < -10) {
+            textTitle = "Low Temperature";
+            textContent = "The surrounding temperature is " + lastBmeData.getTemperature()  + " °C";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        }
+
+        if (lastBmeData.getHumidity() > 60) {
+            textTitle = "High Humidity";
+            textContent = "The surrounding temperature is " + lastBmeData.getHumidity()  + " %";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        }
+
+        if (lastBmeData.getHumidity() < 25) {
+            textTitle = "Low Humidity";
+            textContent = "The surrounding temperature is " + lastBmeData.getHumidity()  + " %";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        }
+
+        if (lastBmeData.getGas() > 350) {
+            textTitle = "Extremely Polluted Air";
+            textContent = "Ventilation suggested";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        } else if (lastBmeData.getGas() > 250) {
+            textTitle = "Severely Polluted Air";
+            textContent = "Increase ventilation with clean air";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        } else if (lastBmeData.getGas() > 200) {
+            textTitle = "Heavily Polluted Air";
+            textContent = "Optimize ventilation";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        } else if (lastBmeData.getGas() > 150) {
+            textTitle = "Moderately Polluted Air";
+            textContent = "Contamination should be identified! Maximize ventilation";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
+        } else if (lastBmeData.getGas() > 100) {
+            textTitle = "Lightly Polluted Air";
+            textContent = "Contamination needs to be identified! Avoid presence in location, maximize ventilation";
+            sendNotification(textTitle, textContent, NotificationCompat.PRIORITY_DEFAULT);
         }
 
 
+    }
+
+    private void sendNotification(String title, String text, int priority) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getResources().getString(R.string.channel_id))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(textTitle)
-                .setContentText(textContent)
+                .setContentTitle(title)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // notificationId is a unique int for each notification that you must define
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_POST_NOTIFICATIONS);
             return;
         }
         notificationManager.notify(0, builder.build());
-        System.out.println("notify");
     }
+
+//
+//    private void createNotificationChannel() {
+//        // Create the NotificationChannel, but only on API 26+ because
+//        // the NotificationChannel class is new and not in the support library
+//        CharSequence name = context.getString(R.string.channel_name);
+//        String description = context.getString(R.string.channel_description);
+//        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//
+//        NotificationChannel channel = new NotificationChannel(context.getString(R.string.channel_id), name, importance);
+//        channel.setDescription(description);
+//        // Register the channel with the system; you can't change the importance
+//        // or other notification behaviors after this
+//        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+//        notificationManager.createNotificationChannel(channel);
+//    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        switch (requestCode) {
+//            case PERMISSION_REQUEST_POST_NOTIFICATIONS: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    // permission granted, show the notification
+//                    handleNotifications();
+//                } else {
+//                    // permission denied, show a toast or something to let the user know
+//                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+//                }
+//                return;
+//            }
+//        }
+//    }
 }

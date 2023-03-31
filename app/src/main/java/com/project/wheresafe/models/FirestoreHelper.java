@@ -238,6 +238,9 @@ public class FirestoreHelper {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
+                            ArrayList<User> teamMembers = new ArrayList<>();
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
 
@@ -266,11 +269,15 @@ public class FirestoreHelper {
                                     user.setLanguageCode("en");
                                 }
 
-                                firestoreData.getTeamMembersArrayList().add(user);
+
+                                teamMembers.add(user);
+
 
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
+
+                            firestoreData.setTeamMembersArrayList(teamMembers);
 
                             firestoreCallback.onResultGet();
                         } else {

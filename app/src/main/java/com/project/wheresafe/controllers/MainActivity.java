@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 //    private LocaleHelper localeHelper;
     private boolean initFlag;
 
+
+    private Button btnConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(bluetoothStateReceiver, filter);
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+        sharedPreferenceHelper.getSharedPreferences().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
@@ -97,6 +105,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(getString(R.string.connection_status_key))) {
+                String newStatus = sharedPreferences.getString(getString(R.string.connection_status_key), getString(R.string.status_connect));
+
+                if (newStatus != null) {
+                    btnConnection = findViewById(R.id.btnConnection);
+                    btnConnection.setText(newStatus);
+                }
+
+                // TODO: add button functionality
+
+                Log.d(TAG, "connection status = " + newStatus);
+            }
+        }
+    };
+
     // *********************************************************************************************
     private BleEspForegroundService mBleEspService;
 
@@ -119,13 +147,13 @@ public class MainActivity extends AppCompatActivity {
             mBleEspService = null;
         }
     };
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        startBleEspService();
-//    }
-//
+////
+////    @Override
+////    protected void onResume() {
+////        super.onResume();
+////        startBleEspService();
+////    }
+////
 //    @Override
 //    protected void onPause() {
 //        super.onPause();
@@ -136,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     // *********************************************************************************************
+
+
+
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because

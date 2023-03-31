@@ -59,6 +59,7 @@
     <string name="user_team_name_key">user_team_name_key</string>
     <string name="user_mac_key">user_mac_key</string>
     <string name="user_language_key">user_language_key</string>
+    <string name="connection_status_key">connection_status_key</string>
 
     <!--  Nofifications  -->
     <string name="channel_id">channel_id</string>
@@ -66,5 +67,9 @@
     <string name="channel_description">channel_description</string>
 
 
+    <!--  Connection status  -->
+    <string name="status_connect">connect</string>
+    <string name="status_connected">connected</string>
+    <string name="status_reconnect">reconnect</string>
 
 </resources>

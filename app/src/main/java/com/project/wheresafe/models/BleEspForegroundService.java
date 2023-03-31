@@ -27,6 +27,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -55,7 +56,7 @@ public class BleEspForegroundService extends Service {
     private static final int MODE_DEVICE_NAME = 2;
 
     private Context mContext;
-    Activity mActivity;
+//    Activity mActivity;
     private FirestoreHelper firestoreHelper;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private BluetoothAdapter bluetoothAdapter;
@@ -72,10 +73,12 @@ public class BleEspForegroundService extends Service {
     private BmeData lastBmeData;
     private int notificationId = 1;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+//        mActivity = getact
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(mContext);
 
@@ -123,7 +126,7 @@ public class BleEspForegroundService extends Service {
         stopForeground(true);
         if (bleGatt != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+//                mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
                 return;
             }
             bleGatt.disconnect();
@@ -148,17 +151,15 @@ public class BleEspForegroundService extends Service {
     // Instantiate the binder
     private final IBinder mBinder = new LocalBinder();
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                    "BleEspForegroundService Channel", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                "BleEspForegroundService Channel", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private void scanConnect(int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BLUETOOTH_SCAN_PERMISSION);
+//            mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BLUETOOTH_SCAN_PERMISSION);
             return;
         }
 
@@ -168,7 +169,7 @@ public class BleEspForegroundService extends Service {
                 BluetoothDevice device = result.getDevice();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+//                    mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
                     return;
                 }
 
@@ -193,12 +194,19 @@ public class BleEspForegroundService extends Service {
                         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                             if (newState == BluetoothProfile.STATE_CONNECTED) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                    mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+//                                    mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
                                     return;
                                 }
+                                sharedPreferenceHelper.setConnectionStatus(getString(R.string.status_connected));
                                 gatt.discoverServices();
-                                Log.d(TAG, "onConnectionStateChange() + newState = " + newState);
+                                Log.d(TAG, "onConnectionStateChange() CONNECTED => newState = " + newState);
+                            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                                sharedPreferenceHelper.setConnectionStatus(getString(R.string.status_reconnect));
+                                Log.d(TAG, "onConnectionStateChange() DISCONNECTED => newState = " + newState);
+                            } else {
+                                Log.d(TAG, "onConnectionStateChange() OTHER => newState = " + newState);
                             }
+
                         }
 
                         @Override
@@ -240,7 +248,7 @@ public class BleEspForegroundService extends Service {
 
     private void setCharacteristics(BluetoothGatt gatt) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+//            mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
             return;
         }
 
@@ -248,7 +256,7 @@ public class BleEspForegroundService extends Service {
         BluetoothGattCharacteristic dataCharacteristic = service.getCharacteristic(UUID_BME680_DATA);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext.getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            mActivity.requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+//            mActivity.requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
             return;
         }
 

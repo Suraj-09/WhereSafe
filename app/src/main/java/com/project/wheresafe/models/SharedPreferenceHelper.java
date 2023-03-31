@@ -23,6 +23,9 @@ public class SharedPreferenceHelper {
         sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.user_preference_file_key), Context.MODE_PRIVATE);
     }
 
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
 
     public void saveUser(FirebaseUser user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -79,6 +82,16 @@ public class SharedPreferenceHelper {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getResources().getString(R.string.user_language_key), languageCode);
         editor.commit();
+    }
+
+    public void setConnectionStatus(String status) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.connection_status_key), status);
+        editor.commit();
+    }
+
+    public String getConnectionStatus() {
+        return sharedPreferences.getString(context.getResources().getString(R.string.connection_status_key), context.getResources().getString(R.string.status_connect));
     }
 
     public User getCurrentUser() {

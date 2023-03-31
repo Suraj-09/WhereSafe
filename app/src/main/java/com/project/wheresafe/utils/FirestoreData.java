@@ -12,8 +12,8 @@ public class FirestoreData {
 
     public FirestoreData() {
         bmeDataLatest = null;
-        bmeDataArrayList = null;
-        teamCodeArraylist = null;
+        bmeDataArrayList = new ArrayList<>();
+        teamCodeArraylist = new ArrayList<>();
         user = null;
     }
 

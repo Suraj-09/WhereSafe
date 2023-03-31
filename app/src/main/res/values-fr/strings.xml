@@ -7,12 +7,12 @@
 <string name="nav_header_desc">Navigation header</string>
 <string name="action_settings">Rafraîchir</string>
 
-<string name="menu_home">Page d\'Accueil</string>
-<string name="menu_advanced_data">Données Détaillées</string>
+<string name="menu_home">Page d\'accueil</string>
+<string name="menu_advanced_data">Données détaillées</string>
 <string name="menu_settings">Paramètres</string>
     <string name="menu_sign_out">Déconnexion</string>
-<string name="title_personal">Mesures Personnelles</string>
-<string name="title_team">Métriques d\'Équipe</string>
+<string name="title_personal">Données personnelles</string>
+<string name="title_team">Données d\'équipe</string>
 <!-- TODO: Remove or change this placeholder text -->
 <string name="hello_blank_fragment">Hello blank fragment</string>
 

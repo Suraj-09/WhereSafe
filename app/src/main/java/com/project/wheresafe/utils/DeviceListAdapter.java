@@ -44,20 +44,20 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
         BluetoothDevice device = mDeviceList.get(position);
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_CODE);
+
+        String deviceAddress = device.getAddress();
+        if (deviceAddress != null && deviceAddress.startsWith("30:AE:A4")) {
+            holder.deviceNameTextView.setText("WhereSafe");
+            holder.deviceAddressTextView.setText(deviceAddress);
+            holder.itemView.setOnClickListener(v -> mClickListener.onDeviceClick(device));
+            holder.itemView.setVisibility(View.VISIBLE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
-            String deviceAddress = device.getAddress();
-            if (deviceAddress != null && deviceAddress.startsWith("30:AE:A4")) {
-                holder.deviceNameTextView.setText("WhereSafe");
-                holder.deviceAddressTextView.setText(deviceAddress);
-            } else {
-                holder.itemView.setVisibility(View.GONE);
-                holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
-            }
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
     }
+
 
     @Override
     public int getItemCount() {

@@ -1,9 +1,13 @@
 package com.project.wheresafe.controllers;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +16,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentTeamBinding;
 import com.project.wheresafe.models.FirestoreHelper;
@@ -27,13 +44,18 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;
 
 
-public class TeamFragment extends Fragment {
+public class TeamFragment<TeamMember> extends Fragment {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     FirestoreHelper firestoreHelper;
     private FragmentTeamBinding binding;
     private String teamName;
     private String teamCode;
     private TeamViewModel teamViewModel;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationCallback locationCallback;
+    private MapView mapView;
+    private GoogleMap googleMap;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
@@ -168,6 +190,9 @@ public class TeamFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
+        // Destroy MapView
+       // mapView.onDestroy();
     }
 
     private void createTeam(String teamName) {

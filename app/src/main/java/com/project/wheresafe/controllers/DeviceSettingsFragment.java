@@ -2,15 +2,11 @@ package com.project.wheresafe.controllers;
 
 import static androidx.fragment.app.FragmentManager.TAG;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -22,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -38,7 +33,6 @@ public class DeviceSettingsFragment extends Fragment {
     private TextView deviceNameTextView;
     private TextView deviceMacAddressTextView;
     private TextView deviceProximityTextView;
-    private EditText deviceNameEditText;
     private Button renameDeviceButton;
     private Button unpairDeviceButton;
     private Button pairNewDeviceButton;
@@ -61,7 +55,6 @@ public class DeviceSettingsFragment extends Fragment {
         deviceProximityTextView = view.findViewById(R.id.device_proximity_textview);
 
         // Get references to EditText and Buttons
-        //deviceNameEditText = view.findViewById(R.id.device_name_edittext);
         renameDeviceButton = view.findViewById(R.id.rename_device_button);
         unpairDeviceButton = view.findViewById(R.id.unpair_device_button);
         pairNewDeviceButton = view.findViewById(R.id.pair_new_device_button);
@@ -69,24 +62,19 @@ public class DeviceSettingsFragment extends Fragment {
         // Initialize FirestoreHelper object
         firestoreHelper = new FirestoreHelper();
 
-        // Get the SharedPreferences object
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-
-        // Update the UI with the saved device name and MAC address
-        String deviceName = sharedPreferences.getString("device_name", "");
-        String deviceMacAddress = sharedPreferences.getString("device_mac_address", "");
-        String deviceProximity = sharedPreferences.getString("device_proximity","");
-        deviceNameTextView.setText(deviceName);
-        deviceMacAddressTextView.setText(deviceMacAddress);
-        deviceProximityTextView.setText(deviceProximity);
+        // Update the UI with device details from Firestore
+        loadDeviceDetails();
 
         // Set up onClickListeners for buttons
         setupOnClickListeners();
 
-        // Load device details
-        loadDeviceDetails();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDeviceDetails();
     }
 
     private void loadDeviceDetails() {
@@ -99,21 +87,19 @@ public class DeviceSettingsFragment extends Fragment {
 
                 if (deviceName != null) {
                     deviceNameTextView.setText(deviceName);
+                } else {
+                    deviceNameTextView.setText("Device Name");
                 }
 
-                if (macAddress != null) {
-                    deviceMacAddressTextView.setText(macAddress);
-                }
-
-                // Get BluetoothAdapter
-                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                if (bluetoothAdapter == null) {
-                    Log.e(TAG, "Bluetooth not supported");
-                    return;
-                }
-
-                // Calculate proximity and update deviceProximityTextView
                 if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
+                    // Get BluetoothAdapter
+                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (bluetoothAdapter == null) {
+                        Log.e(TAG, "Bluetooth not supported");
+                        return;
+                    }
+
+                    // Calculate proximity and update deviceProximityTextView
                     BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
                     Integer rssi = deviceRSSIMap.get(device.getAddress()); // Retrieve the latest RSSI value for the device
                     if (rssi != null) {
@@ -130,6 +116,7 @@ public class DeviceSettingsFragment extends Fragment {
         });
     }
 
+
     private double calculateDistance(int rssi) {
         int txPower = -59; // TODO: calibrate based on device's signal strength
         double ratio = rssi*1.0/txPower;
@@ -138,6 +125,11 @@ public class DeviceSettingsFragment extends Fragment {
             return Math.pow(ratio,10);
         } else {
             double accuracy = (0.89976)*Math.pow(ratio,7.7095) + 0.111;
+            double distance = accuracy;
+            String proximity = getProximity(distance); // Get the proximity label based on the distance
+            updateDeviceProximity(proximity); // Update the device proximity in Firestore
+            String distanceText = String.format("%.2f m", distance); // Format the distance text
+            deviceProximityTextView.setText(String.format("%s (%s)", proximity, distanceText)); // Update the deviceProximityTextView
             return accuracy;
         }
     }
@@ -151,19 +143,15 @@ public class DeviceSettingsFragment extends Fragment {
             return "Far";
         }
     }
-
-    private String getDeviceName() {
-        if (bleEspService != null && bleEspService.getBluetoothGatt() != null) {
-            BluetoothDevice device = bleEspService.getBluetoothGatt().getDevice();
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT}, BleEspService.REQUEST_BLUETOOTH_CONNECT_PERMISSION);
-                return null;
+    private void updateDeviceProximity(String proximity) {
+        firestoreHelper.getDeviceProximity(new FirestoreCallback() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onResultGet() {
+                Log.d(TAG, "Device proximity updated");
             }
-            return device.getName();
-        }
-        return null;
+        }, proximity);
     }
-
 
     private void setupOnClickListeners() {
         renameDeviceButton.setOnClickListener(view -> {
@@ -182,7 +170,10 @@ public class DeviceSettingsFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     String newDeviceName = input.getText().toString().trim();
                     if (!newDeviceName.isEmpty()) {
+                        // Update device name in Firestore database
                         firestoreHelper.updateDeviceName(newDeviceName);
+
+                        // Update device name in the UI
                         deviceNameTextView.setText(newDeviceName);
                         Toast.makeText(requireContext(), "Device name updated", Toast.LENGTH_SHORT).show();
                     } else {
@@ -201,10 +192,13 @@ public class DeviceSettingsFragment extends Fragment {
             builder.show();
         });
 
+
         unpairDeviceButton.setOnClickListener(view -> {
             if (bleEspService != null) { // check if bleEspService is not null
                 bleEspService.stop();
             }
+            //firestoreHelper
+            firestoreHelper.removeDeviceName();
             firestoreHelper.removeMacAddress();
             Toast.makeText(requireContext(), "Device unpaired", Toast.LENGTH_SHORT).show();
 
@@ -225,21 +219,11 @@ public class DeviceSettingsFragment extends Fragment {
         });
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (bleEspService != null) {
             bleEspService.stop();
         }
-    }
-
-    public static SettingsFragment newInstance(String macAddress, String deviceName) {
-        SettingsFragment fragment = new SettingsFragment();
-        Bundle args = new Bundle();
-        args.putString("macAddress", macAddress);
-        args.putString("deviceName", deviceName);
-        fragment.setArguments(args);
-        return fragment;
     }
 }

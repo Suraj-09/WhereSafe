@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FirestoreHelper {
+public class FirestoreHelper<TeamMember> {
     private static final String TAG = "FirestormHelper";
     private static final String USER_ID = "25BcSPUgtlXysuAWJVvWqLvHjjm1"; // temporary
     public FirebaseFirestore firebaseFirestore;
@@ -144,7 +144,6 @@ public class FirestoreHelper {
                 .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
-
     public void getLatestPersonalSensorData(FirestoreCallback firestoreCallback) {
         sensorDataCollection
                 .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -171,8 +170,6 @@ public class FirestoreHelper {
                     }
                 });
     }
-
-
     public void getAllPersonalSensorData(FirestoreCallback firestoreCallback) {
 
         if (sensorDataCollection == null) {
@@ -182,7 +179,6 @@ public class FirestoreHelper {
                 Log.d(TAG, "User not logged in");
             }
         }
-
         if (sensorDataCollection != null) {
             sensorDataCollection
                     .orderBy("timestamp", Query.Direction.DESCENDING).limit(20)
@@ -203,8 +199,11 @@ public class FirestoreHelper {
                         }
                     });
         }
-
-
+    }
+    public void setUserLocation(String userId, double latitude, double longitude) {
+        DocumentReference userRef = FirebaseFirestore.getInstance().collection("users").document(userId);
+        userRef.update("latitude", latitude);
+        userRef.update("longitude", longitude);
     }
 
     public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
@@ -229,10 +228,7 @@ public class FirestoreHelper {
                                         }
                                         firestoreData.getUser().setTeamMembers(members);
                                     }
-
-
                                 }
-
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 firestoreCallback.onResultGet();
                             } else {
@@ -245,7 +241,6 @@ public class FirestoreHelper {
                     }
                 });
     }
-
     public void addMacAddress(String macAddress) {
         Map<String, Object> macInfo = new HashMap<>();
         macInfo.put("mac_address", macAddress);
@@ -262,22 +257,12 @@ public class FirestoreHelper {
             }
         });
     }
-    public void updateDeviceName(String deviceName) {
-        Map<String, Object> deviceInfo = new HashMap<>();
-        deviceInfo.put("device_name", deviceName);
-
-        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Device name successfully updated!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating device name", e);
-            }
-        });
+    public void updateDeviceName(String newDeviceName) {
+        userDocument.update("device_name", newDeviceName)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Device name successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating device name", e));
     }
+
 
     public void removeMacAddress() {
         Map<String, Object> macInfo = new HashMap<>();
@@ -292,6 +277,53 @@ public class FirestoreHelper {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(TAG, "Error removing MAC address", e);
+            }
+        });
+    }
+    public void removeDeviceName() {
+        Map<String, Object> deviceInfo = new HashMap<>();
+        deviceInfo.put("device_name", FieldValue.delete());
+
+        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Device name successfully removed!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error removing device name", e);
+            }
+        });
+    }
+    public void updateDeviceProximity(String deviceProximity) {
+        Map<String, Object> deviceInfo = new HashMap<>();
+        deviceInfo.put("device_proximity", deviceProximity);
+
+        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Device proximity successfully updated!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error updating device proximity", e);
+            }
+        });
+    }
+
+    public void getDeviceProximity(FirestoreCallback callback, String proximity) {
+        userDocument.update("device_proximity", proximity).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Device proximity updated in Firestore");
+                callback.onResultGet();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error updating device proximity in Firestore", e);
             }
         });
     }
@@ -312,7 +344,6 @@ public class FirestoreHelper {
             }
         });
     }
-
     public void createTeam(String teamName, String teamCode) {
         Map<String, Object> teamDoc = new HashMap<>();
         teamDoc.put("team_name", teamName);
@@ -348,7 +379,7 @@ public class FirestoreHelper {
             }
         });
     }
-
+    // Add members to a team based on the team code
     public void addMember(String teamCode) {
         teamsCollection.document(teamCode)
                 .update("members", FieldValue.arrayUnion(userDocument))
@@ -365,5 +396,26 @@ public class FirestoreHelper {
                 });
 
     }
-
+    // Update the user's location
+    public void updateUserLocation(double latitude, double longitude) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(userId);
+            documentReference.update("latitude", latitude);
+            documentReference.update("longitude", longitude)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "User location updated successfully");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "Error updating user location", e);
+                        }
+                    });
+        }
+    }
 }

@@ -28,10 +28,12 @@ import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.GattConfig;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class BleEspService {
-
+public class BleEspService extends BluetoothGattCallback {
+    private Map<String, Integer> deviceRSSIMap = new HashMap<>();
     public final static UUID UUID_ENVIRONMENTAL_SENSING = UUID.fromString(GattConfig.ENVIRONMENTAL_SENSING);
     public final static UUID UUID_BME680_DATA = UUID.fromString(GattConfig.BME680_DATA);
     public final static UUID UUID_CLIENT_CHARACTERISTIC_CONFIG = UUID.fromString(GattConfig.CLIENT_CHARACTERISTIC_CONFIG);
@@ -228,6 +230,34 @@ public class BleEspService {
 
     public BluetoothGatt getBluetoothGatt() {
         return bleGatt;
+    }
+
+    public void readRemoteRssi() {
+        if (bleGatt != null) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // Request the missing permissions
+                if (context instanceof Activity) {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
+                } else {
+                    Log.e("BleEspService", "Context is not an instance of Activity. Cannot request permissions.");
+                }
+            } else {
+                bleGatt.readRemoteRssi();
+            }
+        }
+    }
+
+
+
+    @Override
+    public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+        super.onReadRemoteRssi(gatt, rssi, status);
+        if (status == BluetoothGatt.GATT_SUCCESS) {
+            Log.d(TAG, "Remote RSSI: " + rssi);
+            // Save the new RSSI value in the deviceRSSIMap
+            String deviceAddress = gatt.getDevice().getAddress();
+            deviceRSSIMap.put(deviceAddress, rssi);
+        }
     }
 
 

@@ -28,6 +28,7 @@ import androidx.navigation.NavController;
 
 import com.project.wheresafe.R;
 import com.project.wheresafe.utils.DeviceListAdapter;
+import com.project.wheresafe.models.FirestoreHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     public static final int PERMISSION_REQUEST_CODE = 1;
     private TextView deviceNameTextView;
     private TextView deviceMacAddressTextView;
-    private Button connectButton;
+    //private Button connectButton;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -112,7 +113,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, 1);
         } else {
-            // Bluetooth is enabled, start scanning for devices
+            // Bluetooth is enabled, set the default device name and start scanning for devices
+            bluetoothAdapter.setName("WhereSafe");
             startDiscovery();
         }
         return view;
@@ -152,8 +154,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         bluetoothAdapter.startDiscovery();
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
@@ -164,7 +164,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             }
         }
     }
-
 
     @Override
     public void onDestroyView() {
@@ -179,6 +178,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public void onDeviceClick(BluetoothDevice device) {
         View view = getView();
+        String deviceName = "WhereSafe";
+        String deviceMacAddress = device.getAddress();
 
         // Pair the app to the device
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -188,17 +189,32 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         }
         device.createBond();
 
-        // Update the MAC address and device name in SharedPreferences
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("device_mac_address", device.getAddress());
-        editor.putString("device_name", "WhereSafe");
-        editor.apply();
+        // Rename the device
+        deviceName = "WhereSafe";
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null) {
+            bluetoothAdapter.setName(deviceName);
+        }
 
-        // Register the bondStateReceiver
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        getActivity().registerReceiver(bondStateReceiver, filter);
+        // Update the device name and MAC address in Firestore
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        firestoreHelper.updateDeviceName(deviceName);
+        firestoreHelper.removeMacAddress();
+        firestoreHelper.addMacAddress(deviceMacAddress);
 
-        Navigation.findNavController(view).navigate(R.id.action_deviceListFragment_to_deviceSettingsFragment);
+        // Update the UI with the new device name and MAC address
+        if (deviceNameTextView != null && deviceName != null) {
+            deviceNameTextView.setText(deviceName);
+        }
+
+        if (deviceMacAddressTextView != null && deviceMacAddress != null) {
+            deviceMacAddressTextView.setText(deviceMacAddress);
+        }
+
+        // Navigate back to the DeviceSettingsFragment
+        Navigation.findNavController(view).navigateUp();
+
+      //  Navigation.findNavController(view).navigate(R.id.action_deviceListFragment_to_deviceSettingsFragment);
     }
+
 }

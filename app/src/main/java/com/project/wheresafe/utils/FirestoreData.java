@@ -1,8 +1,12 @@
 package com.project.wheresafe.utils;
 
-import java.util.ArrayList;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirestoreData {
+import java.util.ArrayList;
+import java.util.List;
+
+public class FirestoreData<TeamMember> {
     BmeData bmeDataLatest;
     User user;
     ArrayList<BmeData> bmeDataArrayList;
@@ -46,4 +50,7 @@ public class FirestoreData {
     public void setUser(User user) {
         this.user = user;
     }
+
+
+
 }

@@ -61,5 +61,22 @@
     <string name="user_language_key">user_language_key</string>
 
 
+    <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
+    <string name="privacy_security_subtext">All about your account and data</string>
+    <string name="features_experiences"><![CDATA[Features & Experiences]]></string>
+    <string name="features_experiences_subtext">Information to better understand WhereSafe</string>
+    <string name="wheresafe_101">WhereSafe 101</string>
+    <string name="wheresafe_101_subtext">The basics to help you get started</string>
+    <string name="help_button">Help</string>
+    <string name="wheresafe101_description">
+        Welcome to WhereSafe! This app and its companion wearable device help you stay safe and informed in extreme environments. The wearable device monitors various parameters, such as temperature, pressure, altitude, humidity, and volatile organic compounds. By continuously tracking these data, WhereSafe ensures you are aware of your surroundings and any potential hazards. Use this app to monitor your own safety or connect with team members to coordinate efforts and make informed decisions.
+    </string>
+    <string name="privacy_description">
+        Your privacy and security are our top priorities. We are committed to protecting your personal information and data collected by the WhereSafe app and wearable device. Our privacy policy outlines the data we collect, how it\'s used, and the measures we take to safeguard your information. We continually update our security practices to stay ahead of emerging threats and ensure your data remains safe and secure. For more details, please refer to our full privacy policy on our website.
+    </string>
+    <string name="features_description">
+         WhereSafe comes packed with features designed to enhance your safety and experience in extreme conditions. The app displays real-time sensor data from the wearable device, ensuring you\'re always informed about your environment. Connect with other devices via Wi-Fi or Bluetooth to share information with your team, making it perfect for first responders, search and rescue teams, or adventure sports enthusiasts. In addition, the app offers customizable alerts and notifications for any significant changes in environmental conditions or team member locations.
+    </string>
+    <string name="stayconnected">Stay Connected, Stay Protected</string>
 
 </resources>

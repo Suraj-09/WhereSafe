@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentSettingsBinding;
@@ -45,6 +46,14 @@ public class SettingsFragment extends Fragment implements LanguageSelectionDialo
             LanguageSelectionDialogFragment dialogFragment = new LanguageSelectionDialogFragment();
             dialogFragment.setLanguageSelectionListener(this);
             dialogFragment.show(requireActivity().getSupportFragmentManager(), "languageSelection");
+        });
+
+        Button helpButton = binding.helpButton;
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_settings_to_help);
+            }
         });
 
         return root;

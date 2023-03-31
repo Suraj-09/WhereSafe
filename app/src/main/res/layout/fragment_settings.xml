@@ -18,19 +18,37 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.416" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/language_selection_button"
-        android:layout_width="wrap_content"
+        android:layout_width="195dp"
         android:layout_height="wrap_content"
         android:text="@string/select_language"
+        android:textAllCaps="false"
+        app:backgroundTint="#b0b0b0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.601" />
+        app:layout_constraintVertical_bias="0.499" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/help_button"
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
+        android:text="@string/help_button"
+        android:layout_marginTop="16dp"
+        android:textAllCaps="false"
+        app:backgroundTint="#b0b0b0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

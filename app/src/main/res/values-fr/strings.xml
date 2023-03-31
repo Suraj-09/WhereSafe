@@ -19,8 +19,8 @@
     <string name="humidity">Humidité</string>
     <string name="pressure">Pression</string>
     <string name="temperature">Température</string>
-    <string name="create_team">Créer une Équipe</string>
-    <string name="join_team">Rejoindre une Équipe</string>
+    <string name="create_team">Créer une équipe</string>
+    <string name="join_team">Rejoindre une équipe</string>
     <string name="temperature_data">Données de température (°C)</string>
     <string name="humidity_data">Données d\'humidité (%)</string>
     <string name="pressure_data">Données de pression (hPa)</string>
@@ -59,5 +59,16 @@
     <string name="user_team_name_key">user_team_name_key</string>
     <string name="user_mac_key">user_mac_key</string>
     <string name="user_language_key">user_language_key</string>
+    <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
+    <string name="privacy_security_subtext">All about your account and data</string>
+    <string name="features_experiences"><![CDATA[Features & Experiences]]></string>
+    <string name="features_experiences_subtext">Information to better understand WhereSafe</string>
+    <string name="wheresafe_101">WhereSafe 101</string>
+    <string name="wheresafe_101_subtext">The basics to help you get started</string>
+    <string name="help_button">Aide</string>
+    <string name="wheresafe101_description">Welcome to WhereSafe!</string>
+    <string name="stayconnected">Stay Connected, Stay Protected</string>
+    <string name="privacy_description">Privacy security privacy security .......</string>
+    <string name="features_description">"Features features features ... "</string>
 
 </resources>

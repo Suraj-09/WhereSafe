@@ -10,7 +10,7 @@ public class AdvancedDataViewModel extends ViewModel {
 
     public AdvancedDataViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Advanced stuff");
+        mText.setValue("");
     }
 
     public LiveData<String> getText() {

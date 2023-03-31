@@ -21,7 +21,11 @@
         android:id="@+id/navigation_settings"
         android:name="com.project.wheresafe.controllers.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+    <action
+            android:id="@+id/action_settings_to_help"
+            app:destination="@id/navigation_help" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_personal"
@@ -34,6 +38,43 @@
         android:name="com.project.wheresafe.controllers.TeamFragment"
         android:label="@string/title_team"
         tools:layout="@layout/fragment_team" />
+
+
+    <fragment
+        android:id="@+id/navigation_help"
+        android:name="com.project.wheresafe.controllers.HelpFragment"
+        tools:layout="@layout/fragment_help">
+        <action
+            android:id="@+id/action_help_to_whereSafe101"
+            app:destination="@id/navigation_help_wheresafe101" />
+        <action
+            android:id="@+id/action_help_to_features"
+            app:destination="@id/navigation_help_features" />
+        <action
+            android:id="@+id/action_help_to_privacy"
+            app:destination="@id/navigation_help_privacy" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_help_wheresafe101"
+        android:name="com.project.wheresafe.controllers.HelpWheresafe101Fragment"
+        tools:layout="@layout/fragment_help_wheresafe101">
+        <action
+            android:id="@+id/action_back_to_help"
+            app:destination="@id/navigation_help"
+            app:popUpTo="@id/navigation_help"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_help_features"
+        android:name="com.project.wheresafe.controllers.HelpFeaturesFragment"
+        tools:layout="@layout/fragment_help_features" />
+
+    <fragment
+        android:id="@+id/navigation_help_privacy"
+        android:name="com.project.wheresafe.controllers.HelpPrivacyFragment"
+        tools:layout="@layout/fragment_help_privacy" />
 
 </navigation>
 

@@ -16,7 +16,6 @@
             android:id="@+id/wheresafe101_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
             android:text="@string/wheresafe_101"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -83,50 +82,51 @@
             app:srcCompat="@mipmap/ic_launcher" />
         <TextView
             android:id="@+id/wheresafe101_subtext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/stayconnected"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:textStyle="italic"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:gravity="right">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="8dp"-->
+<!--        android:gravity="right">-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_where_safe_features"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="@string/features_experiences"
-            android:textAllCaps="false"
-            app:backgroundTint="#b0b0b0" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_privacy_security"
-            android:layout_width="208dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/privacy_security"
-            android:textAllCaps="false"
-            app:backgroundTint="#b0b0b0" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_back"
-            android:layout_width="207dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="50dp"
-            android:text="@string/back"
-            android:textAllCaps="false"
-            app:backgroundTint="#b0b0b0" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_where_safe_features"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:text="@string/features_experiences"-->
+<!--            android:textAllCaps="false"-->
+<!--            app:backgroundTint="#b0b0b0" />-->
 
 
-    </LinearLayout>
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_privacy_security"-->
+<!--            android:layout_width="208dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:text="@string/privacy_security"-->
+<!--            android:textAllCaps="false"-->
+<!--            app:backgroundTint="#b0b0b0" />-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_back"-->
+<!--            android:layout_width="207dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginBottom="50dp"-->
+<!--            android:text="@string/back"-->
+<!--            android:textAllCaps="false"-->
+<!--            app:backgroundTint="#b0b0b0" />-->
+
+
+<!--    </LinearLayout>-->
 
     </LinearLayout>
 

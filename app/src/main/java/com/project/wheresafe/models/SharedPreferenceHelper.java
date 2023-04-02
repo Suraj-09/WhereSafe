@@ -107,6 +107,16 @@ public class SharedPreferenceHelper {
         return currentUser;
     }
 
+    public void setDarkMode(boolean darkMode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getResources().getString(R.string.dark_mode_key), darkMode);
+        editor.commit();
+    }
+
+    public boolean getDarkMode() {
+        return sharedPreferences.getBoolean(context.getResources().getString(R.string.dark_mode_key), false);
+    }
+
     public void setLastTemperatureNotification(long time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(context.getResources().getString(R.string.last_temperature_notification), time);

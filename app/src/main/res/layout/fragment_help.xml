@@ -16,7 +16,6 @@
             android:id="@+id/button_wheresafe_101"
             android:layout_width="379dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
             android:text="@string/wheresafe_101"
             app:backgroundTint="#b0b0b0"
             android:textAllCaps="false" />
@@ -66,10 +65,11 @@
 
         <TextView
             android:id="@+id/features_subtext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/stayconnected"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:textStyle="italic"/>
     </LinearLayout>
 </LinearLayout>

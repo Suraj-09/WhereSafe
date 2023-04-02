@@ -52,29 +52,31 @@
     <string name="last_20_voc_readings">Last 20 VOC readings</string>
 
     <!--  SharedPreferences  -->
-    <string name="user_preference_file_key">wheresafe_user</string>
-    <string name="user_name_key">user_name_key</string>
-    <string name="user_id_key">user_id_key</string>
-    <string name="user_team_code_key">user_team_code_key</string>
-    <string name="user_team_name_key">user_team_name_key</string>
-    <string name="user_mac_key">user_mac_key</string>
-    <string name="user_language_key">user_language_key</string>
-    <string name="connection_status_key">connection_status_key</string>
+    <string name="user_preference_file_key" translatable="false">wheresafe_user</string>
+    <string name="user_name_key" translatable="false">user_name_key</string>
+    <string name="user_id_key" translatable="false">user_id_key</string>
+    <string name="user_team_code_key" translatable="false">user_team_code_key</string>
+    <string name="user_team_name_key" translatable="false">user_team_name_key</string>
+    <string name="user_mac_key" translatable="false">user_mac_key</string>
+    <string name="user_language_key" translatable="false">user_language_key</string>
+    <string name="connection_status_key" translatable="false">connection_status_key</string>
+    <string name="dark_mode_key" translatable="false">dark_mode_key</string>
+
 
     <!--  Nofifications  -->
-    <string name="channel_id">channel_id</string>
-    <string name="channel_id_low">channel_id_low</string>
-    <string name="channel_id_default">channel_id_default</string>
-    <string name="channel_id_high">channel_id_high</string>
-    <string name="channel_name">channel_name</string>
-    <string name="channel_description">channel_description</string>
-    <string name="last_temperature_notification">last_temperature_notification</string>
-    <string name="last_humidity_notification">last_humidity_notification</string>
-    <string name="last_iaq_light_notification">last_iaq_light_notification</string>
-    <string name="last_iaq_moderate_notification">last_iaq_moderate_notification</string>
-    <string name="last_iaq_heavy_notification">last_iaq_heavy_notification</string>
-    <string name="last_iaq_severe_notification">last_iaq_severe_notification</string>
-    <string name="last_iaq_extreme_notification">last_iaq_extreme_notification</string>
+    <string name="channel_id" translatable="false">channel_id</string>
+    <string name="channel_id_low" translatable="false">channel_id_low</string>
+    <string name="channel_id_default" translatable="false">channel_id_default</string>
+    <string name="channel_id_high" translatable="false">channel_id_high</string>
+    <string name="channel_name" translatable="false">channel_name</string>
+    <string name="channel_description" translatable="false">channel_description</string>
+    <string name="last_temperature_notification" translatable="false">last_temperature_notification</string>
+    <string name="last_humidity_notification" translatable="false">last_humidity_notification</string>
+    <string name="last_iaq_light_notification" translatable="false">last_iaq_light_notification</string>
+    <string name="last_iaq_moderate_notification" translatable="false">last_iaq_moderate_notification</string>
+    <string name="last_iaq_heavy_notification" translatable="false">last_iaq_heavy_notification</string>
+    <string name="last_iaq_severe_notification" translatable="false">last_iaq_severe_notification</string>
+    <string name="last_iaq_extreme_notification" translatable="false">last_iaq_extreme_notification</string>
 
 
     <string name="privacy_security"><![CDATA[Privacy & Security]]></string>

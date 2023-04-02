@@ -25,15 +25,15 @@ public class HelpFeaturesFragment extends Fragment {
         binding = FragmentHelpFeaturesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Button backButton = binding.buttonBack;
-        Button privacyButton = binding.buttonPrivacySecurity;
-        Button wheresafe101Button = binding.buttonWheresafe101;
-
-        backButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help));
-
-        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
-
-        wheresafe101Button.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_wheresafe101));
+//        Button backButton = binding.buttonBack;
+//        Button privacyButton = binding.buttonPrivacySecurity;
+//        Button wheresafe101Button = binding.buttonWheresafe101;
+//
+//        backButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help));
+//
+//        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
+//
+//        wheresafe101Button.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_wheresafe101));
 
         return root;
     }

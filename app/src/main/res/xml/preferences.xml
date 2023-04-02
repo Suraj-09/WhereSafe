@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <Preference app:enabled="false">-->
+
+<!--    </Preference>-->
+    <SwitchPreferenceCompat
+        app:key="notifications"
+        app:title="Enable notifications"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <SwitchPreferenceCompat
+        app:key="dark_mode"
+        app:title="Enable dark mode"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <ListPreference
+        app:key="language"
+        app:title="Language"
+        app:summary=""
+        app:entries="@array/languages"
+        app:entryValues="@array/language_values"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <PreferenceScreen
+        app:key="device_settings"
+        app:title="Device Settings"
+        app:summary=""
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <PreferenceScreen
+        app:key="help"
+        app:summary=""
+        app:title="Help"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+</PreferenceScreen>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="languages">
+        <item>English</item>
+        <item>Français</item>
+    </array>
+    <array name="language_values">
+        <item>en</item>
+        <item>fr</item>
+    </array>
+
+
+
+    <array name="colors">
+        <item>#FFFF0000</item>
+        <item>#FF00FF00</item>
+        <item>#FF0000FF</item>
+    </array>
+</resources>

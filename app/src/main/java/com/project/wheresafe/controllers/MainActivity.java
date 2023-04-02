@@ -1,5 +1,7 @@
 package com.project.wheresafe.controllers;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationChannel;
@@ -82,18 +84,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+
+        if (sharedPreferenceHelper.getDarkMode()) {
+            setTheme(R.style.Theme_WhereSafe_DarkTheme);
+        } else {
+            setTheme(R.style.Theme_WhereSafe);
+        }
+
         sharedPreferenceHelper.getSharedPreferences().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
         AppCompatDelegate.setApplicationLocales(appLocale);
+
+
+        // on create
+        super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
@@ -104,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             init();
         }
+
+
 
     }
 
@@ -382,19 +396,19 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navigationView, navController);
             NavigationUI.setupWithNavController(navViewBottom, navController);
 
-            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                if (destination.getId() == R.id.navigation_help_wheresafe101
-                        || destination.getId() == R.id.navigation_help_features
-                        || destination.getId() == R.id.navigation_help_privacy) {
-                    // Hide the back button in the app bar
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                }else if (destination.getId() == R.id.navigation_help) {
-                     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> navController.navigate(R.id.navigation_settings));
-                }else {
-                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
-                    }
-                });
+//            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+//                if (destination.getId() == R.id.navigation_help_wheresafe101
+//                        || destination.getId() == R.id.navigation_help_features
+//                        || destination.getId() == R.id.navigation_help_privacy) {
+//                    // Hide the back button in the app bar
+//                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//                }else if (destination.getId() == R.id.navigation_help) {
+//                     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> navController.navigate(R.id.navigation_settings));
+//                }else {
+//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
+//                    }
+//                });
 
         }
     }

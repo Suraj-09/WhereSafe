@@ -39,15 +39,15 @@ public class HelpWheresafe101Fragment extends Fragment {
         binding = FragmentHelpWheresafe101Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Button backButton = binding.buttonBack;
-        Button featuresButton = binding.buttonWhereSafeFeatures;
-        Button privacyButton = binding.buttonPrivacySecurity;
-
-        backButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help));
-
-        featuresButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_features));
-
-        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
+//        Button backButton = binding.buttonBack;
+//        Button featuresButton = binding.buttonWhereSafeFeatures;
+//        Button privacyButton = binding.buttonPrivacySecurity;
+//
+//        backButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help));
+//
+//        featuresButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_features));
+//
+//        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
 
         return root;
     }

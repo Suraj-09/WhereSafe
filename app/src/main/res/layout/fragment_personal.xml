@@ -5,7 +5,6 @@
     android:id="@+id/fragment_personal_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
     android:paddingTop="10dp"
     android:paddingHorizontal="10dp"
     tools:context=".controllers.PersonalFragment">

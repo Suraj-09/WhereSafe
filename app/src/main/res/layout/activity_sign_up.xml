@@ -6,6 +6,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".controllers.SignUpActivity">
 
     <androidx.constraintlayout.widget.Guideline
@@ -54,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
-        android:textColor="#25CF41"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toTopOf="@+id/edtNameSignUp"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
         app:layout_constraintTop_toBottomOf="@id/guideline_30" />
@@ -76,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/prompt_email"
-        android:textColor="#25CF41"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toTopOf="@+id/edtEmailSignUp"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
         app:layout_constraintTop_toBottomOf="@id/guideline_30" />
@@ -99,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/prompt_password"
-        android:textColor="#25CF41"
+        android:textColor="@color/text_color"
         app:layout_constraintBottom_toTopOf="@+id/edtPasswordSignUp"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vert_left"
         app:layout_constraintTop_toBottomOf="@id/edtEmailSignUp" />
@@ -153,7 +154,8 @@
             android:background="#0000"
             android:textColor="#25CF41"
             android:textSize="14sp"
-            android:text="@string/action_sign_in_short" />
+            android:text="@string/action_sign_in_short"
+            android:textColor="@color/text_color" />
 
     </LinearLayout>
 

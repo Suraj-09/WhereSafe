@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BmeData {
     private int dataId;
@@ -170,5 +171,24 @@ public class BmeData {
                 ", altitude=" + altitude +
                 ", timestamp='" + timestamp + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BmeData bmeData = (BmeData) o;
+        return (temperature == bmeData.temperature)
+                && (humidity == bmeData.humidity)
+                && (pressure == bmeData.pressure)
+                && (gas == bmeData.gas)
+                && (altitude == bmeData.altitude);
+
+//        return Double.compare(bmeData.temperature, temperature) == 0 && Double.compare(bmeData.humidity, humidity) == 0 && Double.compare(bmeData.pressure, pressure) == 0 && Double.compare(bmeData.gas, gas) == 0 && Double.compare(bmeData.altitude, altitude) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(temperature, humidity, pressure, gas, altitude, timestamp);
     }
 }

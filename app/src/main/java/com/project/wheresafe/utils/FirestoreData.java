@@ -8,10 +8,12 @@ public class FirestoreData {
     ArrayList<BmeData> bmeDataArrayList;
     ArrayList<String> teamCodeArraylist;
 
+    ArrayList<User> teamMembersArrayList;
+
     public FirestoreData() {
         bmeDataLatest = null;
-        bmeDataArrayList = null;
-        teamCodeArraylist = null;
+        bmeDataArrayList = new ArrayList<>();
+        teamCodeArraylist = new ArrayList<>();
         user = null;
     }
 
@@ -45,5 +47,13 @@ public class FirestoreData {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ArrayList<User> getTeamMembersArrayList() {
+        return teamMembersArrayList;
+    }
+
+    public void setTeamMembersArrayList(ArrayList<User> teamMembersArrayList) {
+        this.teamMembersArrayList = teamMembersArrayList;
     }
 }

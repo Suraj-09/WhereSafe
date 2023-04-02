@@ -22,6 +22,7 @@ import com.project.wheresafe.databinding.FragmentTeamBinding;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
+import com.project.wheresafe.utils.User;
 import com.project.wheresafe.viewmodels.TeamViewModel;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -80,28 +81,35 @@ public class TeamFragment extends Fragment {
         binding.createTeamButton.setVisibility(View.GONE);
         binding.joinTeamButton.setVisibility(View.GONE);
 
-        firestoreHelper.getTeam(teamCode, new FirestoreCallback() {
+//        firestoreHelper.getTeam(teamCode, new FirestoreCallback() {
+//            @Override
+//            public void onResultGet() {
+//                teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
+//
+//                if (binding != null) {
+//                    TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
+//                    String teamText = "Team Name: " + teamName;
+//                    textTeam.setText(teamText);
+//
+//
+//                    TextView textCode = binding.getRoot().findViewById(R.id.code_team);
+//                    String codeText = "Team Code: " + teamCode;
+//                    textCode.setText(codeText);
+//
+//                    // TODO: populate view to show team stuff
+//
+//                    for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
+//                        System.out.println(docRef);
+//                    }
+//                }
+//
+//            }
+//        });
+
+        firestoreHelper.getTeamMembers(teamCode, new FirestoreCallback() {
             @Override
             public void onResultGet() {
-                teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
-
-                if (binding != null) {
-                    TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
-                    String teamText = "Team Name: " + teamName;
-                    textTeam.setText(teamText);
-
-
-                    TextView textCode = binding.getRoot().findViewById(R.id.code_team);
-                    String codeText = "Team Code: " + teamCode;
-                    textCode.setText(codeText);
-
-                    // TODO: populate view to show team stuff
-
-                    for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
-                        System.out.println(docRef);
-                    }
-                }
-
+                User currentUser = sharedPreferenceHelper.getCurrentUser();
             }
         });
 

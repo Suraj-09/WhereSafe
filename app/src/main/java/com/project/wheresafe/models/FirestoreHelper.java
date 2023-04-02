@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.FirestoreConfig;
@@ -65,12 +66,12 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "addUser(): DocumentSnapshot successfully written!");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.w(TAG, "addUser(): Error writing document", e);
                     }
                 });
     }
@@ -135,8 +136,8 @@ public class FirestoreHelper {
         Map<String, Object> bmeMap = bmeData.toMap();
 
         getSensorDataCollection(uid).add(bmeMap)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "addBmeData(): DocumentSnapshot written with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "addBmeData(): Error adding document", e));
     }
 
     public void getLatestPersonalSensorData(String uid, FirestoreCallback firestoreCallback) {
@@ -161,7 +162,6 @@ public class FirestoreHelper {
 
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
-                        System.out.println("error getting documents");
                     }
                 });
     }
@@ -183,7 +183,6 @@ public class FirestoreHelper {
 
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
-                        System.out.println("error getting documents");
                     }
                 });
 
@@ -231,6 +230,60 @@ public class FirestoreHelper {
                 });
     }
 
+    public void getTeamMembers(String teamCode, FirestoreCallback firestoreCallback) {
+        usersCollection
+                .whereEqualTo("team_code", teamCode)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            ArrayList<User> teamMembers = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                User user = new User();
+                                user.setId(document.getId());
+
+                                if (document.getData().containsKey("name")) {
+                                    user.setName(document.getData().get("name").toString());
+                                }
+                                if (document.getData().containsKey("team_code")) {
+                                    user.setTeamCode(document.getData().get("team_code").toString());
+                                }
+                                if (document.getData().containsKey("mac_address")) {
+                                    user.setMacAddress(document.getData().get("mac_address").toString());
+                                }
+
+                                if (document.getData().containsKey("device_name")) {
+                                    user.setDeviceName(document.getData().get("device_name").toString());
+                                } else {
+                                    user.setDeviceName("WhereSafe");
+                                }
+
+                                if (document.getData().containsKey("language_code")) {
+                                    user.setLanguageCode(document.getData().get("language_code").toString());
+                                } else {
+                                    user.setLanguageCode("en");
+                                }
+
+                                teamMembers.add(user);
+
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+
+                            firestoreData.setTeamMembersArrayList(teamMembers);
+
+                            firestoreCallback.onResultGet();
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     public void addMacAddress(String uid, String macAddress) {
         Map<String, Object> macInfo = new HashMap<>();
         macInfo.put("mac_address", macAddress);
@@ -238,12 +291,12 @@ public class FirestoreHelper {
         usersCollection.document(uid).update(macInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "DocumentSnapshot successfully written!");
+                Log.d(TAG, "addMacAddress(): DocumentSnapshot successfully written!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
+                Log.w(TAG, "addMacAddress(): Error writing document", e);
             }
         });
     }
@@ -255,12 +308,12 @@ public class FirestoreHelper {
         usersCollection.document(uid).update(teamInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "DocumentSnapshot successfully written!");
+                Log.d(TAG, "addTeamCode(): DocumentSnapshot successfully written!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
+                Log.w(TAG, "addTeamCode(): Error writing document", e);
             }
         });
     }
@@ -273,12 +326,12 @@ public class FirestoreHelper {
         teamsCollection.document(teamCode).set(teamDoc).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d(TAG, "DocumentSnapshot successfully written!");
+                Log.d(TAG, "createTeam(): DocumentSnapshot successfully written!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
+                Log.w(TAG, "createTeam(): Error writing document", e);
             }
         });
     }
@@ -295,8 +348,7 @@ public class FirestoreHelper {
                 firestoreCallback.onResultGet();
 
             } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
-                System.out.println("error getting documents");
+                Log.d(TAG, "getTeamCodes(): Error getting documents: ", task.getException());
             }
         });
     }
@@ -307,12 +359,12 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        Log.d(TAG, "addMember(): DocumentSnapshot successfully updated!");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error : " + e.getMessage());
+                        Log.d(TAG, "addMember(): Error : " + e.getMessage());
                     }
                 });
 
@@ -325,12 +377,12 @@ public class FirestoreHelper {
         usersCollection.document(uid).update(langInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "DocumentSnapshot successfully written!");
+                Log.d(TAG, "updateLanguage(): DocumentSnapshot successfully written!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error writing document", e);
+                Log.w(TAG, "updateLanguage(): Error writing document", e);
             }
         });
     }

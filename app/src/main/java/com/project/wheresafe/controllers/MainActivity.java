@@ -82,13 +82,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
         sharedPreferenceHelper.getSharedPreferences().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
-
-
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
@@ -115,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
 
                 if (newStatus != null) {
                     btnConnection = findViewById(R.id.btnConnection);
+
+                    if (newStatus.equals(getString(R.string.status_reconnect)) || newStatus.equals(getString(R.string.status_connect)) ) {
+                        btnConnection.setEnabled(true);
+                        stopBleEspService();
+                    } else {
+                        btnConnection.setEnabled(false);
+                    }
+
                     btnConnection.setText(newStatus);
                 }
 
@@ -125,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // *********************************************************************************************
     private BleEspForegroundService mBleEspService;
 
     private void startBleEspService() {
@@ -139,14 +145,25 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             BleEspForegroundService.LocalBinder binder = (BleEspForegroundService.LocalBinder) iBinder;
             mBleEspService = binder.getService();
-            mBleEspService.onStartCommand(null, 0, 0);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+
             mBleEspService = null;
         }
     };
+
+    private void stopBleEspService() {
+        if (mBleEspService != null) {
+            unbindService(mServiceConnection);
+            mBleEspService = null;
+        }
+
+        Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
+        stopService(serviceIntent);
+    }
+
 ////
 ////    @Override
 ////    protected void onResume() {
@@ -163,25 +180,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-    // *********************************************************************************************
-
-
-
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-        NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
 
     private void goToSignIn() {
         Intent intent = new Intent(this, SignInActivity.class);
@@ -227,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
         sharedPreferenceHelper.saveUser(currentFirebaseUser);
-        createNotificationChannel();
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
@@ -291,24 +288,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        startBleEspService();
+        btnConnection = findViewById(R.id.btnConnection);
+//        btnConnection.setText(sharedPreferenceHelper.getConnectionStatus());
+        btnConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopBleEspService();
+                startBleEspService();
+            }
+        });
 
-//        bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
-//        bleEspService.run();
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getResources().getString(R.string.channel_id))
-//            .setSmallIcon(R.mipmap.ic_launcher_round)
-//            .setContentTitle("textTitle")
-//            .setContentText("textContent")
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-////            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_POST_NOTIFICATIONS);
-//            return;
-//        }
-//        notificationManager.notify(1, builder.build());
-//        System.out.println("notify");
     }
 
     @Override
@@ -373,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
             DrawerLayout drawer = binding.drawerLayout;
 
             navigationView.getMenu().findItem(R.id.sign_out).setOnMenuItemClickListener(menuItem -> {
+                stopBleEspService();
                 FirebaseAuth.getInstance().signOut();
                 goToSignIn();
                 return true;
@@ -392,8 +382,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-
 
     @Override
     protected void onResume() {
@@ -449,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+//        stopBleEspService();
 
 //        FirebaseAuth.getInstance().signOut();
 //        bleEspService.stop();
@@ -534,8 +523,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void getPresonalData(ArrayList<BmeData> bmeDataArrayList) {
-//        System.out.println(bmeDataArrayList);
-//    }
 }

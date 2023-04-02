@@ -77,7 +77,8 @@
             android:name=".models.BleEspForegroundService"
             android:foregroundServiceType="location|dataSync"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:stopWithTask="true"/>
     </application>
 
 </manifest>

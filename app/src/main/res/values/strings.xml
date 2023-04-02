@@ -63,8 +63,21 @@
 
     <!--  Nofifications  -->
     <string name="channel_id">channel_id</string>
+    <string name="channel_id_low">channel_id_low</string>
+    <string name="channel_id_default">channel_id_default</string>
+    <string name="channel_id_high">channel_id_high</string>
     <string name="channel_name">channel_name</string>
     <string name="channel_description">channel_description</string>
+    <string name="last_temperature_notification">last_temperature_notification</string>
+    <string name="last_humidity_notification">last_humidity_notification</string>
+    <string name="last_iaq_light_notification">last_iaq_light_notification</string>
+    <string name="last_iaq_moderate_notification">last_iaq_moderate_notification</string>
+    <string name="last_iaq_heavy_notification">last_iaq_heavy_notification</string>
+    <string name="last_iaq_severe_notification">last_iaq_severe_notification</string>
+    <string name="last_iaq_extreme_notification">last_iaq_extreme_notification</string>
+
+
+
 
 
     <!--  Connection status  -->

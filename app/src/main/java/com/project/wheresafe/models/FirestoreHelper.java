@@ -269,10 +269,7 @@ public class FirestoreHelper {
                                     user.setLanguageCode("en");
                                 }
 
-
                                 teamMembers.add(user);
-
-
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }

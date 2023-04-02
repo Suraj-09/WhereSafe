@@ -178,7 +178,13 @@ public class BmeData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BmeData bmeData = (BmeData) o;
-        return Double.compare(bmeData.temperature, temperature) == 0 && Double.compare(bmeData.humidity, humidity) == 0 && Double.compare(bmeData.pressure, pressure) == 0 && Double.compare(bmeData.gas, gas) == 0 && Double.compare(bmeData.altitude, altitude) == 0;
+        return (temperature == bmeData.temperature)
+                && (humidity == bmeData.humidity)
+                && (pressure == bmeData.pressure)
+                && (gas == bmeData.gas)
+                && (altitude == bmeData.altitude);
+
+//        return Double.compare(bmeData.temperature, temperature) == 0 && Double.compare(bmeData.humidity, humidity) == 0 && Double.compare(bmeData.pressure, pressure) == 0 && Double.compare(bmeData.gas, gas) == 0 && Double.compare(bmeData.altitude, altitude) == 0;
     }
 
     @Override

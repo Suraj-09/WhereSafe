@@ -8,12 +8,14 @@
         android:id="@+id/radioButtonEnglish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="English" />
+        android:text="English"
+        android:textColor="@color/text_color_info" />
 
     <RadioButton
         android:id="@+id/radioButtonFrench"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Français" />
+        android:text="Français"
+        android:textColor="@color/text_color_info" />
 
 </LinearLayout>

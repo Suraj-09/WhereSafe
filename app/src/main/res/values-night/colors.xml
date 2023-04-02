@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background_color">#424549</color>
-    <color name="text_color">#1F4325</color>
+    <color name="background_color">#121212</color>
+    <color name="text_color_green">#00FF00</color>
+    <color name="app_bar_color">#1D666B</color>
+    <color name="text_color_info">@color/white</color>
+    <color name="text_color_nav">#00FF00</color>
 
 </resources>

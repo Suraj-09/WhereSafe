@@ -21,8 +21,6 @@ public class HelpFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-     //   SettingsViewModel slideshowViewModel =
-     //           new ViewModelProvider(this).get(SettingsViewModel.class);
 
         binding = FragmentHelpBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -31,26 +29,11 @@ public class HelpFragment extends Fragment {
         Button featuresButton = binding.buttonWhereSafeFeatures;
         Button privacyButton = binding.buttonPrivacySecurity;
 
-        wheresafe101Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_help_to_whereSafe101);
-            }
-        });
+        wheresafe101Button.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_wheresafe101));
 
-        featuresButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_help_to_features);
-            }
-        });
+        featuresButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_features));
 
-        privacyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_help_to_privacy);
-            }
-        });
+        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
 
         return root;
     }

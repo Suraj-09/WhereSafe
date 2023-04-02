@@ -23,9 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.os.LocaleListCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -268,8 +270,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             });
 
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
+            // creates a specific set of top level destinations
+            // the Up button (back arrow) will not be displayed when on these destinations
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.navigation_home, R.id.navigation_advanced_data, R.id.navigation_settings)
                     .setOpenableLayout(drawer)
@@ -279,6 +281,20 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
             NavigationUI.setupWithNavController(navViewBottom, navController);
+
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.navigation_help_wheresafe101
+                        || destination.getId() == R.id.navigation_help_features
+                        || destination.getId() == R.id.navigation_help_privacy) {
+                    // Hide the back button in the app bar
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }else if (destination.getId() == R.id.navigation_help) {
+                     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> navController.navigate(R.id.navigation_settings));
+                }else {
+                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
+                    }
+                });
 
         }
     }
@@ -350,16 +366,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //        if (item.getItemId() == R.id.action_settings) {
 //            Intent intent = getIntent();
 //            finish();
 //            startActivity(intent);
 //            return (true);
 //        }
-        return super.onOptionsItemSelected(item);
-    }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {

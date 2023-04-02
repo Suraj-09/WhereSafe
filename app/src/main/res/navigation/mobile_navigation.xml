@@ -22,9 +22,6 @@
         android:name="com.project.wheresafe.controllers.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings">
-    <action
-            android:id="@+id/action_settings_to_help"
-            app:destination="@id/navigation_help" />
     </fragment>
 
     <fragment
@@ -43,37 +40,27 @@
     <fragment
         android:id="@+id/navigation_help"
         android:name="com.project.wheresafe.controllers.HelpFragment"
+        android:label="@string/help"
         tools:layout="@layout/fragment_help">
-        <action
-            android:id="@+id/action_help_to_whereSafe101"
-            app:destination="@id/navigation_help_wheresafe101" />
-        <action
-            android:id="@+id/action_help_to_features"
-            app:destination="@id/navigation_help_features" />
-        <action
-            android:id="@+id/action_help_to_privacy"
-            app:destination="@id/navigation_help_privacy" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_help_wheresafe101"
         android:name="com.project.wheresafe.controllers.HelpWheresafe101Fragment"
+        android:label="@string/wheresafe_101"
         tools:layout="@layout/fragment_help_wheresafe101">
-        <action
-            android:id="@+id/action_back_to_help"
-            app:destination="@id/navigation_help"
-            app:popUpTo="@id/navigation_help"
-            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_help_features"
         android:name="com.project.wheresafe.controllers.HelpFeaturesFragment"
+        android:label="@string/features_experiences"
         tools:layout="@layout/fragment_help_features" />
 
     <fragment
         android:id="@+id/navigation_help_privacy"
         android:name="com.project.wheresafe.controllers.HelpPrivacyFragment"
+        android:label="@string/privacy_security"
         tools:layout="@layout/fragment_help_privacy" />
 
 </navigation>

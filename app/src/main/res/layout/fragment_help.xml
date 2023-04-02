@@ -56,5 +56,20 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="@string/privacy_security_subtext" />
+
+        <ImageView
+            android:id="@+id/wheresafe101_image"
+            android:layout_width="match_parent"
+            android:layout_height="115dp"
+            android:layout_marginTop="110dp"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/features_subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stayconnected"
+            android:textSize="25sp"
+            android:textStyle="italic"/>
     </LinearLayout>
 </LinearLayout>

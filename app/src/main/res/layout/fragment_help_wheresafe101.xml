@@ -11,22 +11,68 @@
         android:orientation="vertical"
         android:padding="8dp">
 
+
         <TextView
             android:id="@+id/wheresafe101_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wheresafe_101"
             android:layout_marginTop="60dp"
+            android:text="@string/wheresafe_101"
             android:textSize="24sp"
             android:textStyle="bold" />
-
 
         <TextView
             android:id="@+id/wheresafe101_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@string/wheresafe101_description"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/home_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/menu_home"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/home_description"
+            android:layout_width="wrap_content"
+            android:layout_height="122dp"
+            android:text="@string/home_description"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/personal_metrics_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_personal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/personal_metrics_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/personal_metrics_description"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/team_metrics_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/title_team"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/team_metrics_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/team_metrics_description"
             android:textSize="16sp" />
 
         <ImageView
@@ -42,6 +88,45 @@
             android:text="@string/stayconnected"
             android:textSize="25sp"
             android:textStyle="italic"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="right">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_where_safe_features"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/features_experiences"
+            android:textAllCaps="false"
+            app:backgroundTint="#b0b0b0" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_privacy_security"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/privacy_security"
+            android:textAllCaps="false"
+            app:backgroundTint="#b0b0b0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_back"
+            android:layout_width="207dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="50dp"
+            android:text="@string/back"
+            android:textAllCaps="false"
+            app:backgroundTint="#b0b0b0" />
+
+
+    </LinearLayout>
 
     </LinearLayout>
 

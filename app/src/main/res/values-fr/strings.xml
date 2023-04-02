@@ -65,10 +65,14 @@
     <string name="features_experiences_subtext">Information to better understand WhereSafe</string>
     <string name="wheresafe_101">WhereSafe 101</string>
     <string name="wheresafe_101_subtext">The basics to help you get started</string>
-    <string name="help_button">Aide</string>
+    <string name="help">Aide</string>
     <string name="wheresafe101_description">Welcome to WhereSafe!</string>
     <string name="stayconnected">Stay Connected, Stay Protected</string>
     <string name="privacy_description">Privacy security privacy security .......</string>
     <string name="features_description">"Features features features ... "</string>
+    <string name="back">Back</string>
+    <string name="home_description">In the Home menu, you\'ll have instant, real-time access to your readings for Humidity, Temperature, and Pressure. These metrics are displayed in a Gauge format. For further analysis of your security metrics, see team metrics.</string>
+    <string name="personal_metrics_description">Personal Metrics will allow further visual representation of your real-time metrics . In this menu, you can observe line charts of all safety metrics consisting of the last 20 measurements.</string>
+    <string name="team_metrics_description"><![CDATA[In Team Metrics, you will have the ability to either <b>create</b> or <b>join</b> a team. Upon creation of a team, a unique ID will be generated, allowing others to join. Once a team is created, in this menu you will be able to observe the safety metrics of all team members.]]></string>
 
 </resources>

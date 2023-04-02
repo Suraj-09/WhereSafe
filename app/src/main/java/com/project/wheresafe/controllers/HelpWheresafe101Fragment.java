@@ -2,10 +2,16 @@ package com.project.wheresafe.controllers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
+import android.widget.Button;
+import android.widget.Toast;
+
+
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,42 +27,29 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHelpWheresafe101Binding;
+import com.project.wheresafe.viewmodels.AdvancedDataViewModel;
 import com.project.wheresafe.viewmodels.SettingsViewModel;
 
 public class HelpWheresafe101Fragment extends Fragment {
     private FragmentHelpWheresafe101Binding binding;
-    private AppBarConfiguration mAppBarConfiguration;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
         binding = FragmentHelpWheresafe101Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Enable the back button in the AppBar
-        setHasOptionsMenu(true);
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        Button backButton = binding.buttonBack;
+        Button featuresButton = binding.buttonWhereSafeFeatures;
+        Button privacyButton = binding.buttonPrivacySecurity;
+
+        backButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help));
+
+        featuresButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_features));
+
+        privacyButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_help_privacy));
 
         return root;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavHostFragment.findNavController(this).navigate(R.id.action_back_to_help);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    public HelpWheresafe101Fragment() {
-        // constructor
-    }
 }

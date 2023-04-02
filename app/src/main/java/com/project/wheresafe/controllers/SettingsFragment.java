@@ -52,7 +52,7 @@ public class SettingsFragment extends Fragment implements LanguageSelectionDialo
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_settings_to_help);
+                Navigation.findNavController(v).navigate(R.id.navigation_help);
             }
         });
 

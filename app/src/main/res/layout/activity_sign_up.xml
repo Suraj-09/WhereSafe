@@ -152,7 +152,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#0000"
-            android:textColor="#25CF41"
             android:textSize="14sp"
             android:text="@string/action_sign_in_short"
             android:textColor="@color/text_color" />

@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import android.annotation.SuppressLint;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -29,9 +31,14 @@ import androidx.navigation.NavController;
 import com.project.wheresafe.R;
 import com.project.wheresafe.utils.DeviceListAdapter;
 import com.project.wheresafe.models.FirestoreHelper;
+import com.project.wheresafe.utils.FirestoreCallback;
+import com.project.wheresafe.utils.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 public class DeviceListFragment extends Fragment implements DeviceListAdapter.OnDeviceClickListener {
@@ -39,36 +46,36 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     private RecyclerView recyclerView;
     private DeviceListAdapter adapter;
     private BluetoothAdapter bluetoothAdapter;
+    private BroadcastReceiver bluetoothReceiver;
     private List<BluetoothDevice> deviceList = new ArrayList<>();
+    private Map<BluetoothDevice, String> proximityMap = new HashMap<>();
+
+
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
     public static final int PERMISSION_REQUEST_CODE = 1;
-    private TextView deviceNameTextView;
-    private TextView deviceMacAddressTextView;
-    //private Button connectButton;
+
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // Check if the device is already in the list
-                boolean deviceAlreadyAdded = false;
-                for (BluetoothDevice existingDevice : deviceList) {
-                    if (existingDevice.getAddress().equals(device.getAddress())) {
-                        deviceAlreadyAdded = true;
-                        break;
-                    }
-                }
-                // Add the device to the list if it's not already there
-                if (!deviceAlreadyAdded) {
+                short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                double distance = Util.calculateDistance(rssi);
+                String distanceString = String.format(Locale.getDefault(), "%.2f m", distance);
+
+                Log.d("PROX TEST", "Device: " + device.getName() + " Address: " + device.getAddress() + " RSSI: " + rssi + " Distance: " + distanceString);
+
+                if (!deviceList.contains(device)) {
                     deviceList.add(device);
+                    proximityMap.put(device, distanceString);
+                    adapter.updateDeviceRssi(device, rssi);
                     adapter.notifyDataSetChanged();
                 }
             }
         }
     };
+
     private final BroadcastReceiver bondStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,7 +101,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create adapter and set it to RecyclerView
-        adapter = new DeviceListAdapter(getContext(), deviceList);
+        adapter = new DeviceListAdapter(getContext(), deviceList, proximityMap);
         adapter.setOnDeviceClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -123,8 +130,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        deviceNameTextView = view.findViewById(R.id.device_name_textview);
-        deviceMacAddressTextView = view.findViewById(R.id.device_mac_address_textview);
+//        deviceNameTextView = view.findViewById(R.id.device_name_textview);
+//        deviceMacAddressTextView = view.findViewById(R.id.device_mac_address_textview);
     }
 
     private void startDiscovery() {
@@ -133,11 +140,11 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             bluetoothAdapter.cancelDiscovery();
         }
 
-        // Add bonded devices to the list
-        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-        deviceList.clear();
-        deviceList.addAll(bondedDevices);
-        adapter.notifyDataSetChanged();
+//        // Add bonded devices to the list
+//        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+//        deviceList.clear();
+//        deviceList.addAll(bondedDevices);
+//        adapter.notifyDataSetChanged();
 
         // Register the BroadcastReceiver
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -178,8 +185,9 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public void onDeviceClick(BluetoothDevice device) {
         View view = getView();
-        String deviceName = "WhereSafe";
+        final String device_name = "WhereSafe";
         String deviceMacAddress = device.getAddress();
+        String deviceProximity = proximityMap != null ? proximityMap.get(device) : "Unknown";
 
         // Pair the app to the device
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -190,31 +198,22 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         device.createBond();
 
         // Rename the device
-        deviceName = "WhereSafe";
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null) {
-            bluetoothAdapter.setName(deviceName);
+            bluetoothAdapter.setName(device_name);
         }
 
         // Update the device name and MAC address in Firestore
         FirestoreHelper firestoreHelper = new FirestoreHelper();
-        firestoreHelper.updateDeviceName(deviceName);
+        firestoreHelper.updateDeviceName(device_name);
         firestoreHelper.removeMacAddress();
-        firestoreHelper.addMacAddress(deviceMacAddress);
 
-        // Update the UI with the new device name and MAC address
-        if (deviceNameTextView != null && deviceName != null) {
-            deviceNameTextView.setText(deviceName);
+        if (deviceMacAddress != null && deviceMacAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
+            firestoreHelper.addMacAddress(deviceMacAddress);
         }
-
-        if (deviceMacAddressTextView != null && deviceMacAddress != null) {
-            deviceMacAddressTextView.setText(deviceMacAddress);
-        }
+        firestoreHelper.addDeviceProximity(deviceProximity);
 
         // Navigate back to the DeviceSettingsFragment
         Navigation.findNavController(view).navigateUp();
-
-      //  Navigation.findNavController(view).navigate(R.id.action_deviceListFragment_to_deviceSettingsFragment);
     }
-
 }

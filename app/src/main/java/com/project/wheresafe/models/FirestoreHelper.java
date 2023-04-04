@@ -1,6 +1,11 @@
 package com.project.wheresafe.models;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Looper;
 import android.util.Log;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -22,6 +27,7 @@ import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.FirestoreConfig;
 import com.project.wheresafe.utils.FirestoreData;
 import com.project.wheresafe.utils.User;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +124,9 @@ public class FirestoreHelper<TeamMember> {
                             if (document.getData().containsKey("mac_address")) {
                                 user.setMacAddress(document.getData().get("mac_address").toString());
                             }
-
+                            if (document.getData().containsKey("device_name")) {
+                                user.setDeviceName(document.getData().get("device_name").toString());
+                            }
                         }
 
                         firestoreData.setUser(user);
@@ -206,6 +214,33 @@ public class FirestoreHelper<TeamMember> {
         userRef.update("longitude", longitude);
     }
 
+    public void startUpdatingLocation(Context context, String userId) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // Get the current location
+                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                // Update the user's location in Firestore
+                if (location != null) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    setUserLocation(userId, latitude, longitude);
+                }
+
+                // Schedule the next update in 10 seconds
+                handler.postDelayed(this, 10000);
+            }
+        };
+
+        // Start the loop
+        handler.post(runnable);
+    }
+
+
+
     public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
         teamsCollection
                 .document(teamCode)
@@ -257,10 +292,45 @@ public class FirestoreHelper<TeamMember> {
             }
         });
     }
+
+    public void addDeviceProximity(String deviceProximity) {
+        Map<String, Object> proxInfo = new HashMap<>();
+        proxInfo.put("device_proximity", deviceProximity);
+
+        userDocument.update(proxInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error writing document", e);
+            }
+        });
+    }
+
     public void updateDeviceName(String newDeviceName) {
         userDocument.update("device_name", newDeviceName)
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Device name successfully updated"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating device name", e));
+    }
+
+    public void removeDeviceProximity(){
+        Map<String, Object> proxInfo = new HashMap<>();
+        proxInfo.put("device_proximity", FieldValue.delete());
+
+        userDocument.update(proxInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Device proximity successfully removed!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error removing device proximity", e);
+            }
+        });
     }
 
 

@@ -59,10 +59,19 @@ public class TeamFragment<TeamMember> extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
         binding = FragmentTeamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+//        // Check if the app has permission to access the user's location
+//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Request permission to access the user's location
+//            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+//        } else {
+//            // Start updating the user's location
+//            firestoreHelper.startUpdatingLocation();
+//        }
 
         firestoreHelper = new FirestoreHelper();
         firestoreHelper.getUser(new FirestoreCallback() {

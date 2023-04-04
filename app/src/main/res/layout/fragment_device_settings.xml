@@ -37,19 +37,19 @@
         android:text="Device MAC Address"
         android:textSize="16sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device Proximity:"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"/>
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Device Proximity:"-->
+<!--        android:textSize="18sp"-->
+<!--        android:layout_marginTop="8dp"/>-->
 
-    <TextView
-        android:id="@+id/device_proximity_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device Proximity"
-        android:textSize="16sp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/device_proximity_textview"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Device Proximity"-->
+<!--        android:textSize="16sp"/>-->
 
     <Button
         android:id="@+id/rename_device_button"

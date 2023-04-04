@@ -122,6 +122,7 @@ public class BleEspService extends BluetoothGattCallback {
                     scanner.stopScan(this);
 
                     if (device.getAddress() != null) {
+                        Log.d("MAC ADDRESS THING", device.getAddress());
                         saveMacAddress(device.getAddress());
                     }
 
@@ -259,6 +260,7 @@ public class BleEspService extends BluetoothGattCallback {
             deviceRSSIMap.put(deviceAddress, rssi);
         }
     }
+
 
 
 }

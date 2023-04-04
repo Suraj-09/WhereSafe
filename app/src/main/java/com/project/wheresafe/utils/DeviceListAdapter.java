@@ -13,12 +13,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.wheresafe.R;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
 
@@ -26,12 +29,20 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     private final LayoutInflater mInflater;
     private OnDeviceClickListener mClickListener;
     private final Context mContext;
+    private Map<BluetoothDevice, String> mProximityMap;
+    private Map<BluetoothDevice, Integer> mDeviceRssiMap;
 
 
-    public DeviceListAdapter(Context context, List<BluetoothDevice> deviceList) {
+
+    public DeviceListAdapter(Context context, List<BluetoothDevice> deviceList, Map<BluetoothDevice, String> mProximityMap) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mDeviceList = deviceList;
+        this.mProximityMap = mProximityMap;
+        this.mDeviceRssiMap = new HashMap<>();
+    }
+    public void updateDeviceRssi(BluetoothDevice device, int rssi) {
+        mDeviceRssiMap.put(device, rssi);
     }
 
     @NonNull
@@ -44,11 +55,16 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
         BluetoothDevice device = mDeviceList.get(position);
+        Integer rssiValue = mDeviceRssiMap.get(device);
+        int rssi = (rssiValue != null) ? rssiValue : 0;
+        double distance = calculateProximityFromRssi(rssi);
+        String distanceString = mProximityMap.getOrDefault(device, "Unknown");
 
         String deviceAddress = device.getAddress();
         if (deviceAddress != null && deviceAddress.startsWith("30:AE:A4")) {
             holder.deviceNameTextView.setText("WhereSafe");
             holder.deviceAddressTextView.setText(deviceAddress);
+            holder.deviceProximityTextView.setText(distanceString);
             holder.itemView.setOnClickListener(v -> mClickListener.onDeviceClick(device));
             holder.itemView.setVisibility(View.VISIBLE);
             holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -57,6 +73,19 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
     }
+
+
+    private double calculateProximityFromRssi(int rssi) {
+        double txPower = -20.0; // Default txPower for SparkFun ESP32 Thing
+        double ratio = rssi * 1.0 / txPower;
+        if (ratio < 1.0) {
+            return Math.pow(ratio, 10);
+        } else {
+            double distance = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+            return distance;
+        }
+    }
+
 
 
     @Override
@@ -75,12 +104,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     static class DeviceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView deviceNameTextView;
         final TextView deviceAddressTextView;
+        final TextView deviceProximityTextView;
         final OnDeviceClickListener clickListener;
 
         DeviceViewHolder(@NonNull View itemView, OnDeviceClickListener clickListener) {
             super(itemView);
             this.deviceNameTextView = itemView.findViewById(R.id.device_name_textview);
             this.deviceAddressTextView = itemView.findViewById(R.id.device_mac_address_textview);
+            this.deviceProximityTextView = itemView.findViewById(R.id.device_proximity_textview);
             this.clickListener = clickListener;
             itemView.setOnClickListener(this);
         }

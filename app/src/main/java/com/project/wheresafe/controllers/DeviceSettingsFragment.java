@@ -39,7 +39,6 @@ public class DeviceSettingsFragment extends Fragment {
 
     private BleEspService bleEspService;
     private FirestoreHelper firestoreHelper;
-    private Map<String, Integer> deviceRSSIMap = new HashMap<>();
 
 
 
@@ -52,7 +51,7 @@ public class DeviceSettingsFragment extends Fragment {
         // Get references to TextViews
         deviceNameTextView = view.findViewById(R.id.device_name_textview);
         deviceMacAddressTextView = view.findViewById(R.id.device_mac_address_textview);
-        deviceProximityTextView = view.findViewById(R.id.device_proximity_textview);
+        //deviceProximityTextView = view.findViewById(R.id.device_proximity_textview);
 
         // Get references to EditText and Buttons
         renameDeviceButton = view.findViewById(R.id.rename_device_button);
@@ -82,76 +81,82 @@ public class DeviceSettingsFragment extends Fragment {
             @SuppressLint("RestrictedApi")
             @Override
             public void onResultGet() {
+
                 String deviceName = firestoreHelper.getFirestoreData().getUser().getDeviceName();
                 String macAddress = firestoreHelper.getFirestoreData().getUser().getMacAddress();
+                String deviceProximity = firestoreHelper.getFirestoreData().getUser().getDeviceProximity();
 
-                if (deviceName != null) {
-                    deviceNameTextView.setText(deviceName);
-                } else {
-                    deviceNameTextView.setText("Device Name");
-                }
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (deviceName != null && !deviceName.isEmpty()) {
+                            deviceNameTextView.setText(deviceName);
+                        } else {
+                            deviceNameTextView.setText("");
+                        }
 
-                if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
-                    // Get BluetoothAdapter
-                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    if (bluetoothAdapter == null) {
-                        Log.e(TAG, "Bluetooth not supported");
-                        return;
+                        updateMacAddressUI(macAddress); // Update the device's MAC address in the UI
+                        //updateDeviceProximityUI(deviceProximity);
                     }
+                });
 
-                    // Calculate proximity and update deviceProximityTextView
-                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
-                    Integer rssi = deviceRSSIMap.get(device.getAddress()); // Retrieve the latest RSSI value for the device
-                    if (rssi != null) {
-                        double distance = calculateDistance(rssi); // Calculate the distance based on the RSSI value
-                        String proximity = getProximity(distance); // Get the proximity label based on the distance
-                        String distanceText = String.format("%.2f m", distance); // Format the distance text
-                        deviceProximityTextView.setText(String.format("%s (%s)", proximity, distanceText)); // Update the deviceProximityTextView
-                    }
-                } else {
-                    Log.e("DeviceSettingsFragment", "Invalid Bluetooth address: " + macAddress);
-                }
-
+//                if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
+//                    // Get BluetoothAdapter
+//                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                    if (bluetoothAdapter == null) {
+//                        Log.e(TAG, "Bluetooth not supported");
+//                        return;
+//                    }
+//
+//                    // Calculate proximity and update deviceProximityTextView
+//                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
+//                    Integer rssi = deviceRSSIMap.get(device.getAddress()); // Retrieve the latest RSSI value for the device
+//                    if (rssi != null) {
+//                        double distance = calculateDistance(rssi); // Calculate the distance based on the RSSI value
+//                        String proximity = getProximity(distance); // Get the proximity label based on the distance
+//                        String distanceText = String.format("%.2f m", distance); // Format the distance text
+//                        requireActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                deviceProximityTextView.setText(String.format("%s (%s)", proximity, distanceText)); // Update the deviceProximityTextView
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Log.e("DeviceSettingsFragment", "Invalid Bluetooth address: " + macAddress);
+//                }
             }
         });
     }
 
 
-    private double calculateDistance(int rssi) {
-        int txPower = -59; // TODO: calibrate based on device's signal strength
-        double ratio = rssi*1.0/txPower;
 
-        if (ratio < 1.0) {
-            return Math.pow(ratio,10);
+    private void updateMacAddressUI(String macAddress) {
+        if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
+            deviceMacAddressTextView.setText(macAddress);
         } else {
-            double accuracy = (0.89976)*Math.pow(ratio,7.7095) + 0.111;
-            double distance = accuracy;
-            String proximity = getProximity(distance); // Get the proximity label based on the distance
-            updateDeviceProximity(proximity); // Update the device proximity in Firestore
-            String distanceText = String.format("%.2f m", distance); // Format the distance text
-            deviceProximityTextView.setText(String.format("%s (%s)", proximity, distanceText)); // Update the deviceProximityTextView
-            return accuracy;
+            deviceMacAddressTextView.setText("");
         }
     }
 
-    private String getProximity(double distance) {
-        if (distance < 1.0) {
-            return "Immediate";
-        } else if (distance < 3.0) {
-            return "Near";
+    private void updateDeviceProximityUI(String deviceProximity){
+        if(deviceProximity != null){
+            deviceProximityTextView.setText(deviceProximity);
         } else {
-            return "Far";
+            deviceProximityTextView.setText("");
         }
     }
-    private void updateDeviceProximity(String proximity) {
-        firestoreHelper.getDeviceProximity(new FirestoreCallback() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onResultGet() {
-                Log.d(TAG, "Device proximity updated");
-            }
-        }, proximity);
-    }
+
+
+//    private void updateDeviceProximity(String proximity) {
+//        firestoreHelper.getDeviceProximity(new FirestoreCallback() {
+//            @SuppressLint("RestrictedApi")
+//            @Override
+//            public void onResultGet() {
+//                Log.d(TAG, "Device proximity updated");
+//            }
+//        }, proximity);
+//    }
 
     private void setupOnClickListeners() {
         renameDeviceButton.setOnClickListener(view -> {
@@ -200,13 +205,16 @@ public class DeviceSettingsFragment extends Fragment {
             //firestoreHelper
             firestoreHelper.removeDeviceName();
             firestoreHelper.removeMacAddress();
+            //firestoreHelper.removeDeviceProximity();
             Toast.makeText(requireContext(), "Device unpaired", Toast.LENGTH_SHORT).show();
 
             // Clear displayed device
             deviceNameTextView.setText("");
-            deviceMacAddressTextView.setText("");
-            deviceProximityTextView.setText("");
+            updateMacAddressUI(null); // Clear the displayed MAC address
+            //deviceProximityTextView.setText("");
         });
+
+
 
         pairNewDeviceButton.setOnClickListener(view -> {
             // Stop current BLE service
@@ -214,9 +222,13 @@ public class DeviceSettingsFragment extends Fragment {
                 bleEspService.stop();
             }
 
+            // Set device name to "WhereSafe" when a new device is paired
+            firestoreHelper.updateDeviceName("WhereSafe");
+
             // Navigate to Device List screen to pair a new device
             Navigation.findNavController(view).navigate(R.id.action_deviceSettingsFragment_to_deviceListFragment);
         });
+
     }
 
     @Override

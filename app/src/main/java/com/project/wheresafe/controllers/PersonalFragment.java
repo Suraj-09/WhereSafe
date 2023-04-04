@@ -1,15 +1,21 @@
 package com.project.wheresafe.controllers;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +29,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
 import com.project.wheresafe.models.DatabaseHelper;
@@ -47,17 +57,19 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 
 //    private MapView mapView;
 //    private GoogleMap googleMap;
-//    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
-//    private LocationManager locationManager;
-//    private Location currentLocation;
-//    private double latitude;
-//    private double longitude;
+    private FirebaseFirestore firebaseFirestore;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
+    private LocationManager locationManager;
+    private Location currentLocation;
+    private double latitude;
+    private double longitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         View root = binding.getRoot();
 
@@ -71,21 +83,23 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //        mapView.onCreate(savedInstanceState);
 //        mapView.getMapAsync(this);
 
-//        locationManager = (LocationManager) requireActivity().getSystemService(Activity.LOCATION_SERVICE);
-//
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted, request it from the user
-//            ActivityCompat.requestPermissions(requireActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-//            return null;
-//        }
-//
-//        // Permission is already granted, request location updates
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager = (LocationManager) requireActivity().getSystemService(Activity.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it from the user
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            return null;
+        }
+
+        // Permission is already granted, request location updates
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         return root;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

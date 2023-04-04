@@ -9,15 +9,19 @@ public class User {
     private String name;
     private String teamCode;
     private String macAddress;
+    private String deviceName;
+    private String deviceProximity;
     private String teamName;
     private ArrayList<DocumentReference> teamMembers;
+    private double longitude;
+    private double latitude;
 
-    private String deviceName;
 
     public User() {
         id = null;
         name = null;
         teamCode = null;
+        deviceName = null;
         macAddress = null;
         teamName = null;
         teamMembers = new ArrayList<>();
@@ -76,6 +80,30 @@ public class User {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public String getDeviceProximity() {
+        return deviceProximity;
+    }
+
+    public void setDeviceProximity(String deviceProximity) {
+        this.deviceProximity = deviceProximity;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
 }

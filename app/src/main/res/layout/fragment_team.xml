@@ -19,28 +19,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.1" />
+            app:layout_constraintGuide_percent="0.01" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineV2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.9" />
+            app:layout_constraintGuide_percent="0.99" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="1" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.02" />
 
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:background="@drawable/rounded_corner_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
             app:layout_constraintTop_toBottomOf="@id/guideline1"
             app:layout_constraintLeft_toRightOf="@id/guidelineV1"
             app:layout_constraintRight_toLeftOf="@id/guidelineV2"
@@ -53,7 +70,7 @@
                 android:accessibilityLiveRegion="polite"
                 android:apiKey="AIzaSyDmsIq-0qDu2AAZpBPjjFJ8vG2ewVDEeGk"
                 android:contentDescription="Map showing location of the user" />
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
 
 
@@ -70,42 +87,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.58" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_corner_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/guideline2"
+            app:layout_constraintLeft_toRightOf="@id/guidelineV3"
+            app:layout_constraintRight_toLeftOf="@id/guidelineV4"
+            app:layout_constraintBottom_toTopOf="@id/guideline4">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintLeft_toRightOf="@id/guidelineV1"
-            app:layout_constraintRight_toLeftOf="@id/guidelineV2"
-            app:layout_constraintTop_toBottomOf="@id/guideline3">
+>
 
         <TextView
             android:id="@+id/txtMyTeam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="My team"
+            android:padding="10dp"
+            android:text=""
             android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
 
 
         <ListView
             android:id="@+id/team_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@id/txtMyTeam" />
 
         </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-<!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/guideline4"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            app:layout_constraintGuide_percent="0.9" />-->
-
-
-
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

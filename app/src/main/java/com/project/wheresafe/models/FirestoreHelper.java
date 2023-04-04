@@ -189,6 +189,33 @@ public class FirestoreHelper {
 
     }
 
+    public void getTeamName(String teamCode, FirestoreCallback firestoreCallback) {
+        teamsCollection.document(teamCode).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        if (document.getData() != null) {
+                            if (document.getData().containsKey("team_name")) {
+                                firestoreData.setTeamName(document.getData().get("team_name").toString());
+                            }
+                        }
+
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        firestoreCallback.onResultGet();
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
     public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
         teamsCollection
                 .document(teamCode)

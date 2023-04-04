@@ -78,7 +78,7 @@ public class BleEspForegroundService extends Service {
 
     private long lastDataTime = 0;
     long curTime;
-    private int notificationId = 1;
+    private int notificationId = 9;
 
     String lastCharacteristicTime;
 
@@ -98,6 +98,7 @@ public class BleEspForegroundService extends Service {
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(mContext);
 
+        Log.d(TAG, "create notification channel");
         createNotificationChannel();
         createNotificationChannelLow();
         createNotificationChannelDefault();
@@ -128,11 +129,15 @@ public class BleEspForegroundService extends Service {
             scanConnect(MODE_DEVICE_NAME);
         }
 
-        foregroundNotification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+
+
+        foregroundNotification = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("WhereSafe Bluetooth Service")
                 .setContentText("Connected with " + DEVICE_NAME)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .build();
+
+
 
 
 
@@ -142,7 +147,7 @@ public class BleEspForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        resetNotifications();
+//        resetNotifications();
 
         sharedPreferenceHelper.setConnectionStatus(getString(R.string.status_connect));
         stopForeground(true);
@@ -176,8 +181,7 @@ public class BleEspForegroundService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
     private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                "BleEspForegroundService Channel", NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"BleEspForegroundService Channel", NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
@@ -222,8 +226,10 @@ public class BleEspForegroundService extends Service {
                 boolean connectionCondition = false;
                 if (mode == MODE_DEVICE_MAC_ADDRESS) {
                     connectionCondition = device.getAddress() != null && device.getAddress().equals(DEVICE_MAC_ADDRESS);
+                    Log.d(TAG, "MODE_DEVICE_MAC_ADDRESS");
                 } else {
                     connectionCondition = device.getName() != null && device.getName().equals(DEVICE_NAME);
+                    Log.d(TAG, "MODE_DEVICE_NAME");
                 }
 
                 // Check the MAC address or name of the discovered device
@@ -309,16 +315,6 @@ public class BleEspForegroundService extends Service {
             }
         });
 
-        // Add notification for foreground service
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, mContext.getString(R.string.channel_id))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Bluetooth Scan")
-                .setContentText("Scanning for devices...")
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-
-        Notification notification = builder.build();
-        startForeground(1, notification);
     }
 
     private void setCharacteristics(BluetoothGatt gatt) {
@@ -370,7 +366,7 @@ public class BleEspForegroundService extends Service {
 
             lastBmeData = new BmeData(bmeData);
 
-//            firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
+            firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
             handleNotifications();
         }
 

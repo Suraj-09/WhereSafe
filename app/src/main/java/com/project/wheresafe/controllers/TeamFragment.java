@@ -3,6 +3,7 @@ package com.project.wheresafe.controllers;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,12 +72,18 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
     private double longitude;
     private RecyclerView recyclerView;
     private ListView listView;
+    private Activity mActivity;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new TeamViewModel();
 
         binding = FragmentTeamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        while (mActivity == null) {
+            mActivity = getActivity();
+        }
+
 
         firestoreHelper = new FirestoreHelper();
         teamCode = sharedPreferenceHelper.getTeamCode();
@@ -102,7 +110,7 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         // Permission is already granted, request location updates
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, (float) 0, this);
 
-//        sharedPreferenceHelper = new SharedPreferenceHelper(getActivity().getApplicationContext());
+//        sharedPreferenceHelper = new SharedPreferenceHelper(mActivity.getApplicationContext());
 
 ////        firestoreHelper.getUser(new FirestoreCallback() {
 ////            @Override
@@ -149,6 +157,9 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         super.onAttach(context);
         sharedPreferenceHelper = new SharedPreferenceHelper(context);
 
+        mActivity = getActivity();
+
+
     }
 
     private void showTeamView(String teamCode) {
@@ -156,30 +167,19 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         binding.noTeamLayout.setVisibility(View.GONE);
         binding.teamLayout.setVisibility(View.VISIBLE);
 
-//        firestoreHelper.getTeam(teamCode, new FirestoreCallback() {
-//            @Override
-//            public void onResultGet() {
-//                teamName = firestoreHelper.getFirestoreData().getUser().getTeamName();
-//
-//                if (binding != null) {
-//                    TextView textTeam = (TextView) binding.getRoot().findViewById(R.id.text_team);
-//                    String teamText = "Team Name: " + teamName;
-//                    textTeam.setText(teamText);
-//
-//
-//                    TextView textCode = binding.getRoot().findViewById(R.id.code_team);
-//                    String codeText = "Team Code: " + teamCode;
-//                    textCode.setText(codeText);
-//
-//                    // TODO: populate view to show team stuff
-//
-//                    for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
-//                        System.out.println(docRef);
-//                    }
-//                }
-//
-//            }
-//        });
+        firestoreHelper.getTeamName(teamCode, new FirestoreCallback() {
+            @Override
+            public void onResultGet() {
+                teamName = firestoreHelper.getFirestoreData().getTeamName();
+
+                if (binding != null) {
+                    TextView txtMyTeam = (TextView) binding.getRoot().findViewById(R.id.txtMyTeam);
+                    String teamText = teamName;
+                    txtMyTeam.setText(teamText);
+                }
+
+            }
+        });
 
         firestoreHelper.getTeamMembers(teamCode, new FirestoreCallback() {
             @Override
@@ -195,27 +195,19 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                     }
                 }
 
+                if (mActivity != null) {
+                    TextView txtMyTeam = binding.getRoot().findViewById(R.id.text_team);
+                    listView = binding.getRoot().findViewById(R.id.team_list_view);
 
-                //
-//                recyclerView = getActivity().findViewById(R.id.team_list_view);
-//                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//                TeamListAdapter adapter = new TeamListAdapter(teamList);
-//                recyclerView.setAdapter(adapter);
+                    if (listView != null) {
 
-//
-                listView = getActivity().findViewById(R.id.team_list_view);
-//                listView.setLayoutManager(new LinearLayoutManager(getContext()));
-//                TeamListAdapter adapter = new TeamListAdapter(teamList);
-//                recyclerView.setAdapter(adapter);
+                        UserArrayAdapter userAdapter;
+                        userAdapter = new UserArrayAdapter (mActivity, 0, teamList);
+                        listView.setAdapter(userAdapter);
+                    }
 
+                }
 
-                UserArrayAdapter userAdapter;
-//                ArrayList<User> myListItems  = new ArrayList<>();
-
-                //then populate myListItems
-
-                userAdapter = new UserArrayAdapter (getActivity(), 0, teamList);
-                listView.setAdapter(userAdapter);
 
 
             }
@@ -383,6 +375,11 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
             mapView.onResume();
         }
 
+
+        while (mActivity == null) {
+            mActivity = getActivity();
+        }
+
         teamCode = sharedPreferenceHelper.getTeamCode();
         if (teamCode != null) {
             showTeamView(teamCode);
@@ -429,10 +426,10 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     private void getPreciseLocation() {
-        FragmentActivity mActivity = getActivity();
+        FragmentActivity mFragmentActivity = getActivity();
 
         // get user's precise location
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mActivity);
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mFragmentActivity);
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted, request it from the user

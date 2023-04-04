@@ -60,12 +60,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
         notificationsSwitch = findPreference("notifications");
         darkModeSwitch = findPreference("dark_mode");
 
-//        if (sharedPreferenceHelper.getDarkMode()) {
-//            darkModeSwitch.setSwitchTextOn(0);
-//        } else {
-//            darkModeSwitch.setSwitchTextOff(0);
-//        }
-
     }
 
     @Override
@@ -144,45 +138,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
         Log.d(TAG, "stop");
     }
 
-    //    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_settings, container, false);
-//        return view;
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-//    public View onCreateView(@NonNull LayoutInflater inflater,
-//                             ViewGroup container, Bundle savedInstanceState) {
-//        SettingsViewModel slideshowViewModel =
-//                new ViewModelProvider(this).get(SettingsViewModel.class);
-//
-//        binding = FragmentSettingsBinding.inflate(inflater, container, false);
-//        View root = binding.getRoot();
-//
-////        final TextView textView = binding.textSettings;
-////        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//
-//        Button languageSelectionButton = binding.languageSelectionButton;
-//        languageSelectionButton.setOnClickListener(v -> {
-//            LanguageSelectionDialogFragment dialogFragment = new LanguageSelectionDialogFragment();
-//            dialogFragment.setLanguageSelectionListener(this);
-//            dialogFragment.show(requireActivity().getSupportFragmentManager(), "languageSelection");
-//        });
-//
-//        Button helpButton = binding.helpButton;
-//        helpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Navigation.findNavController(v).navigate(R.id.navigation_help);
-//            }
-//        });
-//
-//        return root;
-//    }
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         sharedPreferenceHelper = new SharedPreferenceHelper(context);
+        mActivity = getActivity();
     }
 
     @Override

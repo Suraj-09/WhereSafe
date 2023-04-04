@@ -2,15 +2,115 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_settings_id"
+    android:id="@+id/fragment_team_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controllers.TeamFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/team_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineV2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+
+        <LinearLayout
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/guideline1"
+            app:layout_constraintLeft_toRightOf="@id/guidelineV1"
+            app:layout_constraintRight_toLeftOf="@id/guidelineV2"
+            app:layout_constraintBottom_toTopOf="@id/guideline2">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:accessibilityLiveRegion="polite"
+                android:apiKey="AIzaSyDmsIq-0qDu2AAZpBPjjFJ8vG2ewVDEeGk"
+                android:contentDescription="Map showing location of the user" />
+        </LinearLayout>
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.55" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toRightOf="@id/guidelineV1"
+            app:layout_constraintRight_toLeftOf="@id/guidelineV2"
+            app:layout_constraintTop_toBottomOf="@id/guideline3">
+
+        <TextView
+            android:id="@+id/txtMyTeam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My team" />
+
+        <ListView
+            android:id="@+id/team_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txtMyTeam" />
+
+        </LinearLayout>
+
+<!--        <androidx.constraintlayout.widget.Guideline-->
+<!--            android:id="@+id/guideline4"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintGuide_percent="0.9" />-->
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/no_team_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/text_team"
@@ -50,7 +150,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:visibility="gone"
+
             android:textAllCaps="false"
             app:backgroundTint="#b0b0b0"/>
 
@@ -65,10 +165,9 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:visibility="gone"
+
             android:textAllCaps="false"
             app:backgroundTint="#b0b0b0"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

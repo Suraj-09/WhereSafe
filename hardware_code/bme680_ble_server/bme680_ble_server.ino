@@ -162,6 +162,11 @@ void loop() {
 void checkIaqSensorStatus(void)
 {
   if (iaqSensor.bsecStatus != BSEC_OK) {
+    if (iaqSensor.bme68xStatus == 2) {
+      delay(3000); // wait until there is data in registers
+    }
+
+    
     if (iaqSensor.bsecStatus < BSEC_OK) {
       output = "BSEC error code : " + String(iaqSensor.bme68xStatus);
       Serial.println(output);

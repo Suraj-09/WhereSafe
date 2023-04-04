@@ -87,6 +87,7 @@ public class BleEspForegroundService extends Service {
     private final int NOTIFICATION_TEMPERATURE_ID = 2;
     private final int NOTIFICATION_HUMIDITY_ID = 2;
     private final int NOTIFICATION_IAQ_ID = 2;
+    private Notification foregroundNotification;
 
 
     @Override
@@ -96,8 +97,6 @@ public class BleEspForegroundService extends Service {
 //        mActivity = getact
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(mContext);
-
-
 
         createNotificationChannel();
         createNotificationChannelLow();
@@ -129,13 +128,13 @@ public class BleEspForegroundService extends Service {
             scanConnect(MODE_DEVICE_NAME);
         }
 
-        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        foregroundNotification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("WhereSafe Bluetooth Service")
                 .setContentText("Connected with " + DEVICE_NAME)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .build();
 
-        startForeground(notificationId, notification);
+
 
         return START_STICKY;
     }
@@ -241,6 +240,8 @@ public class BleEspForegroundService extends Service {
                         @Override
                         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                             if (newState == BluetoothProfile.STATE_CONNECTED) {
+                                startForeground(notificationId, foregroundNotification);
+
                                 Log.d(TAG, "sharedPreferenceHelper.getConnectionStatus()");
                                 Log.d(TAG, sharedPreferenceHelper.getConnectionStatus());
                                 sharedPreferenceHelper.setConnectionStatus(getString(R.string.status_connect));
@@ -369,7 +370,7 @@ public class BleEspForegroundService extends Service {
 
             lastBmeData = new BmeData(bmeData);
 
-            firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
+//            firestoreHelper.addBmeData(sharedPreferenceHelper.getUid(), bmeData);
             handleNotifications();
         }
 

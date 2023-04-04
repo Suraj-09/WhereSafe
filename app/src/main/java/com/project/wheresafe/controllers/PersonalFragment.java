@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
+
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -57,7 +57,7 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
 //    private double longitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PersonalViewModel personalViewModel = new ViewModelProvider(this).get(PersonalViewModel.class);
+        PersonalViewModel personalViewModel = new PersonalViewModel();
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());

@@ -39,10 +39,14 @@ public class HomeFragment extends Fragment {
 
         ArcGauge temperatureGauge = binding.temperatureGauge;
         ArcGauge pressureGauge = binding.pressureGauge;
+        ArcGauge airQualityGauge = binding.airQualityGauge;
+        ArcGauge altitudeGauge = binding.altitudeGauge;
 
         // set color ranges and other parameters for gauges
         setTemperatureGauge(temperatureGauge);
         setPressureGauge(pressureGauge);
+        setAirQualityGauge(airQualityGauge);
+        setAltitudeGauge(altitudeGauge);
 
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
             @Override
@@ -54,6 +58,8 @@ public class HomeFragment extends Fragment {
 
                 temperatureGauge.setValue(bmeData.getTemperature());
                 pressureGauge.setValue(bmeData.getPressure());
+                airQualityGauge.setValue(bmeData.getGas());
+                altitudeGauge.setValue(bmeData.getAltitude());
             }
         };
 
@@ -116,6 +122,51 @@ public class HomeFragment extends Fragment {
         pressureGauge.setMinValue(300.0);
         pressureGauge.setMaxValue(1700.0);
     }
+
+    private void setAirQualityGauge(ArcGauge airQualityGauge) {
+        // set color ranges to gauge and other parameters
+        airQualityGauge.setUnit("");
+
+        Range range1 = new Range();
+        range1.setColor(Color.parseColor("#FF4CAF50")); // green
+        range1.setFrom(0.0);
+        range1.setTo(50.9);
+
+        Range range2 = new Range();
+        range2.setColor(Color.parseColor("#FFFF00")); // yellow
+        range2.setFrom(51.0);
+        range2.setTo(100.9);
+
+        airQualityGauge.addRange(range1);
+        airQualityGauge.addRange(range2);
+
+        //set min and max
+        airQualityGauge.setMinValue(0.0);
+        airQualityGauge.setMaxValue(500.0);
+    }
+
+    private void setAltitudeGauge(ArcGauge altitudeGauge) {
+        // set color ranges to gauge and other parameters
+        altitudeGauge.setUnit("m");
+
+//        Range range1 = new Range();
+//        range1.setColor(Color.parseColor("#FF4CAF50")); // green
+//        range1.setFrom(0.0);
+//        range1.setTo(50.9);
+//
+//        Range range2 = new Range();
+//        range2.setColor(Color.parseColor("#FFFF00")); // yellow
+//        range2.setFrom(51.0);
+//        range2.setTo(100.9);
+//
+//        altitudeGauge.addRange(range1);
+//        altitudeGauge.addRange(range2);
+
+        //set min and max
+        altitudeGauge.setMinValue(0.0);
+        altitudeGauge.setMaxValue(1000.0);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

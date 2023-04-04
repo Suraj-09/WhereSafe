@@ -19,6 +19,8 @@
     <string name="humidity">Humidité</string>
     <string name="pressure">Pression</string>
     <string name="temperature">Température</string>
+    <string name="altitude">Altitude</string>
+    <string name="air_quality">Qualité de l\'air</string>
     <string name="create_team">Créer une équipe</string>
     <string name="join_team">Rejoindre une équipe</string>
     <string name="temperature_data">Données de température (°C)</string>

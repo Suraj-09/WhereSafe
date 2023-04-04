@@ -84,7 +84,10 @@
             android:id="@+id/txtMyTeam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="My team" />
+            android:paddingLeft="10dp"
+            android:text="My team"
+            android:textSize="18sp" />
+
 
         <ListView
             android:id="@+id/team_list_view"

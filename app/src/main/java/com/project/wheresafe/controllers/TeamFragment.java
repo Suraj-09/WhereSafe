@@ -456,9 +456,30 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
 
                 // Add a marker
-                LatLng location = new LatLng(latitude, longitude);
-                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+//                LatLng location = new LatLng(latitude, longitude);
+//                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+
+//                googleMap.clear();
+//                for (int i = 0; i < teamList.size(); i++) {
+//
+//                    double lat = teamList.get(i).getLatitude();
+//                    double lng = teamList.get(i).getLongitude();
+//                    LatLng position = new LatLng(lat, lng);
+//                    String title = teamList.get(i).getName();
+//                    Log.d(TAG, title + " at " + position.toString());
+//
+//                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 5));
+//                    googleMap.addMarker(new MarkerOptions().position(position).title(title));
+//                }
+
+
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (Exception e) {
+//
+//                }
+
             }
         });
     }

@@ -300,6 +300,15 @@ public class FirestoreHelper<TeamMember> {
                                     user.setLanguageCode("en");
                                 }
 
+                                if (document.getData().containsKey("latitude")) {
+                                    user.setLatitude((Double) document.getData().get("latitude"));
+                                }
+
+                                if (document.getData().containsKey("longitude")) {
+                                    user.setLongitude((Double) document.getData().get("latitude"));
+                                }
+
+
 
                                 teamMembers.add(user);
 

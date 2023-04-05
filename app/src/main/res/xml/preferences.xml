@@ -37,6 +37,24 @@
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
 
+<!--    <DialogPreference-->
+<!--        app:key="team_code"-->
+<!--        app:title="View Team Code"-->
+<!--        app:summary=""-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:allowDividerBelow="true">-->
+<!--    </DialogPreference>-->
+
+    <PreferenceScreen
+        app:key="team_leave"
+        app:title="Leave Team"
+        app:summary=""
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+
     <PreferenceScreen
         app:key="help"
         app:summary=""

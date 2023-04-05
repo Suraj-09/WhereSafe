@@ -23,6 +23,7 @@ import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -32,6 +33,7 @@ import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentSettingsBinding;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
+import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 import com.project.wheresafe.viewmodels.SettingsViewModel;
 
@@ -48,19 +50,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
     private Preference prefHelp;
 
     private Preference prefDevice;
+    private DialogPreference prefTeamCode;
+    private Preference prefTeamLeave;
     private ListPreference prefLanguage;
     private SwitchPreferenceCompat notificationsSwitch;
     private SwitchPreferenceCompat darkModeSwitch;
+    private FirestoreHelper firestoreHelper;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
+
+        firestoreHelper = new FirestoreHelper<>();
 
         prefHelp = findPreference("help");
         prefLanguage = (ListPreference) findPreference("language");
 //        notificationsSwitch = findPreference("notifications");
         darkModeSwitch = findPreference("dark_mode");
         prefDevice = findPreference("device_settings");
+//        prefTeamCode = findPreference("team_code");
 
     }
 
@@ -132,6 +140,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
                 return true;
             }
         });
+
+
+//        DialogPreference dialogPreference = getPreferenceScreen().findPreference("team_code");
+//        dialogPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            public boolean onPreferenceClick(Preference preference) {
+//                // dialog code here
+//                return true;
+//            }
+//        });
+
+//        prefTeamCode.
+
+//        prefTeamCode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(@NonNull Preference preference) {
+//                prefTeamCode.setDialogMessage(sharedPreferenceHelper.getTeamCode());
+//                return true;
+//            }
+//        });
+
+
 
 //        prefDevice.setOnPreferenceChangeListener(new Preference.OnPreferenceClickListener() {
 //            @Override

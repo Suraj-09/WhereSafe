@@ -14,14 +14,14 @@ import java.util.ArrayList;
 
 public class UserArrayAdapter extends ArrayAdapter<User> {
         private Activity activity;
-        private ArrayList<User> lUser;
+        private ArrayList<User> users;
         private static LayoutInflater inflater = null;
 
         public UserArrayAdapter (Activity activity, int textViewResourceId,ArrayList<User> _lUser) {
             super(activity, textViewResourceId, _lUser);
             try {
                 this.activity = activity;
-                this.lUser = _lUser;
+                this.users = _lUser;
 
                 inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -31,11 +31,11 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
         }
 
         public int getCount() {
-            return lUser.size();
+            return users.size();
         }
 
-        public User getItem(User position) {
-            return position;
+        public User getItem(int position) {
+            return users.get(position);
         }
 
         public long getItemId(int position) {
@@ -63,11 +63,18 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
                     vi.setTag(holder);
                 } else {
                     holder = (ViewHolder) vi.getTag();
+
                 }
+//
+//                vi.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
 
 
-
-                holder.display_name.setText(lUser.get(position).getName());
+                holder.display_name.setText(users.get(position).getName());
 //                holder.display_number.setText(lProducts.get(position).number);
 
 

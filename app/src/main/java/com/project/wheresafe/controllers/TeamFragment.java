@@ -78,6 +78,8 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
     private ListView listView;
     private Activity mActivity;
     private TextView txtMyTeam;
+    private ArrayList<User> teamList;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new TeamViewModel();
@@ -155,9 +157,22 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
 
         // Add a marker
         LatLng location = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+//        googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
         System.out.println("MAP READY");
+
+        googleMap.clear();
+        for (int i = 0; i < teamList.size(); i++) {
+
+            double lat = teamList.get(i).getLatitude();
+            double lng = teamList.get(i).getLongitude();
+            LatLng position = new LatLng(lat, lng);
+            String title = teamList.get(i).getName();
+            Log.d(TAG, title + " at " + position.toString());
+
+            googleMap.addMarker(new MarkerOptions().position(position).title(title));
+        }
+
     }
 
     @Override
@@ -193,23 +208,23 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
             @Override
             public void onResultGet() {
                 User currentUser = sharedPreferenceHelper.getCurrentUser();
-                ArrayList<User> teamList = firestoreHelper.getFirestoreData().getTeamMembersArrayList();
+                teamList = firestoreHelper.getFirestoreData().getTeamMembersArrayList();
+                ArrayList<User> teammateList = new ArrayList<>();
 
                 // remove self from team list
                 for (int i = 0; i < teamList.size(); i++) {
-                    if (teamList.get(i).getId().equals(currentUser.getId())) {
-                        teamList.remove(i);
-                        break;
+                    if (!teamList.get(i).getId().equals(currentUser.getId())) {
+                        teammateList.add(teamList.get(i));
                     }
                 }
 
-                if (mActivity != null) {
 
+                if (mActivity != null) {
 
                     if (listView != null) {
 
                         UserArrayAdapter userAdapter;
-                        userAdapter = new UserArrayAdapter (mActivity, 0, teamList);
+                        userAdapter = new UserArrayAdapter (mActivity, 0, teammateList);
                         listView.setAdapter(userAdapter);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -220,7 +235,11 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                                 // Create a new instance of the TeammateFragment
 
 
-                                Navigation.findNavController(view).navigate(R.id.navigation_teammate);
+                                Bundle args = new Bundle();
+                                args.putString("teammate_id", item.getId());
+
+                                Navigation.findNavController(view).navigate(R.id.navigation_teammate, args);
+
 
                             }
                         });
@@ -233,15 +252,6 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         });
 
     }
-
-
-//                                TeammateFragment teammateFragment = new TeammateFragment();
-//
-//                                // Replace the current fragment with the TeammateFragment
-//                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//                                transaction.replace(R.id.nav_host_fragment_content_main, teammateFragment);
-//                                transaction.addToBackStack(null);
-//                                transaction.commit();
 
     private void showCreateJoinView() {
         Log.d(TAG, "showCreateJoinView()");

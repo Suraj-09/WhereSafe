@@ -82,6 +82,8 @@
     <string name="last_iaq_extreme_notification" translatable="false">last_iaq_extreme_notification</string>
 
 
+
+    <string name="teammate_metrics">Teammate Metrics</string>
     <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
     <string name="privacy_security_subtext">All about your account and data</string>
     <string name="features_experiences"><![CDATA[Features & Experiences]]></string>

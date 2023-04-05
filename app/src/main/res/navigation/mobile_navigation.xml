@@ -65,7 +65,6 @@
         android:label="@string/privacy_security"
         tools:layout="@layout/fragment_help_privacy" />
 
-
     <fragment
         android:id="@+id/deviceSettingsFragment"
         android:name="com.project.wheresafe.controllers.DeviceSettingsFragment"
@@ -85,6 +84,13 @@
         android:id="@+id/action_deviceListFragment_to_deviceSettingsFragment"
         app:destination="@id/deviceListFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_teammate"
+        android:name="com.project.wheresafe.controllers.TeammateFragment"
+        android:label="@string/teammate_metrics"
+        tools:layout="@layout/fragment_teammate" />
+
 
 </navigation>
 

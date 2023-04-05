@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 
 public class User {
-    private static String id;
+    private String id;
     private String name;
     private String teamCode;
     private String macAddress;
@@ -116,4 +116,17 @@ public class User {
         this.latitude = latitude;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id + ", " +
+                ", name=" + name +
+                ", teamCode=" + teamCode +
+                ", macAddress=" + macAddress +
+                ", deviceName=" + deviceName +
+                ", languageCode=" + languageCode +
+                ", teamName=" + teamName +
+                ", teamMembers=" + teamMembers +
+                "}";
+    }
 }

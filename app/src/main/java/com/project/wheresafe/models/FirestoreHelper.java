@@ -271,12 +271,13 @@ public class FirestoreHelper<TeamMember> {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            ArrayList<User> teamMembers = new ArrayList<>();
+                            ArrayList<User> teamMembers = new ArrayList<User>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
 
                                 User user = new User();
+
                                 user.setId(document.getId());
 
                                 if (document.getData().containsKey("name")) {
@@ -291,8 +292,6 @@ public class FirestoreHelper<TeamMember> {
 
                                 if (document.getData().containsKey("device_name")) {
                                     user.setDeviceName(document.getData().get("device_name").toString());
-                                } else {
-                                    user.setDeviceName("WhereSafe");
                                 }
 
                                 if (document.getData().containsKey("language_code")) {
@@ -301,12 +300,15 @@ public class FirestoreHelper<TeamMember> {
                                     user.setLanguageCode("en");
                                 }
 
+
                                 teamMembers.add(user);
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
 
                             firestoreData.setTeamMembersArrayList(teamMembers);
+
+                            Log.d(TAG, firestoreData.getTeamMembersArrayList().toString());
 
                             firestoreCallback.onResultGet();
                         } else {

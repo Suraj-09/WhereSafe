@@ -47,7 +47,6 @@ public class TeammateFragment extends Fragment {
     private SharedPreferenceHelper sharedPreferenceHelper;
     private String teammateId;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TeammateViewModel teammateViewModel = new TeammateViewModel();
 

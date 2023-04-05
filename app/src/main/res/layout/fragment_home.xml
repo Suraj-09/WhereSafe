@@ -292,29 +292,36 @@
                 app:layout_constraintRight_toLeftOf="@id/guidelineV32"
                 app:layout_constraintBottom_toTopOf="@id/guideline32">
 
-                <TextView
-                    android:id="@+id/humidityValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text=""
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-                    android:textColor="#770D1515"
-                    android:textSize="16sp"
-                    android:textAlignment="center"
-                    android:gravity="center" />
+<!--                <TextView-->
+<!--                    android:id="@+id/humidityValue"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:text=""-->
+<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"-->
+<!--                    android:textColor="#770D1515"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:gravity="center" />-->
 
-                <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                    android:id="@+id/humidityProgressBar"
+<!--                <com.mikhaellopez.circularprogressbar.CircularProgressBar-->
+<!--                    android:id="@+id/humidityProgressBar"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:foregroundGravity="center_horizontal"-->
+<!--                    app:cpb_background_progressbar_color="#CCCCCC"-->
+<!--                    app:cpb_background_progressbar_width="5dp"-->
+<!--                    app:cpb_progress="0"-->
+<!--                    app:cpb_progressbar_color="#22B2FF"-->
+<!--                    app:cpb_progressbar_width="5dp"-->
+<!--                    app:cpb_start_angle="360"-->
+<!--                    android:layout_centerHorizontal="true" />-->
+
+                <com.ekndev.gaugelibrary.ArcGauge
+                    android:id="@+id/humidityGauge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:foregroundGravity="center_horizontal"
-                    app:cpb_background_progressbar_color="#CCCCCC"
-                    app:cpb_background_progressbar_width="5dp"
-                    app:cpb_progress="0"
-                    app:cpb_progressbar_color="#22B2FF"
-                    app:cpb_progressbar_width="5dp"
-                    app:cpb_start_angle="360"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 

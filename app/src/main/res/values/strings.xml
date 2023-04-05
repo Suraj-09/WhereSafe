@@ -50,8 +50,8 @@
     <string name="last_20_humidity_readings">Last 20 humidity readings</string>
     <string name="last_20_pressure_readings">Last 20 pressure readings</string>
     <string name="last_20_altitude_readings">Last 20 altitude readings</string>
-    <string name="voc_data_trendline">VOC Data Trendline</string>
-    <string name="last_20_voc_readings">Last 20 VOC readings</string>
+    <string name="voc_data_trendline">Air Quality Index</string>
+    <string name="last_20_voc_readings">Last 20 air quality index readings</string>
 
     <!--  SharedPreferences  -->
     <string name="user_preference_file_key" translatable="false">wheresafe_user</string>

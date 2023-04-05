@@ -50,8 +50,8 @@
     <string name="last_20_humidity_readings">20 dernières mesures d\'humidité</string>
     <string name="last_20_pressure_readings">20 dernières mesures de pression</string>
     <string name="last_20_altitude_readings">20 dernières mesures d\'altitude</string>
-    <string name="voc_data_trendline">Courbe de tendance des données COV</string>
-    <string name="last_20_voc_readings">20 dernières mesures de COV</string>
+    <string name="voc_data_trendline">Indice de qualité de l\'air</string>
+    <string name="last_20_voc_readings">20 dernières mesures de qualité de l\'air</string>
 
 
 <!--<<<<<<< HEAD-->

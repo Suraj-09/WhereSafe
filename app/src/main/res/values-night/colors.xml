@@ -2,5 +2,12 @@
 <resources>
     <color name="background_color">#424549</color>
     <color name="text_color">#1F4325</color>
+    <color name="humidity_color">#E5E4E2</color>
+    <color name="info_names">#E5E4E2</color>
+    <color name="background1">#121212</color>
+    <color name="app_bar_color">#404040</color>
+    <color name="app_bar_button">#181818</color>
+    <color name="login_color">#404040</color>
+    <color name="sign_in_text">#00FF00</color>
 
 </resources>

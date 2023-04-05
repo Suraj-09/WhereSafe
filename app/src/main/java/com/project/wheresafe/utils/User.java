@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 
 public class User {
-    private String id;
+    private static String id;
     private String name;
     private String teamCode;
     private String macAddress;

@@ -61,7 +61,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         String distanceString = mProximityMap.getOrDefault(device, "Unknown");
 
         String deviceAddress = device.getAddress();
-        if (deviceAddress != null && deviceAddress.startsWith("30:AE:A4")) {
+        if (deviceAddress != null) {
             holder.deviceNameTextView.setText("WhereSafe");
             holder.deviceAddressTextView.setText(deviceAddress);
             holder.deviceProximityTextView.setText(distanceString);

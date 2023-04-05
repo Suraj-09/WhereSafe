@@ -1,11 +1,6 @@
 package com.project.wheresafe.models;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Looper;
 import android.util.Log;
-import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -214,33 +209,6 @@ public class FirestoreHelper<TeamMember> {
         userRef.update("longitude", longitude);
     }
 
-    public void startUpdatingLocation(Context context, String userId) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // Get the current location
-                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                // Update the user's location in Firestore
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    setUserLocation(userId, latitude, longitude);
-                }
-
-                // Schedule the next update in 10 seconds
-                handler.postDelayed(this, 10000);
-            }
-        };
-
-        // Start the loop
-        handler.post(runnable);
-    }
-
-
-
     public void getTeam(String teamCode, FirestoreCallback firestoreCallback) {
         teamsCollection
                 .document(teamCode)
@@ -366,37 +334,22 @@ public class FirestoreHelper<TeamMember> {
             }
         });
     }
-    public void updateDeviceProximity(String deviceProximity) {
-        Map<String, Object> deviceInfo = new HashMap<>();
-        deviceInfo.put("device_proximity", deviceProximity);
-
-        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Device proximity successfully updated!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating device proximity", e);
-            }
-        });
-    }
-
-    public void getDeviceProximity(FirestoreCallback callback, String proximity) {
-        userDocument.update("device_proximity", proximity).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "Device proximity updated in Firestore");
-                callback.onResultGet();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating device proximity in Firestore", e);
-            }
-        });
-    }
+//    public void updateDeviceProximity(String deviceProximity) {
+//        Map<String, Object> deviceInfo = new HashMap<>();
+//        deviceInfo.put("device_proximity", deviceProximity);
+//
+//        userDocument.update(deviceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.d(TAG, "Device proximity successfully updated!");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w(TAG, "Error updating device proximity", e);
+//            }
+//        });
+//    }
 
     public void addTeamCode(String teamCode) {
         Map<String, Object> teamInfo = new HashMap<>();
@@ -464,8 +417,48 @@ public class FirestoreHelper<TeamMember> {
                         Log.d(TAG, "Error : " + e.getMessage());
                     }
                 });
-
     }
+    public void getMembers(String teamCode, final TeamMembersCallback callback) {
+        teamsCollection.document(teamCode)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            List<User> teamMembers = new ArrayList<>();
+
+                            Object membersDocument = documentSnapshot.get("members");
+                            Log.d(TAG, "SUCK MY DICK");
+//                            for(int i = 0; i < members.size(); i++){
+//                                Log.d("MEMBERS LOOP", members.get(i));
+//                            }
+//
+//                            if (members != null) {
+//                                for (String memberId : members) {
+//                                    usersCollection.document(memberId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                            User user = documentSnapshot.toObject(User.class);
+//                                            teamMembers.add(user);
+//
+//                                            if (teamMembers.size() == members.size()) {
+//                                                callback.onTeamMembersReceived(teamMembers);
+//                                            }
+//                                        }
+//                                    });
+//                                }
+//                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error : " + e.getMessage());
+                    }
+                });
+    }
+
+
     // Update the user's location
     public void updateUserLocation(double latitude, double longitude) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

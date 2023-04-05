@@ -4,10 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +15,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.project.wheresafe.R;
@@ -44,7 +42,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;
 
 
-public class TeamFragment<TeamMember> extends Fragment {
+public class TeamFragment<TeamMember> extends Fragment implements OnMapReadyCallback{
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     FirestoreHelper firestoreHelper;
@@ -56,22 +54,35 @@ public class TeamFragment<TeamMember> extends Fragment {
     private LocationCallback locationCallback;
     private MapView mapView;
     private GoogleMap googleMap;
+    private MapView mMapView;
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private Handler handler;
+    private Runnable fetchTeamMembersRunnable;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
         binding = FragmentTeamBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//        // Check if the app has permission to access the user's location
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Request permission to access the user's location
-//            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-//        } else {
-//            // Start updating the user's location
-//            firestoreHelper.startUpdatingLocation();
+        // Check if the app has permission to access the user's location
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request permission to access the user's location
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            // Start updating the user's location
+            //firestoreHelper.startUpdatingLocation(latitude, longitude);
+        }
+
+//        mMapView = view.findViewById(R.id.mapView);
+//        Bundle mapViewBundle = null;
+//        if (savedInstanceState != null) {
+//            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
 //        }
+//        mMapView.onCreate(mapViewBundle);
+//        mMapView.getMapAsync(this);
 
         firestoreHelper = new FirestoreHelper();
         firestoreHelper.getUser(new FirestoreCallback() {
@@ -80,14 +91,34 @@ public class TeamFragment<TeamMember> extends Fragment {
                 teamCode = firestoreHelper.getFirestoreData().getUser().getTeamCode();
                 if (teamCode != null) {
                     showTeamView(teamCode);
+                   // fetchTeamMembers();
                 } else {
                     showCreateJoinView();
                 }
             }
         });
+//        handler = new Handler(Looper.getMainLooper());
+//
+//        // Start fetching team members data
+//        handler.post(fetchTeamMembersRunnable);
+
 
         return root;
     }
+
+//    private void setFetchTeamMembers(){
+//        handler.post(fetchTeamMembersRunnable);
+//    }
+//    private void fetchTeamMembersRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            firestoreHelper.getMembers(teamCode, (teamMembers) -> {
+//                addTeamMemberMarkers(teamMembers);
+//                handler.postDelayed(fetchTeamMembersRunnable, 10000);
+//            });
+//        }
+//    };
+
 
     private void showTeamView(String teamCode) {
         binding.createTeamButton.setVisibility(View.GONE);
@@ -109,13 +140,59 @@ public class TeamFragment<TeamMember> extends Fragment {
 
                 // TODO: populate view to show team stuff
 
+                googleMap.clear();
+
                 for (DocumentReference docRef : firestoreHelper.getFirestoreData().getUser().getTeamMembers()) {
-                    System.out.println(docRef);
+                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    double lat = (double)documentSnapshot.get("latitude");
+                                    double lng = (double)documentSnapshot.get("longitude");
+                                    LatLng position = new LatLng(lat, lng);
+
+                                    String title = (String)documentSnapshot.get("name");
+
+                                    googleMap.addMarker(new MarkerOptions().position(position).title(title));
+                                }
+                            }
+                    });
                 }
             }
         });
-
     }
+//    private void addTeamMemberMarkers(List<com.project.wheresafe.firestore.auth.User> teamMembers) {
+//        if (mMap == null) {
+//            return;
+//        }
+//
+//        // Clear existing markers
+//        mMap.clear();
+//
+//        // Loop through your team members' locations
+//        for (com.project.wheresafe.firestore.auth.User teamMember : teamMembers) {
+//            LatLng teamMemberLocation = new LatLng(teamMember.getLatitude(), teamMember.getLongitude());
+//            mMap.addMarker(new MarkerOptions().position(teamMemberLocation).title(teamMember.getName()));
+//        }
+//
+//        // Optionally set the camera to focus on the first team member's location
+//        if (!teamMembers.isEmpty()) {
+//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(teamMembers.get(0).getLatitude(), teamMembers.get(0).getLongitude()), 15));
+//        }
+//    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        this.showTeamView(teamCode);
+//        // Fetch team members and add their markers to the map
+//        firestoreHelper.getMembers(teamCode, (teamMembers) -> {
+//            addTeamMemberMarkers(teamMembers);
+//        });
+    }
+
+
 
     private void showCreateJoinView() {
         binding.createTeamButton.setVisibility(View.VISIBLE);
@@ -194,16 +271,49 @@ public class TeamFragment<TeamMember> extends Fragment {
 
         builder.show();
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        //mMapView.onStart();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+       // mMapView.onResume();
+    }
 
+    @Override
+    public void onPause() {
+       // mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+       // mMapView.onStop();
+        super.onStop();
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        if (handler != null && fetchTeamMembersRunnable != null) {
+            handler.removeCallbacks(fetchTeamMembersRunnable);
+        }
 
         // Destroy MapView
-       // mapView.onDestroy();
+       // mMapView.onDestroy();
     }
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
+//        if (mapViewBundle == null) {
+//            mapViewBundle = new Bundle();
+//            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
+//        }
+//        mMapView.onSaveInstanceState(mapViewBundle);
+    }
     private void createTeam(String teamName) {
         firestoreHelper.getTeamCodes(new FirestoreCallback() {
             @Override

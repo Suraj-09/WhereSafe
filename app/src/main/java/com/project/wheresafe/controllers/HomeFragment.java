@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ekndev.gaugelibrary.ArcGauge;
 import com.ekndev.gaugelibrary.Range;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
@@ -32,6 +33,7 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        TextView aqDesc = binding.airQualityDesc;
         View root = binding.getRoot();
 
 //        CircularProgressBar circularProgressBar = binding.humidityGauge;
@@ -63,6 +65,22 @@ public class HomeFragment extends Fragment {
                 humidityGauge.setValue(bmeData.getHumidity());
                 airQualityGauge.setValue(bmeData.getGas());
                 altitudeGauge.setValue(bmeData.getAltitude());
+
+                if (bmeData.getGas() < 51.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_1));
+                } else if (bmeData.getGas() < 101.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_2));
+                } else if (bmeData.getGas() < 151.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_3));
+                } else if (bmeData.getGas() < 201.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_4));
+                } else if (bmeData.getGas() < 251.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_5));
+                } else if (bmeData.getGas() < 351.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_6));
+                } else {
+                    aqDesc.setText(getString(R.string.air_quality_desc_7));
+                }
             }
         };
 
@@ -157,29 +175,29 @@ public class HomeFragment extends Fragment {
         range2.setTo(100.9);
 
         Range range3 = new Range();
-        range2.setColor(Color.parseColor("#FFFF00")); // yellow
-        range2.setFrom(101.0);
-        range2.setTo(150.9);
+        range3.setColor(Color.parseColor("#FFFF00")); // yellow
+        range3.setFrom(101.0);
+        range3.setTo(150.9);
 
         Range range4 = new Range();
-        range2.setColor(Color.parseColor("#FFA500")); // orange
-        range2.setFrom(151.0);
-        range2.setTo(200.9);
+        range4.setColor(Color.parseColor("#FFA500")); // orange
+        range4.setFrom(151.0);
+        range4.setTo(200.9);
 
         Range range5 = new Range();
-        range2.setColor(Color.parseColor("#f07e7a")); // light red
-        range2.setFrom(201.0);
-        range2.setTo(250.9);
+        range5.setColor(Color.parseColor("#f07e7a")); // light red
+        range5.setFrom(201.0);
+        range5.setTo(250.9);
 
         Range range6 = new Range();
-        range2.setColor(Color.parseColor("#A020F0")); // purple
-        range2.setFrom(250.0);
-        range2.setTo(350.9);
+        range6.setColor(Color.parseColor("#A020F0")); // purple
+        range6.setFrom(250.0);
+        range6.setTo(350.9);
 
         Range range7 = new Range();
-        range2.setColor(Color.parseColor("#964B00")); // brown
-        range2.setFrom(350.0);
-        range2.setTo(500.0);
+        range7.setColor(Color.parseColor("#964B00")); // brown
+        range7.setFrom(350.0);
+        range7.setTo(500.0);
 
         airQualityGauge.addRange(range1);
         airQualityGauge.addRange(range2);

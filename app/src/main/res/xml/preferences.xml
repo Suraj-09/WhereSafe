@@ -14,14 +14,14 @@
 
     <SwitchPreferenceCompat
         app:key="dark_mode"
-        app:title="Enable dark mode"
+        app:title="@string/dark_mode"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
 
     <ListPreference
         app:key="language"
-        app:title="Language"
+        app:title="@string/language"
         app:summary=""
         app:entries="@array/languages"
         app:entryValues="@array/language_values"
@@ -31,7 +31,7 @@
 
     <PreferenceScreen
         app:key="device_settings"
-        app:title="Device Settings"
+        app:title="@string/device_settings"
         app:summary=""
         app:iconSpaceReserved="false"
         app:allowDividerAbove="true"
@@ -39,7 +39,7 @@
 
     <Preference
         app:key="team_code"
-        app:title="View Team Code"
+        app:title="@string/team_code"
         app:summary=""
         app:iconSpaceReserved="false"
         app:allowDividerAbove="true"
@@ -48,7 +48,7 @@
 
     <PreferenceScreen
         app:key="team_leave"
-        app:title="Leave Team"
+        app:title="@string/team_leave"
         app:summary=""
         app:iconSpaceReserved="false"
         app:allowDividerAbove="true"
@@ -58,7 +58,7 @@
     <PreferenceScreen
         app:key="help"
         app:summary=""
-        app:title="Help"
+        app:title="@string/help"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>

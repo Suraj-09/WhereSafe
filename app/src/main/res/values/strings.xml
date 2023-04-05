@@ -82,6 +82,14 @@
     <string name="last_iaq_extreme_notification" translatable="false">last_iaq_extreme_notification</string>
 
 
+    <string name="air_quality_desc_1">Excellent air quality: No measures needed</string>
+    <string name="air_quality_desc_2">Good air quality: No measures needed</string>
+    <string name="air_quality_desc_3">Lightly polluted air quality: Ventilation suggested</string>
+    <string name="air_quality_desc_4">Moderately polluted air quality: Increase ventilation with clean air</string>
+    <string name="air_quality_desc_5">Heavily polluted air quality: Optimize ventilation</string>
+    <string name="air_quality_desc_6">Severely polluted air quality: Contamination should be identified</string>
+    <string name="air_quality_desc_7">Extremely polluted air quality: Contamination needs to be identified</string>
+
 
     <string name="teammate_metrics">Teammate Metrics</string>
     <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
@@ -112,5 +120,12 @@
     <string name="status_connect">connect</string>
     <string name="status_connected">connected</string>
     <string name="status_reconnect">reconnect</string>
+
+    <string name="dark_mode">Enable dark mode</string>
+    <string name="language">Language</string>
+    <string name="device_settings">Device Settings</string>
+    <string name="team_code">View Team Code</string>
+    <string name="team_leave">Leave Team</string>
+
 
 </resources>

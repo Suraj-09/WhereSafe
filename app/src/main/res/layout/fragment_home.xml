@@ -70,19 +70,39 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="1" />
 
-            <TextView
-                android:id="@+id/airQualityLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/air_quality"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-                android:textColor="@color/info_names"
-                android:textSize="18sp"
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@id/guideline11"
                 app:layout_constraintLeft_toRightOf="@id/guidelineV10"
                 app:layout_constraintRight_toLeftOf="@id/guidelineV11"
-                app:layout_constraintBottom_toTopOf="@id/guideline12" />
+                app:layout_constraintBottom_toTopOf="@id/guideline12">
+
+                <TextView
+                    android:id="@+id/airQualityLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/air_quality"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                    android:textColor="@color/info_names"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/airQualityDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="5dp"
+                    android:textAlignment="center"
+
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                    android:textColor="@color/info_names"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
 
 
             <RelativeLayout

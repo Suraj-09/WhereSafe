@@ -54,6 +54,14 @@
     <string name="last_20_voc_readings">20 dernières mesures de qualité de l\'air</string>
 
 
+    <string name="air_quality_desc_1">Excellente qualité de l\'air: Aucune mesure nécessaire</string>
+    <string name="air_quality_desc_2">Bonne qualité de l\'air: Aucune mesure nécessaire</string>
+    <string name="air_quality_desc_3">Qualité de l\'air légèrement polluée: Ventilation recommandée</string>
+    <string name="air_quality_desc_4">Qualité de l\'air modérément polluée: Augmenter la ventilation avec de l\'air propre</string>
+    <string name="air_quality_desc_5">Qualité de l\'air fortement polluée: Optimiser la ventilation</string>
+    <string name="air_quality_desc_6">Qualité de l\'air gravement polluée: La contamination doit être identifiée</string>
+    <string name="air_quality_desc_7">Qualité de l\'air extrêmement polluée: La contamination doit être identifiée</string>
+
 
     <string name="teammate_metrics">Données de coéquipier</string>
     <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
@@ -77,6 +85,15 @@
     <string name="status_connect">connecter</string>
     <string name="status_connected">connecté</string>
     <string name="status_reconnect">reconnecter</string>
+
+
 <!--&gt;>>>>>> foreground_service-->
+
+    <string name="dark_mode">Activer le mode sombre</string>
+    <string name="language">Langue</string>
+    <string name="device_settings">Paramètres de l\'appareil</string>
+    <string name="team_code">Voir le code d\'équipe</string>
+    <string name="team_leave">Quitter l\'équipe</string>
+<!--    <string name="help">Aide</string>-->
 
 </resources>

@@ -45,6 +45,7 @@ public class TeammateFragment extends Fragment {
     DatabaseHelper dbHelper;
     private FragmentTeammateBinding binding;
     private SharedPreferenceHelper sharedPreferenceHelper;
+    private String teammateId;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +53,11 @@ public class TeammateFragment extends Fragment {
 
         binding = FragmentTeammateBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
+
+        Bundle args = getArguments();
+        if (args != null) {
+            teammateId = args.getString("teammate_id");
+        }
 
         View root = binding.getRoot();
 
@@ -69,7 +75,7 @@ public class TeammateFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirestoreHelper firestoreHelper = new FirestoreHelper();
-        firestoreHelper.getAllPersonalSensorData(sharedPreferenceHelper.getUid(), new FirestoreCallback() {
+        firestoreHelper.getAllPersonalSensorData(teammateId, new FirestoreCallback() {
             @Override
             public void onResultGet() {
 

@@ -219,8 +219,10 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                                 Log.d(TAG, item.toString());
                                 // Create a new instance of the TeammateFragment
 
+                                Bundle args = new Bundle();
+                                args.putString("teammate_id", item.getId());
 
-                                Navigation.findNavController(view).navigate(R.id.navigation_teammate);
+                                Navigation.findNavController(view).navigate(R.id.navigation_teammate, args);
 
                             }
                         });
@@ -233,15 +235,6 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         });
 
     }
-
-
-//                                TeammateFragment teammateFragment = new TeammateFragment();
-//
-//                                // Replace the current fragment with the TeammateFragment
-//                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//                                transaction.replace(R.id.nav_host_fragment_content_main, teammateFragment);
-//                                transaction.addToBackStack(null);
-//                                transaction.commit();
 
     private void showCreateJoinView() {
         Log.d(TAG, "showCreateJoinView()");

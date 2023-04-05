@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                     btnConnection.setText(newStatus);
                 }
 
-                // TODO: add button functionality
 
                 Log.d(TAG, "connection status = " + newStatus);
             }

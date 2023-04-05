@@ -86,4 +86,18 @@ public class User {
     public void setTeamMembers(ArrayList<DocumentReference> teamMembers) {
         this.teamMembers = teamMembers;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id + ", " +
+                ", name=" + name +
+                ", teamCode=" + teamCode +
+                ", macAddress=" + macAddress +
+                ", deviceName=" + deviceName +
+                ", languageCode=" + languageCode +
+                ", teamName=" + teamName +
+                ", teamMembers=" + teamMembers +
+                "}";
+    }
 }

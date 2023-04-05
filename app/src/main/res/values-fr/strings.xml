@@ -54,7 +54,8 @@
     <string name="last_20_voc_readings">20 dernières mesures de qualité de l\'air</string>
 
 
-<!--<<<<<<< HEAD-->
+
+    <string name="teammate_metrics">Données de coéquipier</string>
     <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
     <string name="privacy_security_subtext">All about your account and data</string>
     <string name="features_experiences"><![CDATA[Features & Experiences]]></string>

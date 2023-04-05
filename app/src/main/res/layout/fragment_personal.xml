@@ -50,7 +50,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner_background"
+                android:background="@drawable/rounded_corner_background2"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -67,6 +67,7 @@
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:text="@string/temperature_data"
+                        android:textColor="@color/black"
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
@@ -77,6 +78,7 @@
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:text="@string/last_20_temperature_readings"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <com.github.mikephil.charting.charts.LineChart
@@ -92,7 +94,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner_background"
+                android:background="@drawable/rounded_corner_background2"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -107,6 +109,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/humidity_data"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="22sp"
@@ -117,6 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_20_humidity_readings"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="16sp" />
@@ -132,7 +136,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner_background"
+                android:background="@drawable/rounded_corner_background2"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -147,6 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/pressure_data"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="22sp"
@@ -157,6 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_20_pressure_readings"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="16sp" />
@@ -171,7 +177,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner_background"
+                android:background="@drawable/rounded_corner_background2"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -186,6 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/altitude_data"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="22sp"
@@ -196,6 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_20_altitude_readings"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="16sp" />
@@ -211,7 +219,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner_background"
+                android:background="@drawable/rounded_corner_background2"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -226,6 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/voc_data_trendline"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="22sp"
@@ -236,6 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_20_voc_readings"
+                        android:textColor="@color/black"
                         android:paddingLeft="6dp"
                         android:paddingTop="1dp"
                         android:textSize="16sp" />

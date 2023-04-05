@@ -2,7 +2,9 @@ package com.project.wheresafe.controllers;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,7 +53,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
     private Preference prefHelp;
 
     private Preference prefDevice;
-    private DialogPreference prefTeamCode;
+    private Preference prefTeamCode;
     private Preference prefTeamLeave;
     private ListPreference prefLanguage;
     private SwitchPreferenceCompat notificationsSwitch;
@@ -68,7 +71,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
 //        notificationsSwitch = findPreference("notifications");
         darkModeSwitch = findPreference("dark_mode");
         prefDevice = findPreference("device_settings");
-//        prefTeamCode = findPreference("team_code");
+        prefTeamCode = findPreference("team_code");
+        prefTeamLeave = findPreference("team_leave");
 
     }
 
@@ -142,13 +146,54 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
         });
 
 
-//        DialogPreference dialogPreference = getPreferenceScreen().findPreference("team_code");
-//        dialogPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//            public boolean onPreferenceClick(Preference preference) {
-//                // dialog code here
-//                return true;
-//            }
-//        });
+
+
+        prefTeamCode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                String teamCode = sharedPreferenceHelper.getTeamCode();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Team Code");
+
+                if (teamCode != null) {
+                    builder.setMessage("Your team code is:\n\n" + teamCode);
+                } else {
+                    builder.setMessage("You are not in a team");
+                }
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+            }
+        });
+
+        prefTeamLeave.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+
+                String teamCode = sharedPreferenceHelper.getTeamCode();
+
+                if (teamCode == null) {
+                    Toast toast = Toast.makeText(getContext(),"You are not in a team",Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    firestoreHelper.leaveTeam(sharedPreferenceHelper.getUid(), teamCode);
+                    sharedPreferenceHelper.setTeamCode(null);
+                    Toast toast = Toast.makeText(getContext(),"Successfully left team",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+
+
+
+                return true;
+            }
+        });
 
 //        prefTeamCode.
 

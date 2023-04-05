@@ -161,17 +161,6 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
 //        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
         System.out.println("MAP READY");
 
-        googleMap.clear();
-        for (int i = 0; i < teamList.size(); i++) {
-
-            double lat = teamList.get(i).getLatitude();
-            double lng = teamList.get(i).getLongitude();
-            LatLng position = new LatLng(lat, lng);
-            String title = teamList.get(i).getName();
-            Log.d(TAG, title + " at " + position.toString());
-
-            googleMap.addMarker(new MarkerOptions().position(position).title(title));
-        }
 
     }
 
@@ -195,9 +184,10 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
             public void onResultGet() {
                 teamName = firestoreHelper.getFirestoreData().getTeamName();
 
+
                 if (binding != null) {
                     TextView txtMyTeam = (TextView) binding.getRoot().findViewById(R.id.txtMyTeam);
-                    String teamText = teamName;
+                    String teamText = teamName + " (" + teamCode +  ")";
                     txtMyTeam.setText(teamText);
                 }
 
@@ -385,6 +375,8 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                     firestoreHelper.addTeamCode(sharedPreferenceHelper.getUid(), teamCode);
                     firestoreHelper.addMember(sharedPreferenceHelper.getUid(), teamCode);
 
+                    sharedPreferenceHelper.setTeamCode(teamCode);
+
                     // change view
                     showTeamView(teamCode);
                 } else {
@@ -456,11 +448,13 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
 
                 // Add a marker
-//                LatLng location = new LatLng(latitude, longitude);
-//                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
-//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+                LatLng location = new LatLng(latitude, longitude);
 
-//                googleMap.clear();
+
+                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+
+                googleMap.clear();
 //                for (int i = 0; i < teamList.size(); i++) {
 //
 //                    double lat = teamList.get(i).getLatitude();
@@ -472,8 +466,8 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
 //                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 5));
 //                    googleMap.addMarker(new MarkerOptions().position(position).title(title));
 //                }
-
-
+//
+//
 //                try {
 //                    Thread.sleep(2000);
 //                } catch (Exception e) {

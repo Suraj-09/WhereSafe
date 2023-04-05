@@ -95,7 +95,6 @@ public class DeviceSettingsFragment extends Fragment {
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "DEVICE NAME ===> " + deviceName);
                         if (deviceName != null && !deviceName.isEmpty()) {
                             deviceNameTextView.setText(deviceName);
                         } else {

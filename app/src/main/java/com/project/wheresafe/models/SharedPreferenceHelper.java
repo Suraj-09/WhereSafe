@@ -74,6 +74,12 @@ public class SharedPreferenceHelper {
         return sharedPreferences.getString(context.getResources().getString(R.string.user_team_code_key), null);
     }
 
+    public void setTeamCode(String teamCode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.user_team_code_key), teamCode);
+        editor.commit();
+    }
+
     public String getLanguageCode() {
         return sharedPreferences.getString(context.getResources().getString(R.string.user_language_key), "en");
     }

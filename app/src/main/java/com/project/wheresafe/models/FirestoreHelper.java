@@ -487,45 +487,32 @@ public class FirestoreHelper<TeamMember> {
                 });
     }
 
-//    public void getMembers(String teamCode, final TeamMembersCallback callback) {
-//        teamsCollection.document(teamCode)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        if (documentSnapshot.exists()) {
-//                            List<User> teamMembers = new ArrayList<>();
-//
-//                            Object membersDocument = documentSnapshot.get("members");
-//                            Log.d(TAG, "SUCK MY DICK");
-////                            for(int i = 0; i < members.size(); i++){
-////                                Log.d("MEMBERS LOOP", members.get(i));
-////                            }
-////
-////                            if (members != null) {
-////                                for (String memberId : members) {
-////                                    usersCollection.document(memberId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-////                                        @Override
-////                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-////                                            User user = documentSnapshot.toObject(User.class);
-////                                            teamMembers.add(user);
-////
-////                                            if (teamMembers.size() == members.size()) {
-////                                                callback.onTeamMembersReceived(teamMembers);
-////                                            }
-////                                        }
-////                                    });
-////                                }
-////                            }
-//                        }
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d(TAG, "Error : " + e.getMessage());
-//                    }
-//                });
-//    }
+    public void leaveTeam(String uid, String teamCode) {
+        Map<String,Object> userUpdates = new HashMap<>();
+        userUpdates.put("team_code", FieldValue.delete());
+
+        usersCollection.document(uid).update(userUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "team code removal successful");
+                }
+            }
+        });
+
+        Map<String,Object> teamUpdates = new HashMap<>();
+        teamUpdates.put("members", FieldValue.arrayRemove(usersCollection.document(uid)));
+
+        teamsCollection.document(teamCode).update(teamUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "team member removal successful");
+                }
+            }
+        });
+
+    }
 
 
     public void updateLanguage(String uid, String languageCode) {

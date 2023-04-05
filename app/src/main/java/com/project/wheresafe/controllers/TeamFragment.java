@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,6 +77,7 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
     private RecyclerView recyclerView;
     private ListView listView;
     private Activity mActivity;
+    private TextView txtMyTeam;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         teamViewModel = new TeamViewModel();
@@ -83,6 +88,9 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
         while (mActivity == null) {
             mActivity = getActivity();
         }
+
+        txtMyTeam = binding.getRoot().findViewById(R.id.txtMyTeam);
+        listView = binding.getRoot().findViewById(R.id.team_list_view);
 
 
         firestoreHelper = new FirestoreHelper();
@@ -196,24 +204,44 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                 }
 
                 if (mActivity != null) {
-                    TextView txtMyTeam = binding.getRoot().findViewById(R.id.text_team);
-                    listView = binding.getRoot().findViewById(R.id.team_list_view);
+
 
                     if (listView != null) {
 
                         UserArrayAdapter userAdapter;
                         userAdapter = new UserArrayAdapter (mActivity, 0, teamList);
                         listView.setAdapter(userAdapter);
+
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                User item = (User) parent.getItemAtPosition(position);
+                                Log.d(TAG, item.toString());
+                                // Create a new instance of the TeammateFragment
+
+
+                                Navigation.findNavController(view).navigate(R.id.navigation_teammate);
+
+                            }
+                        });
+
                     }
 
                 }
-
-
 
             }
         });
 
     }
+
+
+//                                TeammateFragment teammateFragment = new TeammateFragment();
+//
+//                                // Replace the current fragment with the TeammateFragment
+//                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//                                transaction.replace(R.id.nav_host_fragment_content_main, teammateFragment);
+//                                transaction.addToBackStack(null);
+//                                transaction.commit();
 
     private void showCreateJoinView() {
         Log.d(TAG, "showCreateJoinView()");

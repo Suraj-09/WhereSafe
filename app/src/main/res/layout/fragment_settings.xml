@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_settings_id"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controllers.SettingsFragment">
+    android:orientation="vertical"
+    android:layout_marginTop="?attr/actionBarSize">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/language_selection_button"
-            android:layout_width="195dp"
-            android:layout_height="wrap_content"
-            android:text="@string/select_language"
-            android:textAllCaps="false"
-            app:backgroundTint="#b0b0b0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.499" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/help_button"
-            android:layout_width="195dp"
-            android:layout_height="wrap_content"
-            android:text="@string/help"
-            android:layout_marginTop="16dp"
-            android:textAllCaps="false"
-            app:backgroundTint="#b0b0b0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.569" />
-
-    </LinearLayout>
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/language_selection_button"-->
+<!--            android:layout_width="195dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/select_language"-->
+<!--            android:textAllCaps="false"-->
+<!--            app:backgroundTint="#b0b0b0"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0.499" />-->
 
 
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/help_button"-->
+<!--            android:layout_width="195dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/help"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:textAllCaps="false"-->
+<!--            app:backgroundTint="#b0b0b0"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0.569" />-->
+
+<!--    </LinearLayout>-->
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--    &lt;!&ndash; Device button &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/device_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Device"-->
+<!--        android:layout_marginTop="8dp"/>-->
+
+
+</LinearLayout>

@@ -52,7 +52,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspForegroundService;
-import com.project.wheresafe.models.BleEspService;
+//import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 //import com.project.wheresafe.models.LocaleHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentFirebaseUser;
     private FirestoreHelper firestoreHelper;
-    private BleEspService bleEspService;
+//    private BleEspService bleEspService;
     private SharedPreferenceHelper sharedPreferenceHelper;
 
 //    private LocaleHelper localeHelper;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BleEspForegroundService mBleEspService;
 
-    private void startBleEspService() {
+    public void startBleEspService() {
         Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
         startForegroundService(serviceIntent);
         bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void stopBleEspService() {
+    public void stopBleEspService() {
         if (mBleEspService != null) {
             unbindService(mServiceConnection);
             mBleEspService = null;

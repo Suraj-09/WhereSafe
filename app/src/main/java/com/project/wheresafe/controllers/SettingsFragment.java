@@ -45,11 +45,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
     private Activity mActivity;
     private int actionBarSize;
 
-    Preference prefHelp;
-    ListPreference prefLanguage;
-    SwitchPreferenceCompat notificationsSwitch;
-    SwitchPreferenceCompat darkModeSwitch;
+    private Preference prefHelp;
 
+    private Preference prefDevice;
+    private ListPreference prefLanguage;
+    private SwitchPreferenceCompat notificationsSwitch;
+    private SwitchPreferenceCompat darkModeSwitch;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -57,8 +58,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
 
         prefHelp = findPreference("help");
         prefLanguage = (ListPreference) findPreference("language");
-        notificationsSwitch = findPreference("notifications");
+//        notificationsSwitch = findPreference("notifications");
         darkModeSwitch = findPreference("dark_mode");
+        prefDevice = findPreference("device_settings");
 
     }
 
@@ -79,21 +81,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
 
 
         // Set up listeners for the SwitchPreferenceCompat objects
-        if (notificationsSwitch != null) {
-            notificationsSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    // Do something when the notifications switch is toggled
-                    boolean enabled = (Boolean) newValue;
-                    if (enabled) {
-                        // Enable notifications
-                    } else {
-                        // Disable notifications
-                    }
-                    return true;
-                }
-            });
-        }
+//        if (notificationsSwitch != null) {
+//            notificationsSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                    // Do something when the notifications switch is toggled
+//                    boolean enabled = (Boolean) newValue;
+//                    if (enabled) {
+//                        // Enable notifications
+//                    } else {
+//                        // Disable notifications
+//                    }
+//                    return true;
+//                }
+//            });
+//        }
         if (darkModeSwitch != null) {
             darkModeSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -123,6 +125,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
             }
         });
 
+        prefDevice.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_deviceSettingsFragment);
+                return true;
+            }
+        });
+
+//        prefDevice.setOnPreferenceChangeListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(@NonNull Preference preference) {
+//                Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_deviceSettingsFragment);
+//                return true;
+//            }
+//
+////            @Override
+////            public boolean onPreferenceClick(@NonNull Preference preference, Object newValue) {
+//////                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+//////                        .navigate(R.id.deviceListFragment);
+////
+////
+////            }
+//        });
 
     }
 
@@ -163,22 +188,34 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
         FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.updateLanguage(sharedPreferenceHelper.getUid(), languageCode);
 
-//        setLocale(languageCode);
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(languageCode);
         AppCompatDelegate.setApplicationLocales(appLocale);
-        // Recreate the current activity to apply the language changes
-//        requireActivity().recreate();
     }
 
 
-    private void setLocale(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-
-        Resources resources = requireActivity().getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-    }
+//    private void setLocale(String languageCode) {
+//        Locale locale = new Locale(languageCode);
+//        Locale.setDefault(locale);
+//
+//        Resources resources = requireActivity().getResources();
+//        Configuration config = resources.getConfiguration();
+//        config.setLocale(locale);
+//        resources.updateConfiguration(config, resources.getDisplayMetrics());
+//    }
 
 }
+//=======
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+//
+//        Button deviceButton = view.findViewById(R.id.device_button);
+//        deviceButton.setOnClickListener(view1 -> {
+//            Navigation.findNavController(view1).navigate(R.id.action_settingsFragment_to_deviceSettingsFragment);
+//        });
+//
+//        return view;
+//    }
+//}
+//>>>>>>> origin/devicesettings_2

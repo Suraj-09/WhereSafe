@@ -5,12 +5,12 @@
 <!--    <Preference app:enabled="false">-->
 
 <!--    </Preference>-->
-    <SwitchPreferenceCompat
-        app:key="notifications"
-        app:title="Enable notifications"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="true"
-        app:allowDividerBelow="true"/>
+<!--    <SwitchPreferenceCompat-->
+<!--        app:key="notifications"-->
+<!--        app:title="Enable notifications"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:allowDividerBelow="true"/>-->
 
     <SwitchPreferenceCompat
         app:key="dark_mode"

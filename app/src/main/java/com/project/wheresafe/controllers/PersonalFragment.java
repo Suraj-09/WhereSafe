@@ -1,16 +1,27 @@
 package com.project.wheresafe.controllers;
 
+
 import android.content.Context;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -22,8 +33,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
 import com.project.wheresafe.models.DatabaseHelper;
@@ -40,56 +55,89 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class PersonalFragment extends Fragment implements OnMapReadyCallback, LocationListener {
+public class PersonalFragment extends Fragment {
     DatabaseHelper dbHelper;
     Timer timer;
     TimerTask timerTask;
     private FragmentPersonalBinding binding;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private boolean paused;
-
-//    private MapView mapView;
-//    private GoogleMap googleMap;
-//    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
-//    private LocationManager locationManager;
-//    private Location currentLocation;
-//    private double latitude;
-//    private double longitude;
+    private FirebaseFirestore firebaseFirestore;
+    private FirestoreHelper firestoreHelper;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 234;
+    private static final int PRIORITY_HIGH_ACCURACY = 345;
+    private LocationManager locationManager;
+    private Location currentLocation;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    private double latitude;
+    private double longitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PersonalViewModel personalViewModel = new PersonalViewModel();
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
         dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+            locationRequest = LocationRequest.create();
+            locationRequest.setInterval(10000); // 10 seconds
+            locationRequest.setFastestInterval(5000); // 5 seconds
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(@NonNull LocationResult locationResult) {
+                    if (locationResult == null) {
+                        return;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+
+                        firestoreHelper.updateUserLocation(latitude, longitude);
+                        Log.d("LOCATION", "Latitude: " + latitude + " Longitude: " +longitude);
+                    }
+                }
+            };
+
+            startLocationUpdates();
+        } else {
+            requestPermissions(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
 
         View root = binding.getRoot();
-
         paused = false;
-
-
-//        runOnTimer();
-
-
-//        mapView = root.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//        mapView.getMapAsync(this);
-
-//        locationManager = (LocationManager) requireActivity().getSystemService(Activity.LOCATION_SERVICE);
-//
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted, request it from the user
-//            ActivityCompat.requestPermissions(requireActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-//            return null;
-//        }
-//
-//        // Permission is already granted, request location updates
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
         return root;
     }
 
+    private void startLocationUpdates() {
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates();
+            }
+        }
+    }
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -104,111 +152,24 @@ public class PersonalFragment extends Fragment implements OnMapReadyCallback, Lo
         firestoreHelper.getAllPersonalSensorData(sharedPreferenceHelper.getUid(), new FirestoreCallback() {
             @Override
             public void onResultGet() {
-
                 populateCharts(firestoreHelper.getFirestoreData().getBmeDataArrayList());
             }
         });
-
-
-//        // Initialize the MapView
-//        mapView = (MapView) view.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//
-////        getPreciseLocation();
     }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-//        googleMap = map;
-//
-//        // Set up the map
-//        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//        googleMap.getUiSettings().setZoomControlsEnabled(true);
-//
-//        // Add a marker
-//        LatLng location = new LatLng(latitude, longitude);
-//        googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-//        System.out.println("MAP READY");
-    }
-
     @Override
     public void onPause() {
         super.onPause();
         paused = true;
-//        mapView.onPause();
     }
-
     @Override
     public void onResume() {
         super.onResume();
-//        mapView.onResume();
-//        if (mapView != null) {
-//            mapView.onResume();
-//        }
-
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted, request it from the user
-//            ActivityCompat.requestPermissions(requireActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-//            return;
-//        }
-//
-//        // Permission is already granted, request location updates
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-//
-//        getPreciseLocation();
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-//        // Update latitude and longitude with the new location
-//        latitude = location.getLatitude();
-//        longitude = location.getLongitude();
-//
-//        // Update the map view with the new location
-//        mapView.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(@NonNull GoogleMap map) {
-//                googleMap = map;
-//
-//                // Set up the map
-//                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//                googleMap.getUiSettings().setZoomControlsEnabled(true);
-//
-//                // Add a marker
-//                LatLng location = new LatLng(latitude, longitude);
-//                googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
-//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-//            }
-//        });
-    }
-
-
-//    private void getPreciseLocation() {
-//        FragmentActivity mActivity = getActivity();
-//
-//        // get user's precise location
-//        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mActivity);
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted, request it from the user
-//            ActivityCompat.requestPermissions(requireActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-//        }
-//
-//        // Permission is already granted, request location updates
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-//
-//    }
-
     public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
         if (bmeDataArrayList.isEmpty()) {
             return;

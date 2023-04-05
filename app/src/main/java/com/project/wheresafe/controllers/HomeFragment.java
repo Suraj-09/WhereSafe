@@ -147,17 +147,47 @@ public class HomeFragment extends Fragment {
         airQualityGauge.setUnit("");
 
         Range range1 = new Range();
-        range1.setColor(Color.parseColor("#FF4CAF50")); // green
+        range1.setColor(Color.parseColor("#90EE90")); // light green
         range1.setFrom(0.0);
         range1.setTo(50.9);
 
         Range range2 = new Range();
-        range2.setColor(Color.parseColor("#FFFF00")); // yellow
+        range2.setColor(Color.parseColor("#FFFF00")); // green
         range2.setFrom(51.0);
         range2.setTo(100.9);
 
+        Range range3 = new Range();
+        range2.setColor(Color.parseColor("#FFFF00")); // yellow
+        range2.setFrom(101.0);
+        range2.setTo(150.9);
+
+        Range range4 = new Range();
+        range2.setColor(Color.parseColor("#FFA500")); // orange
+        range2.setFrom(151.0);
+        range2.setTo(200.9);
+
+        Range range5 = new Range();
+        range2.setColor(Color.parseColor("#f07e7a")); // light red
+        range2.setFrom(201.0);
+        range2.setTo(250.9);
+
+        Range range6 = new Range();
+        range2.setColor(Color.parseColor("#A020F0")); // purple
+        range2.setFrom(250.0);
+        range2.setTo(350.9);
+
+        Range range7 = new Range();
+        range2.setColor(Color.parseColor("#964B00")); // brown
+        range2.setFrom(350.0);
+        range2.setTo(500.0);
+
         airQualityGauge.addRange(range1);
         airQualityGauge.addRange(range2);
+        airQualityGauge.addRange(range3);
+        airQualityGauge.addRange(range4);
+        airQualityGauge.addRange(range5);
+        airQualityGauge.addRange(range6);
+        airQualityGauge.addRange(range7);
 
         //set min and max
         airQualityGauge.setMinValue(0.0);

@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_background2"
+                app:cardBackgroundColor="@color/personal_cards"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -95,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_background2"
+                app:cardBackgroundColor="@color/personal_cards"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -137,6 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_background2"
+                app:cardBackgroundColor="@color/personal_cards"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -178,6 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_background2"
+                app:cardBackgroundColor="@color/personal_cards"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -220,6 +224,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_background2"
+                app:cardBackgroundColor="@color/personal_cards"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">

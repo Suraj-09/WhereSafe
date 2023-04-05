@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/info_names"
             android:text=""
             android:textSize="18sp" />
 
@@ -126,6 +126,7 @@
             android:id="@+id/team_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/info_names"
             app:layout_constraintTop_toBottomOf="@id/txtMyTeam" />
 
         </LinearLayout>

@@ -182,10 +182,28 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
                     Toast toast = Toast.makeText(getContext(),"You are not in a team",Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    firestoreHelper.leaveTeam(sharedPreferenceHelper.getUid(), teamCode);
-                    sharedPreferenceHelper.setTeamCode(null);
-                    Toast toast = Toast.makeText(getContext(),"Successfully left team",Toast.LENGTH_SHORT);
-                    toast.show();
+
+                    // Create a new AlertDialog to display the team code
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Leave Team");
+                    builder.setMessage("Are you sure you would like to leave your team?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            firestoreHelper.leaveTeam(sharedPreferenceHelper.getUid(), teamCode);
+                            sharedPreferenceHelper.setTeamCode(null);
+                            Toast toast = Toast.makeText(getContext(),"Successfully left team",Toast.LENGTH_SHORT);
+                            toast.show();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
                 }
 
 
@@ -194,34 +212,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
                 return true;
             }
         });
-
-//        prefTeamCode.
-
-//        prefTeamCode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//            @Override
-//            public boolean onPreferenceClick(@NonNull Preference preference) {
-//                prefTeamCode.setDialogMessage(sharedPreferenceHelper.getTeamCode());
-//                return true;
-//            }
-//        });
-
-
-
-//        prefDevice.setOnPreferenceChangeListener(new Preference.OnPreferenceClickListener() {
-//            @Override
-//            public boolean onPreferenceClick(@NonNull Preference preference) {
-//                Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_deviceSettingsFragment);
-//                return true;
-//            }
-//
-////            @Override
-////            public boolean onPreferenceClick(@NonNull Preference preference, Object newValue) {
-//////                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
-//////                        .navigate(R.id.deviceListFragment);
-////
-////
-////            }
-//        });
 
     }
 

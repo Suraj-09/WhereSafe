@@ -44,7 +44,6 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
 
         public static class ViewHolder {
             public TextView display_name;
-            public TextView display_number;
 
         }
 
@@ -57,25 +56,14 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
                     holder = new ViewHolder();
 
                     holder.display_name = (TextView) vi.findViewById(R.id.user_name);
-//                    holder.display_number = (TextView) vi.findViewById(R.id.display_number);
-
 
                     vi.setTag(holder);
                 } else {
                     holder = (ViewHolder) vi.getTag();
 
                 }
-//
-//                vi.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                    }
-//                });
-
 
                 holder.display_name.setText(users.get(position).getName());
-//                holder.display_number.setText(lProducts.get(position).number);
 
 
             } catch (Exception e) {

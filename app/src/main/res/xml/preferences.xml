@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <Preference app:enabled="false">-->
+
+<!--    </Preference>-->
+<!--    <SwitchPreferenceCompat-->
+<!--        app:key="notifications"-->
+<!--        app:title="Enable notifications"-->
+<!--        app:iconSpaceReserved="false"-->
+<!--        app:allowDividerAbove="true"-->
+<!--        app:allowDividerBelow="true"/>-->
+
+    <SwitchPreferenceCompat
+        app:key="dark_mode"
+        app:title="@string/dark_mode"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <ListPreference
+        app:key="language"
+        app:title="@string/language"
+        app:summary=""
+        app:entries="@array/languages"
+        app:entryValues="@array/language_values"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <PreferenceScreen
+        app:key="device_settings"
+        app:title="@string/device_settings"
+        app:summary=""
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+    <Preference
+        app:key="team_code"
+        app:title="@string/team_code"
+        app:summary=""
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true">
+    </Preference>
+
+    <PreferenceScreen
+        app:key="team_leave"
+        app:title="@string/team_leave"
+        app:summary=""
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+
+    <PreferenceScreen
+        app:key="help"
+        app:summary=""
+        app:title="@string/help"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+
+</PreferenceScreen>

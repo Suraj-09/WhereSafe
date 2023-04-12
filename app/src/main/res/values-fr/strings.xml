@@ -7,20 +7,22 @@
 <string name="nav_header_desc">Navigation header</string>
 <string name="action_settings">Rafraîchir</string>
 
-<string name="menu_home">Page d\'Accueil</string>
-<string name="menu_advanced_data">Données Détaillées</string>
+<string name="menu_home">Page d\'accueil</string>
+<string name="menu_advanced_data">Données détaillées</string>
 <string name="menu_settings">Paramètres</string>
     <string name="menu_sign_out">Déconnexion</string>
-<string name="title_personal">Mesures Personnelles</string>
-<string name="title_team">Métriques d\'Équipe</string>
+<string name="title_personal">Données personnelles</string>
+<string name="title_team">Données d\'équipe</string>
 <!-- TODO: Remove or change this placeholder text -->
 <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="humidity">Humidité</string>
     <string name="pressure">Pression</string>
     <string name="temperature">Température</string>
-    <string name="create_team">Créer une Équipe</string>
-    <string name="join_team">Rejoindre une Équipe</string>
+    <string name="altitude">Altitude</string>
+    <string name="air_quality">Qualité de l\'air</string>
+    <string name="create_team">Créer une équipe</string>
+    <string name="join_team">Rejoindre une équipe</string>
     <string name="temperature_data">Données de température (°C)</string>
     <string name="humidity_data">Données d\'humidité (%)</string>
     <string name="pressure_data">Données de pression (hPa)</string>
@@ -48,16 +50,50 @@
     <string name="last_20_humidity_readings">20 dernières mesures d\'humidité</string>
     <string name="last_20_pressure_readings">20 dernières mesures de pression</string>
     <string name="last_20_altitude_readings">20 dernières mesures d\'altitude</string>
-    <string name="voc_data_trendline">Courbe de tendance des données COV</string>
-    <string name="last_20_voc_readings">20 dernières mesures de COV</string>
+    <string name="voc_data_trendline">Indice de qualité de l\'air</string>
+    <string name="last_20_voc_readings">20 dernières mesures de qualité de l\'air</string>
 
-    <!--  SharedPreferences  -->
-    <string name="user_preference_file_key">wheresafe_user</string>
-    <string name="user_name_key">user_name_key</string>
-    <string name="user_id_key">user_id_key</string>
-    <string name="user_team_code_key">user_team_code_key</string>
-    <string name="user_team_name_key">user_team_name_key</string>
-    <string name="user_mac_key">user_mac_key</string>
-    <string name="user_language_key">user_language_key</string>
+
+    <string name="air_quality_desc_1">Excellente qualité de l\'air: Aucune mesure nécessaire</string>
+    <string name="air_quality_desc_2">Bonne qualité de l\'air: Aucune mesure nécessaire</string>
+    <string name="air_quality_desc_3">Qualité de l\'air légèrement polluée: Ventilation recommandée</string>
+    <string name="air_quality_desc_4">Qualité de l\'air modérément polluée: Augmenter la ventilation avec de l\'air propre</string>
+    <string name="air_quality_desc_5">Qualité de l\'air fortement polluée: Optimiser la ventilation</string>
+    <string name="air_quality_desc_6">Qualité de l\'air gravement polluée: La contamination doit être identifiée</string>
+    <string name="air_quality_desc_7">Qualité de l\'air extrêmement polluée: La contamination doit être identifiée</string>
+
+
+    <string name="teammate_metrics">Données de coéquipier</string>
+    <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
+    <string name="privacy_security_subtext">All about your account and data</string>
+    <string name="features_experiences"><![CDATA[Features & Experiences]]></string>
+    <string name="features_experiences_subtext">Information to better understand WhereSafe</string>
+    <string name="wheresafe_101">WhereSafe 101</string>
+    <string name="wheresafe_101_subtext">The basics to help you get started</string>
+    <string name="help">Aide</string>
+    <string name="wheresafe101_description">Welcome to WhereSafe!</string>
+    <string name="stayconnected">Stay Connected, Stay Protected</string>
+    <string name="privacy_description">Privacy security privacy security .......</string>
+    <string name="features_description">"Features features features ... "</string>
+    <string name="back">Back</string>
+    <string name="home_description">In the Home menu, you\'ll have instant, real-time access to your readings for Humidity, Temperature, and Pressure. These metrics are displayed in a Gauge format. For further analysis of your security metrics, see team metrics.</string>
+    <string name="personal_metrics_description">Personal Metrics will allow further visual representation of your real-time metrics . In this menu, you can observe line charts of all safety metrics consisting of the last 20 measurements.</string>
+    <string name="team_metrics_description"><![CDATA[In Team Metrics, you will have the ability to either <b>create</b> or <b>join</b> a team. Upon creation of a team, a unique ID will be generated, allowing others to join. Once a team is created, in this menu you will be able to observe the safety metrics of all team members.]]></string>
+<!--=======-->
+
+    <!--  Connection status  -->
+    <string name="status_connect">connecter</string>
+    <string name="status_connected">connecté</string>
+    <string name="status_reconnect">reconnecter</string>
+
+
+<!--&gt;>>>>>> foreground_service-->
+
+    <string name="dark_mode">Activer le mode sombre</string>
+    <string name="language">Langue</string>
+    <string name="device_settings">Paramètres de l\'appareil</string>
+    <string name="team_code">Voir le code d\'équipe</string>
+    <string name="team_leave">Quitter l\'équipe</string>
+<!--    <string name="help">Aide</string>-->
 
 </resources>

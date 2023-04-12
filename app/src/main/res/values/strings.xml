@@ -13,12 +13,15 @@
     <string name="menu_sign_out">Sign Out</string>
     <string name="title_personal">Personal Metrics</string>
     <string name="title_team">Team Metrics</string>
+    <string name="device_list_fragment_label">Device List</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="humidity">Humidity</string>
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
+    <string name="altitude">Altitude</string>
+    <string name="air_quality">Air Quality</string>
     <string name="create_team">Create Team</string>
     <string name="join_team">Join Team</string>
     <string name="temperature_data">Temperature Data (°C)</string>
@@ -48,18 +51,81 @@
     <string name="last_20_humidity_readings">Last 20 humidity readings</string>
     <string name="last_20_pressure_readings">Last 20 pressure readings</string>
     <string name="last_20_altitude_readings">Last 20 altitude readings</string>
-    <string name="voc_data_trendline">VOC Data Trendline</string>
-    <string name="last_20_voc_readings">Last 20 VOC readings</string>
+    <string name="voc_data_trendline">Air Quality Index</string>
+    <string name="last_20_voc_readings">Last 20 air quality index readings</string>
 
     <!--  SharedPreferences  -->
-    <string name="user_preference_file_key">wheresafe_user</string>
-    <string name="user_name_key">user_name_key</string>
-    <string name="user_id_key">user_id_key</string>
-    <string name="user_team_code_key">user_team_code_key</string>
-    <string name="user_team_name_key">user_team_name_key</string>
-    <string name="user_mac_key">user_mac_key</string>
-    <string name="user_language_key">user_language_key</string>
+    <string name="user_preference_file_key" translatable="false">wheresafe_user</string>
+    <string name="user_name_key" translatable="false">user_name_key</string>
+    <string name="user_id_key" translatable="false">user_id_key</string>
+    <string name="user_team_code_key" translatable="false">user_team_code_key</string>
+    <string name="user_team_name_key" translatable="false">user_team_name_key</string>
+    <string name="user_mac_key" translatable="false">user_mac_key</string>
+    <string name="user_language_key" translatable="false">user_language_key</string>
+    <string name="connection_status_key" translatable="false">connection_status_key</string>
+    <string name="dark_mode_key" translatable="false">dark_mode_key</string>
 
+
+    <!--  Nofifications  -->
+    <string name="channel_id" translatable="false">channel_id</string>
+    <string name="channel_id_low" translatable="false">channel_id_low</string>
+    <string name="channel_id_default" translatable="false">channel_id_default</string>
+    <string name="channel_id_high" translatable="false">channel_id_high</string>
+    <string name="channel_name" translatable="false">channel_name</string>
+    <string name="channel_description" translatable="false">channel_description</string>
+    <string name="last_temperature_notification" translatable="false">last_temperature_notification</string>
+    <string name="last_humidity_notification" translatable="false">last_humidity_notification</string>
+    <string name="last_iaq_light_notification" translatable="false">last_iaq_light_notification</string>
+    <string name="last_iaq_moderate_notification" translatable="false">last_iaq_moderate_notification</string>
+    <string name="last_iaq_heavy_notification" translatable="false">last_iaq_heavy_notification</string>
+    <string name="last_iaq_severe_notification" translatable="false">last_iaq_severe_notification</string>
+    <string name="last_iaq_extreme_notification" translatable="false">last_iaq_extreme_notification</string>
+
+
+    <string name="air_quality_desc_1">Excellent air quality: No measures needed</string>
+    <string name="air_quality_desc_2">Good air quality: No measures needed</string>
+    <string name="air_quality_desc_3">Lightly polluted air quality: Ventilation suggested</string>
+    <string name="air_quality_desc_4">Moderately polluted air quality: Increase ventilation with clean air</string>
+    <string name="air_quality_desc_5">Heavily polluted air quality: Optimize ventilation</string>
+    <string name="air_quality_desc_6">Severely polluted air quality: Contamination should be identified</string>
+    <string name="air_quality_desc_7">Extremely polluted air quality: Contamination needs to be identified</string>
+
+
+    <string name="teammate_metrics">Teammate Metrics</string>
+    <string name="privacy_security"><![CDATA[Privacy & Security]]></string>
+    <string name="privacy_security_subtext">All about your account and data</string>
+    <string name="features_experiences"><![CDATA[Features & Experiences]]></string>
+    <string name="features_experiences_subtext">Information to better understand WhereSafe</string>
+    <string name="wheresafe_101">WhereSafe 101</string>
+    <string name="wheresafe_101_subtext">The basics to help you get started</string>
+    <string name="help">Help</string>
+    <string name="wheresafe101_description">
+        Welcome to WhereSafe! This app and its companion wearable device help you stay safe and informed in extreme environments. The wearable device monitors various parameters, such as temperature, pressure, altitude, humidity, and volatile organic compounds. By continuously tracking these data, WhereSafe ensures you are aware of your surroundings and any potential hazards. Use this app to monitor your own safety or connect with team members to coordinate efforts and make informed decisions.
+    </string>
+    <string name="privacy_description">
+        Your privacy and security are our top priorities. We are committed to protecting your personal information and data collected by the WhereSafe app and wearable device. Our privacy policy outlines the data we collect, how it\'s used, and the measures we take to safeguard your information. We continually update our security practices to stay ahead of emerging threats and ensure your data remains safe and secure. For more details, please refer to our full privacy policy on our website.
+    </string>
+    <string name="features_description">
+         WhereSafe comes packed with features designed to enhance your safety and experience in extreme conditions. The app displays real-time sensor data from the wearable device, ensuring you\'re always informed about your environment. Connect with other devices via Wi-Fi or Bluetooth to share information with your team, making it perfect for first responders, search and rescue teams, or adventure sports enthusiasts. In addition, the app offers customizable alerts and notifications for any significant changes in environmental conditions or team member locations.
+    </string>
+    <string name="stayconnected">Stay Connected, Stay Protected</string>
+    <string name="back">Back</string>
+    <string name="home_description">In the Home menu, you\'ll have instant, real-time access to your readings for Humidity, Temperature, and Pressure. These metrics are displayed in a Gauge format. For further analysis of your security metrics, see <b>personal metrics</b>.</string>
+    <string name="personal_metrics_description">Personal Metrics will allow further visual representation of your real-time metrics . In this menu, you can observe line charts of all safety metrics consisting of the last 20 measurements.</string>
+    <string name="team_metrics_description">In Team Metrics, you will have the ability to either <b>create</b> or <b>join</b> a team. A unique ID will be generated upon creation of a team. This identifier will allow access to others wishing to join the team. In this menu you can observe the safety metrics of all team members.</string>
+
+
+
+    <!--  Connection status  -->
+    <string name="status_connect">connect</string>
+    <string name="status_connected">connected</string>
+    <string name="status_reconnect">reconnect</string>
+
+    <string name="dark_mode">Enable dark mode</string>
+    <string name="language">Language</string>
+    <string name="device_settings">Device Settings</string>
+    <string name="team_code">View Team Code</string>
+    <string name="team_leave">Leave Team</string>
 
 
 </resources>

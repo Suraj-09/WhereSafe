@@ -16,6 +16,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.project.wheresafe.R;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
@@ -30,6 +31,8 @@ public class HomeViewModel extends AndroidViewModel {
     private final MutableLiveData<ArrayList<BmeData>> bmeArraylist;
     private final MutableLiveData<BmeData> latestBmeData;
 
+//    private final MutableLiveData<String> aqDesc;
+
     private SharedPreferenceHelper sharedPreferenceHelper;
     ListenerRegistration registration;
     FirestoreHelper firestoreHelper;
@@ -40,6 +43,7 @@ public class HomeViewModel extends AndroidViewModel {
         bmeArraylist = new MutableLiveData<>();
         latestBmeData = new MutableLiveData<>();
         mText = new MutableLiveData<>();
+//        aqDesc = new MutableLiveData<>();
 
         firestoreHelper = new FirestoreHelper();
         attachListener();
@@ -78,6 +82,22 @@ public class HomeViewModel extends AndroidViewModel {
 
                         latestBmeData.setValue(new BmeData(latestDoc.getId(), Objects.requireNonNull(latestDoc.getData())));
                         mText.setValue(Objects.requireNonNull(latestBmeData.getValue()).toBetterString());
+
+//                        if (latestBmeData.getValue().getGas() < 51.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_1));
+//                        } else if (latestBmeData.getValue().getGas() < 101.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_2));
+//                        } else if (latestBmeData.getValue().getGas() < 151.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_3));
+//                        } else if (latestBmeData.getValue().getGas() < 201.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_4));
+//                        } else if (latestBmeData.getValue().getGas() < 251.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_5));
+//                        } else if (latestBmeData.getValue().getGas() < 351.0) {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_6));
+//                        } else {
+//                            aqDesc.setValue(getApplication().getResources().getString(R.string.air_quality_desc_7));
+//                        }
                     }
 
                 }

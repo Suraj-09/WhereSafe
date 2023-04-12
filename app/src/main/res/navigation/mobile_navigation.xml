@@ -21,7 +21,11 @@
         android:id="@+id/navigation_settings"
         android:name="com.project.wheresafe.controllers.SettingsFragment"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_deviceSettingsFragment"
+            app:destination="@id/deviceSettingsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_personal"
@@ -35,7 +39,61 @@
         android:label="@string/title_team"
         tools:layout="@layout/fragment_team" />
 
+    <fragment
+        android:id="@+id/navigation_help"
+        android:name="com.project.wheresafe.controllers.HelpFragment"
+        android:label="@string/help"
+        tools:layout="@layout/fragment_help">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_help_wheresafe101"
+        android:name="com.project.wheresafe.controllers.HelpWheresafe101Fragment"
+        android:label="@string/wheresafe_101"
+        tools:layout="@layout/fragment_help_wheresafe101">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_help_features"
+        android:name="com.project.wheresafe.controllers.HelpFeaturesFragment"
+        android:label="@string/features_experiences"
+        tools:layout="@layout/fragment_help_features" />
+
+    <fragment
+        android:id="@+id/navigation_help_privacy"
+        android:name="com.project.wheresafe.controllers.HelpPrivacyFragment"
+        android:label="@string/privacy_security"
+        tools:layout="@layout/fragment_help_privacy" />
+
+    <fragment
+        android:id="@+id/deviceSettingsFragment"
+        android:name="com.project.wheresafe.controllers.DeviceSettingsFragment"
+        android:label="Device Settings"
+        tools:layout="@layout/fragment_device_settings" >
+    <action
+        android:id="@+id/action_deviceSettingsFragment_to_deviceListFragment"
+        app:destination="@id/deviceListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/deviceListFragment"
+        android:name="com.project.wheresafe.controllers.DeviceListFragment"
+        android:label="@string/device_list_fragment_label"
+        tools:layout="@layout/fragment_device_list" >
+    <action
+        android:id="@+id/action_deviceListFragment_to_deviceSettingsFragment"
+        app:destination="@id/deviceListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_teammate"
+        android:name="com.project.wheresafe.controllers.TeammateFragment"
+        android:label="@string/teammate_metrics"
+        tools:layout="@layout/fragment_teammate" />
+
+
 </navigation>
+
 
 
 

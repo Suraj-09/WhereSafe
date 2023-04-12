@@ -1,20 +1,29 @@
 package com.project.wheresafe.controllers;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +31,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.os.LocaleListCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -38,7 +51,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
-import com.project.wheresafe.models.BleEspService;
+import com.project.wheresafe.models.BleEspForegroundService;
+//import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
 //import com.project.wheresafe.models.LocaleHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
@@ -59,28 +73,45 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentFirebaseUser;
     private FirestoreHelper firestoreHelper;
-    private BleEspService bleEspService;
+//    private BleEspService bleEspService;
     private SharedPreferenceHelper sharedPreferenceHelper;
 
 //    private LocaleHelper localeHelper;
     private boolean initFlag;
 
+
+    private Button btnConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothStateReceiver, filter);
         firestoreHelper = new FirestoreHelper();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        if (sharedPreferenceHelper.getDarkMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            setTheme(R.style.Theme_WhereSafe_DarkTheme);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.Theme_WhereSafe);
+        }
+
+        sharedPreferenceHelper.getSharedPreferences().registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         String lang = sharedPreferenceHelper.getLanguageCode();
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(lang);
         AppCompatDelegate.setApplicationLocales(appLocale);
 
+
+        // on create
+        super.onCreate(savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
-
+//        createNotificationChannel();
         if (currentFirebaseUser == null) {
             initFlag = false;
             goToSignIn();
@@ -88,7 +119,84 @@ public class MainActivity extends AppCompatActivity {
             init();
         }
 
+
+
     }
+
+
+    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(getString(R.string.connection_status_key))) {
+                String newStatus = sharedPreferences.getString(getString(R.string.connection_status_key), getString(R.string.status_connect));
+
+                if (newStatus != null) {
+                    btnConnection = findViewById(R.id.btnConnection);
+
+                    if (newStatus.equals(getString(R.string.status_reconnect)) || newStatus.equals(getString(R.string.status_connect)) ) {
+                        btnConnection.setEnabled(true);
+                        stopBleEspService();
+                    } else {
+                        btnConnection.setEnabled(false);
+                    }
+
+                    btnConnection.setText(newStatus);
+                }
+
+
+                Log.d(TAG, "connection status = " + newStatus);
+            }
+        }
+    };
+
+    private BleEspForegroundService mBleEspService;
+
+    public void startBleEspService() {
+        Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
+        startForegroundService(serviceIntent);
+        bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            BleEspForegroundService.LocalBinder binder = (BleEspForegroundService.LocalBinder) iBinder;
+            mBleEspService = binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+            mBleEspService = null;
+        }
+    };
+
+    public void stopBleEspService() {
+        if (mBleEspService != null) {
+            unbindService(mServiceConnection);
+            mBleEspService = null;
+        }
+
+        Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
+        stopService(serviceIntent);
+    }
+
+////
+////    @Override
+////    protected void onResume() {
+////        super.onResume();
+////        startBleEspService();
+////    }
+////
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        if (mBleEspService != null) {
+//            unbindService(mServiceConnection);
+//            mBleEspService = null;
+//        }
+//    }
+
 
     private void goToSignIn() {
         Intent intent = new Intent(this, SignInActivity.class);
@@ -197,8 +305,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        bleEspService = new BleEspService(getApplicationContext(), (Activity) this);
-        bleEspService.run();
+        btnConnection = findViewById(R.id.btnConnection);
+//        btnConnection.setText(sharedPreferenceHelper.getConnectionStatus());
+        btnConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopBleEspService();
+                startBleEspService();
+            }
+        });
+
     }
 
     @Override
@@ -263,13 +379,14 @@ public class MainActivity extends AppCompatActivity {
             DrawerLayout drawer = binding.drawerLayout;
 
             navigationView.getMenu().findItem(R.id.sign_out).setOnMenuItemClickListener(menuItem -> {
+                stopBleEspService();
                 FirebaseAuth.getInstance().signOut();
                 goToSignIn();
                 return true;
             });
 
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
+            // creates a specific set of top level destinations
+            // the Up button (back arrow) will not be displayed when on these destinations
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.navigation_home, R.id.navigation_advanced_data, R.id.navigation_settings)
                     .setOpenableLayout(drawer)
@@ -279,6 +396,20 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
             NavigationUI.setupWithNavController(navViewBottom, navController);
+
+//            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+//                if (destination.getId() == R.id.navigation_help_wheresafe101
+//                        || destination.getId() == R.id.navigation_help_features
+//                        || destination.getId() == R.id.navigation_help_privacy) {
+//                    // Hide the back button in the app bar
+//                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//                }else if (destination.getId() == R.id.navigation_help) {
+//                     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> navController.navigate(R.id.navigation_settings));
+//                }else {
+//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
+//                    }
+//                });
 
         }
     }
@@ -337,6 +468,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+//        stopBleEspService();
 
 //        FirebaseAuth.getInstance().signOut();
 //        bleEspService.stop();
@@ -350,16 +482,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //        if (item.getItemId() == R.id.action_settings) {
 //            Intent intent = getIntent();
 //            finish();
 //            startActivity(intent);
 //            return (true);
 //        }
-        return super.onOptionsItemSelected(item);
-    }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -422,8 +554,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void getPresonalData(ArrayList<BmeData> bmeDataArrayList) {
-//        System.out.println(bmeDataArrayList);
-//    }
 }

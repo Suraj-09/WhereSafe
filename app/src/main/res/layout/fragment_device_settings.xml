@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device:"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/device_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device Name"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAC Address:"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/device_mac_address_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device MAC Address"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/rename_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rename Device"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/unpair_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forget Device"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/pair_new_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pair Device"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

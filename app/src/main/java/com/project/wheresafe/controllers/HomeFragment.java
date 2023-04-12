@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ekndev.gaugelibrary.ArcGauge;
 import com.ekndev.gaugelibrary.Range;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
@@ -32,28 +33,54 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        TextView aqDesc = binding.airQualityDesc;
         View root = binding.getRoot();
 
-        CircularProgressBar circularProgressBar = binding.humidityProgressBar;
-        TextView humidityValue = binding.humidityValue;  // textView above progress bar. "Humidity"
+//        CircularProgressBar circularProgressBar = binding.humidityGauge;
+//        TextView humidityValue = binding.humidityValue;  // textView above progress bar. "Humidity"
 
         ArcGauge temperatureGauge = binding.temperatureGauge;
         ArcGauge pressureGauge = binding.pressureGauge;
+        ArcGauge airQualityGauge = binding.airQualityGauge;
+        ArcGauge altitudeGauge = binding.altitudeGauge;
+        ArcGauge humidityGauge = binding.humidityGauge;
 
         // set color ranges and other parameters for gauges
         setTemperatureGauge(temperatureGauge);
         setPressureGauge(pressureGauge);
+        setAirQualityGauge(airQualityGauge);
+        setAltitudeGauge(altitudeGauge);
+        setHumidityGauge(humidityGauge);
 
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
             @Override
             public void onChanged(BmeData bmeData) {
-                System.out.println(bmeData);
-                circularProgressBar.setProgress((float) bmeData.getHumidity());
-                String humidityText = bmeData.getHumidity() + "%";
-                humidityValue.setText(humidityText);
+//                System.out.println(bmeData);
+//                circularProgressBar.setProgress((float) bmeData.getHumidity());
+//                String humidityText = bmeData.getHumidity() + "%";
+//                humidityValue.setText(humidityText);
 
                 temperatureGauge.setValue(bmeData.getTemperature());
                 pressureGauge.setValue(bmeData.getPressure());
+                humidityGauge.setValue(bmeData.getHumidity());
+                airQualityGauge.setValue(bmeData.getGas());
+                altitudeGauge.setValue(bmeData.getAltitude());
+
+                if (bmeData.getGas() < 51.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_1));
+                } else if (bmeData.getGas() < 101.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_2));
+                } else if (bmeData.getGas() < 151.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_3));
+                } else if (bmeData.getGas() < 201.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_4));
+                } else if (bmeData.getGas() < 251.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_5));
+                } else if (bmeData.getGas() < 351.0) {
+                    aqDesc.setText(getString(R.string.air_quality_desc_6));
+                } else {
+                    aqDesc.setText(getString(R.string.air_quality_desc_7));
+                }
             }
         };
 
@@ -98,6 +125,22 @@ public class HomeFragment extends Fragment {
         temperatureGauge.setMinValue(-50.0);
         temperatureGauge.setMaxValue(50.0);
     }
+
+    private void setHumidityGauge(ArcGauge humidityGauge) {
+        // set color ranges to gauge and other parameters
+        humidityGauge.setUnit("%");
+        Range range = new Range();
+        range.setColor(Color.parseColor("#22B2FF")); // green
+        range.setFrom(0.0);
+        range.setTo(100.0);
+
+        humidityGauge.addRange(range);
+
+        //set min and max
+        humidityGauge.setMinValue(0.0);
+        humidityGauge.setMaxValue(100.0);
+    }
+
     private void setPressureGauge(ArcGauge pressureGauge) {
         // set color ranges to gauge and other parameters
         pressureGauge.setUnit("hPa");
@@ -116,6 +159,81 @@ public class HomeFragment extends Fragment {
         pressureGauge.setMinValue(300.0);
         pressureGauge.setMaxValue(1700.0);
     }
+
+    private void setAirQualityGauge(ArcGauge airQualityGauge) {
+        // set color ranges to gauge and other parameters
+        airQualityGauge.setUnit("");
+
+        Range range1 = new Range();
+        range1.setColor(Color.parseColor("#90EE90")); // light green
+        range1.setFrom(0.0);
+        range1.setTo(50.9);
+
+        Range range2 = new Range();
+        range2.setColor(Color.parseColor("#FFFF00")); // green
+        range2.setFrom(51.0);
+        range2.setTo(100.9);
+
+        Range range3 = new Range();
+        range3.setColor(Color.parseColor("#FFFF00")); // yellow
+        range3.setFrom(101.0);
+        range3.setTo(150.9);
+
+        Range range4 = new Range();
+        range4.setColor(Color.parseColor("#FFA500")); // orange
+        range4.setFrom(151.0);
+        range4.setTo(200.9);
+
+        Range range5 = new Range();
+        range5.setColor(Color.parseColor("#f07e7a")); // light red
+        range5.setFrom(201.0);
+        range5.setTo(250.9);
+
+        Range range6 = new Range();
+        range6.setColor(Color.parseColor("#A020F0")); // purple
+        range6.setFrom(250.0);
+        range6.setTo(350.9);
+
+        Range range7 = new Range();
+        range7.setColor(Color.parseColor("#964B00")); // brown
+        range7.setFrom(350.0);
+        range7.setTo(500.0);
+
+        airQualityGauge.addRange(range1);
+        airQualityGauge.addRange(range2);
+        airQualityGauge.addRange(range3);
+        airQualityGauge.addRange(range4);
+        airQualityGauge.addRange(range5);
+        airQualityGauge.addRange(range6);
+        airQualityGauge.addRange(range7);
+
+        //set min and max
+        airQualityGauge.setMinValue(0.0);
+        airQualityGauge.setMaxValue(500.0);
+    }
+
+    private void setAltitudeGauge(ArcGauge altitudeGauge) {
+        // set color ranges to gauge and other parameters
+        altitudeGauge.setUnit("m");
+
+//        Range range1 = new Range();
+//        range1.setColor(Color.parseColor("#FF4CAF50")); // green
+//        range1.setFrom(0.0);
+//        range1.setTo(50.9);
+//
+//        Range range2 = new Range();
+//        range2.setColor(Color.parseColor("#FFFF00")); // yellow
+//        range2.setFrom(51.0);
+//        range2.setTo(100.9);
+//
+//        altitudeGauge.addRange(range1);
+//        altitudeGauge.addRange(range2);
+
+        //set min and max
+        altitudeGauge.setMinValue(0.0);
+        altitudeGauge.setMaxValue(1000.0);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

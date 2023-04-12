@@ -1,17 +1,26 @@
 package com.project.wheresafe.utils;
 
-import java.util.ArrayList;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirestoreData {
+import java.util.ArrayList;
+import java.util.List;
+
+public class FirestoreData<TeamMember> {
     BmeData bmeDataLatest;
     User user;
     ArrayList<BmeData> bmeDataArrayList;
     ArrayList<String> teamCodeArraylist;
 
+    String teamName;
+    ArrayList<User> teamMembersArrayList;
+
     public FirestoreData() {
         bmeDataLatest = null;
-        bmeDataArrayList = null;
-        teamCodeArraylist = null;
+        bmeDataArrayList = new ArrayList<>();
+        teamCodeArraylist = new ArrayList<>();
+        teamMembersArrayList = new ArrayList<>();
+        teamName = null;
         user = null;
     }
 
@@ -46,4 +55,21 @@ public class FirestoreData {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public ArrayList<User> getTeamMembersArrayList() {
+        return teamMembersArrayList;
+    }
+
+    public void setTeamMembersArrayList(ArrayList<User> teamMembersArrayList) {
+        this.teamMembersArrayList = teamMembersArrayList;
+    }
+
 }

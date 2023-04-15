@@ -1,12 +1,8 @@
 package com.project.wheresafe.controllers;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -41,7 +37,6 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-//        Log.d(TAG, AppCompatDelegate.getApplicationLocales().toLanguageTags());
         LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(AppCompatDelegate.getApplicationLocales().toLanguageTags());
         AppCompatDelegate.setApplicationLocales(appLocale);
 

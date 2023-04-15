@@ -1,11 +1,7 @@
 package com.project.wheresafe.controllers;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
 import android.Manifest;
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
@@ -21,7 +17,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,14 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.os.LocaleListCompat;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -52,12 +43,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.ActivityMainBinding;
 import com.project.wheresafe.models.BleEspForegroundService;
-//import com.project.wheresafe.models.BleEspService;
 import com.project.wheresafe.models.FirestoreHelper;
-//import com.project.wheresafe.models.LocaleHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
-import com.project.wheresafe.viewmodels.LanguageSelectionDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
     final private String TAG = "MainActivity";
@@ -73,10 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentFirebaseUser;
     private FirestoreHelper firestoreHelper;
-//    private BleEspService bleEspService;
     private SharedPreferenceHelper sharedPreferenceHelper;
-
-//    private LocaleHelper localeHelper;
     private boolean initFlag;
 
 
@@ -111,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
-//        createNotificationChannel();
         if (currentFirebaseUser == null) {
             initFlag = false;
             goToSignIn();
@@ -119,10 +103,7 @@ public class MainActivity extends AppCompatActivity {
             init();
         }
 
-
-
     }
-
 
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -180,23 +161,6 @@ public class MainActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, BleEspForegroundService.class);
         stopService(serviceIntent);
     }
-
-////
-////    @Override
-////    protected void onResume() {
-////        super.onResume();
-////        startBleEspService();
-////    }
-////
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (mBleEspService != null) {
-//            unbindService(mServiceConnection);
-//            mBleEspService = null;
-//        }
-//    }
-
 
     private void goToSignIn() {
         Intent intent = new Intent(this, SignInActivity.class);
@@ -363,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -396,20 +359,6 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
             NavigationUI.setupWithNavController(navViewBottom, navController);
-
-//            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-//                if (destination.getId() == R.id.navigation_help_wheresafe101
-//                        || destination.getId() == R.id.navigation_help_features
-//                        || destination.getId() == R.id.navigation_help_privacy) {
-//                    // Hide the back button in the app bar
-//                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//                }else if (destination.getId() == R.id.navigation_help) {
-//                     //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> navController.navigate(R.id.navigation_settings));
-//                }else {
-//                    binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
-//                    }
-//                });
 
         }
     }
@@ -468,10 +417,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        stopBleEspService();
-
-//        FirebaseAuth.getInstance().signOut();
-//        bleEspService.stop();
     }
 
 
@@ -481,17 +426,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.action_settings) {
-//            Intent intent = getIntent();
-//            finish();
-//            startActivity(intent);
-//            return (true);
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -504,7 +438,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        FirebaseAuth.getInstance().signOut();
         unregisterReceiver(bluetoothStateReceiver);
     }
 

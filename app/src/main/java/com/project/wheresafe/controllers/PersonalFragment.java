@@ -1,16 +1,11 @@
 package com.project.wheresafe.controllers;
 
 
-import android.content.Context;
-
 import android.Manifest;
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
-
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -20,11 +15,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -35,13 +28,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentPersonalBinding;
-import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
@@ -56,19 +48,11 @@ import java.util.TimerTask;
 
 
 public class PersonalFragment extends Fragment {
-    DatabaseHelper dbHelper;
-    Timer timer;
-    TimerTask timerTask;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 234;
     private FragmentPersonalBinding binding;
     private SharedPreferenceHelper sharedPreferenceHelper;
-    private boolean paused;
     private FirebaseFirestore firebaseFirestore;
     private FirestoreHelper firestoreHelper;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 234;
-    private static final int PRIORITY_HIGH_ACCURACY = 345;
-    private LocationManager locationManager;
-    private Location currentLocation;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
@@ -79,14 +63,10 @@ public class PersonalFragment extends Fragment {
         PersonalViewModel personalViewModel = new PersonalViewModel();
 
         binding = FragmentPersonalBinding.inflate(inflater, container, false);
-        dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
         firebaseFirestore = FirebaseFirestore.getInstance();
         FirestoreHelper firestoreHelper = new FirestoreHelper();
 
-        if (ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
@@ -105,31 +85,26 @@ public class PersonalFragment extends Fragment {
                         longitude = location.getLongitude();
 
                         firestoreHelper.updateUserLocation(latitude, longitude);
-                        Log.d("LOCATION", "Latitude: " + latitude + " Longitude: " +longitude);
+                        Log.d("LOCATION", "Latitude: " + latitude + " Longitude: " + longitude);
                     }
                 }
             };
 
             startLocationUpdates();
         } else {
-            requestPermissions(new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
 
         View root = binding.getRoot();
-        paused = false;
         return root;
     }
 
     private void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
@@ -138,6 +113,7 @@ public class PersonalFragment extends Fragment {
             }
         }
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -156,20 +132,23 @@ public class PersonalFragment extends Fragment {
             }
         });
     }
+
     @Override
     public void onPause() {
         super.onPause();
-        paused = true;
     }
+
     @Override
     public void onResume() {
         super.onResume();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
     public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
         if (bmeDataArrayList.isEmpty()) {
             return;
@@ -186,7 +165,6 @@ public class PersonalFragment extends Fragment {
         FragmentActivity mActivity = getActivity();
 
         if (mActivity != null) {
-//        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
             LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChart);
             LineChart humidityChart = mActivity.findViewById(R.id.humidityChart);
             LineChart pressureChart = mActivity.findViewById(R.id.pressureChart);
@@ -194,7 +172,6 @@ public class PersonalFragment extends Fragment {
             LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChart);
 
             // Customize CHART appearance and behavior
-//        initializeBarChart(temperatureChart);
             initializeLineChart(temperatureChart);
             initializeLineChart(humidityChart);
             initializeLineChart(pressureChart);
@@ -202,7 +179,6 @@ public class PersonalFragment extends Fragment {
             initializeLineChart(altitudeChart);
 
             // create ArrayLists for BarCharts & create Lists for LineCharts
-//        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
             List<Entry> temperatureReadings = new ArrayList<>();
             List<Entry> humidityReadings = new ArrayList<>();
             List<Entry> pressureReadings = new ArrayList<>();
@@ -233,12 +209,11 @@ public class PersonalFragment extends Fragment {
             }
 
             // declare datasets
-//        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
-        LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings,  getString(R.string.temperature_data));
-        LineDataSet humidityDataSet = new LineDataSet(humidityReadings,  getString(R.string.humidity_data));
-        LineDataSet pressureDataSet = new LineDataSet(pressureReadings,  getString(R.string.pressure_data));
-        LineDataSet gasDataSet = new LineDataSet(gasReadings,  getString(R.string.gas_data));
-        LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings,  getString(R.string.altitude_data));
+            LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, getString(R.string.temperature_data));
+            LineDataSet humidityDataSet = new LineDataSet(humidityReadings, getString(R.string.humidity_data));
+            LineDataSet pressureDataSet = new LineDataSet(pressureReadings, getString(R.string.pressure_data));
+            LineDataSet gasDataSet = new LineDataSet(gasReadings, getString(R.string.gas_data));
+            LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, getString(R.string.altitude_data));
 
             // for line charts, customizes DATASET appearance and behavior
             customizeLineDataSet(temperatureDataSet);
@@ -246,11 +221,6 @@ public class PersonalFragment extends Fragment {
             customizeLineDataSet(pressureDataSet);
             customizeLineDataSet(gasDataSet);
             customizeLineDataSet(altitudeDataSet);
-
-            // set data objects for the charts with their corresponding data sets
-//        BarData temperatureData = new BarData(temperatureDataSet);
-//        temperatureChart.setData(temperatureData);
-//        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
 
             LineData temperatureData = new LineData(temperatureDataSet);
             temperatureChart.setData(temperatureData);

@@ -12,7 +12,6 @@ public class PersonalViewModel extends ViewModel {
         mText = new MutableLiveData<>();
         mText.setValue("Personal Data Metrics");
     }
-
     public LiveData<String> getText() {
         return mText;
     }

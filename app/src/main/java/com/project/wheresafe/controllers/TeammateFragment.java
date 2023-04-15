@@ -2,8 +2,6 @@ package com.project.wheresafe.controllers;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,28 +19,20 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.project.wheresafe.R;
-import com.project.wheresafe.databinding.FragmentPersonalBinding;
 import com.project.wheresafe.databinding.FragmentTeammateBinding;
-import com.project.wheresafe.models.DatabaseHelper;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.FirestoreCallback;
-import com.project.wheresafe.viewmodels.PersonalViewModel;
 import com.project.wheresafe.viewmodels.TeammateViewModel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TeammateFragment extends Fragment {
-    DatabaseHelper dbHelper;
     private FragmentTeammateBinding binding;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private String teammateId;
@@ -51,7 +41,6 @@ public class TeammateFragment extends Fragment {
         TeammateViewModel teammateViewModel = new TeammateViewModel();
 
         binding = FragmentTeammateBinding.inflate(inflater, container, false);
-        dbHelper = new DatabaseHelper(requireActivity().getApplicationContext());
 
         Bundle args = getArguments();
         if (args != null) {
@@ -116,7 +105,6 @@ public class TeammateFragment extends Fragment {
         FragmentActivity mActivity = getActivity();
 
         if (mActivity != null) {
-//        BarChart temperatureChart = mActivity.findViewById(R.id.temperatureChartTeammate);
             LineChart temperatureChart = mActivity.findViewById(R.id.temperatureChartTeammate);
             LineChart humidityChart = mActivity.findViewById(R.id.humidityChartTeammate);
             LineChart pressureChart = mActivity.findViewById(R.id.pressureChartTeammate);
@@ -124,7 +112,6 @@ public class TeammateFragment extends Fragment {
             LineChart altitudeChart = mActivity.findViewById(R.id.altitudeChartTeammate);
 
             // Customize CHART appearance and behavior
-//        initializeBarChart(temperatureChart);
             initializeLineChart(temperatureChart);
             initializeLineChart(humidityChart);
             initializeLineChart(pressureChart);
@@ -132,7 +119,6 @@ public class TeammateFragment extends Fragment {
             initializeLineChart(altitudeChart);
 
             // create ArrayLists for BarCharts & create Lists for LineCharts
-//        ArrayList<BarEntry> temperatureReadings = new ArrayList<>();
             List<Entry> temperatureReadings = new ArrayList<>();
             List<Entry> humidityReadings = new ArrayList<>();
             List<Entry> pressureReadings = new ArrayList<>();
@@ -163,12 +149,11 @@ public class TeammateFragment extends Fragment {
             }
 
             // declare datasets
-//        BarDataSet temperatureDataSet = new BarDataSet(temperatureReadings, "Temperature Data");
-        LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings,  getString(R.string.temperature_data));
-        LineDataSet humidityDataSet = new LineDataSet(humidityReadings,  getString(R.string.humidity_data));
-        LineDataSet pressureDataSet = new LineDataSet(pressureReadings,  getString(R.string.pressure_data));
-        LineDataSet gasDataSet = new LineDataSet(gasReadings,  getString(R.string.gas_data));
-        LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings,  getString(R.string.altitude_data));
+            LineDataSet temperatureDataSet = new LineDataSet(temperatureReadings, getString(R.string.temperature_data));
+            LineDataSet humidityDataSet = new LineDataSet(humidityReadings, getString(R.string.humidity_data));
+            LineDataSet pressureDataSet = new LineDataSet(pressureReadings, getString(R.string.pressure_data));
+            LineDataSet gasDataSet = new LineDataSet(gasReadings, getString(R.string.gas_data));
+            LineDataSet altitudeDataSet = new LineDataSet(altitudeReadings, getString(R.string.altitude_data));
 
             // for line charts, customizes DATASET appearance and behavior
             customizeLineDataSet(temperatureDataSet);
@@ -176,11 +161,6 @@ public class TeammateFragment extends Fragment {
             customizeLineDataSet(pressureDataSet);
             customizeLineDataSet(gasDataSet);
             customizeLineDataSet(altitudeDataSet);
-
-            // set data objects for the charts with their corresponding data sets
-//        BarData temperatureData = new BarData(temperatureDataSet);
-//        temperatureChart.setData(temperatureData);
-//        temperatureChart.invalidate();    // call this whenever a chart needs to get updated
 
             LineData temperatureData = new LineData(temperatureDataSet);
             temperatureChart.setData(temperatureData);
@@ -219,9 +199,7 @@ public class TeammateFragment extends Fragment {
         rightAxis.setDrawLabels(false);
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setGranularity(0.5f); // sets value for x-axis to be incremented
-        //chart.setMarker(marker);      // could be implemented later...
-        // displays a customized pop-up whenever a value in the chart is clicked on
-        // https://github.com/PhilJay/MPAndroidChart/wiki/MarkerView
+
         lineChart.invalidate();
     }
 

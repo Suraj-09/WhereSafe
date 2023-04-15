@@ -3,10 +3,8 @@ package com.project.wheresafe.controllers;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -28,11 +26,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -47,7 +42,6 @@ import com.project.wheresafe.databinding.FragmentTeamBinding;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
-import com.project.wheresafe.utils.TeamListAdapter;
 import com.project.wheresafe.utils.User;
 import com.project.wheresafe.utils.UserArrayAdapter;
 import com.project.wheresafe.viewmodels.TeamViewModel;
@@ -59,6 +53,7 @@ import java.util.ArrayList;
 
 public class TeamFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
     private final String TAG = "TeamFragment";
     FirestoreHelper firestoreHelper;
     private FragmentTeamBinding binding;
@@ -66,10 +61,8 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
     private String teamCode;
     private TeamViewModel teamViewModel;
     private SharedPreferenceHelper sharedPreferenceHelper;
-
     private MapView mapView;
     private GoogleMap googleMap;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
     private LocationManager locationManager;
     private Location currentLocation;
     private double latitude;
@@ -187,7 +180,7 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
 
                 if (binding != null) {
                     TextView txtMyTeam = (TextView) binding.getRoot().findViewById(R.id.txtMyTeam);
-                    String teamText = teamName + " (" + teamCode +  ")";
+                    String teamText = teamName + " (" + teamCode + ")";
                     txtMyTeam.setText(teamText);
                 }
 
@@ -214,10 +207,10 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                     if (listView != null) {
 
                         UserArrayAdapter userAdapter;
-                        userAdapter = new UserArrayAdapter (mActivity, 0, teammateList);
+                        userAdapter = new UserArrayAdapter(mActivity, 0, teammateList);
                         listView.setAdapter(userAdapter);
 
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 User item = (User) parent.getItemAtPosition(position);
@@ -455,24 +448,6 @@ public class TeamFragment extends Fragment implements OnMapReadyCallback, Locati
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
                 googleMap.clear();
-//                for (int i = 0; i < teamList.size(); i++) {
-//
-//                    double lat = teamList.get(i).getLatitude();
-//                    double lng = teamList.get(i).getLongitude();
-//                    LatLng position = new LatLng(lat, lng);
-//                    String title = teamList.get(i).getName();
-//                    Log.d(TAG, title + " at " + position.toString());
-//
-//                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 5));
-//                    googleMap.addMarker(new MarkerOptions().position(position).title(title));
-//                }
-//
-//
-//                try {
-//                    Thread.sleep(2000);
-//                } catch (Exception e) {
-//
-//                }
 
             }
         });

@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ekndev.gaugelibrary.ArcGauge;
 import com.ekndev.gaugelibrary.Range;
-import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.project.wheresafe.R;
 import com.project.wheresafe.databinding.FragmentHomeBinding;
 import com.project.wheresafe.models.SharedPreferenceHelper;
@@ -25,8 +24,8 @@ import com.project.wheresafe.viewmodels.HomeViewModel;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
     HomeViewModel homeViewModel;
+    private FragmentHomeBinding binding;
     private SharedPreferenceHelper sharedPreferenceHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,9 +34,6 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         TextView aqDesc = binding.airQualityDesc;
         View root = binding.getRoot();
-
-//        CircularProgressBar circularProgressBar = binding.humidityGauge;
-//        TextView humidityValue = binding.humidityValue;  // textView above progress bar. "Humidity"
 
         ArcGauge temperatureGauge = binding.temperatureGauge;
         ArcGauge pressureGauge = binding.pressureGauge;
@@ -55,11 +51,6 @@ public class HomeFragment extends Fragment {
         final Observer<BmeData> latestBmeDataObserver = new Observer<BmeData>() {
             @Override
             public void onChanged(BmeData bmeData) {
-//                System.out.println(bmeData);
-//                circularProgressBar.setProgress((float) bmeData.getHumidity());
-//                String humidityText = bmeData.getHumidity() + "%";
-//                humidityValue.setText(humidityText);
-
                 temperatureGauge.setValue(bmeData.getTemperature());
                 pressureGauge.setValue(bmeData.getPressure());
                 humidityGauge.setValue(bmeData.getHumidity());
@@ -215,19 +206,6 @@ public class HomeFragment extends Fragment {
     private void setAltitudeGauge(ArcGauge altitudeGauge) {
         // set color ranges to gauge and other parameters
         altitudeGauge.setUnit("m");
-
-//        Range range1 = new Range();
-//        range1.setColor(Color.parseColor("#FF4CAF50")); // green
-//        range1.setFrom(0.0);
-//        range1.setTo(50.9);
-//
-//        Range range2 = new Range();
-//        range2.setColor(Color.parseColor("#FFFF00")); // yellow
-//        range2.setFrom(51.0);
-//        range2.setTo(100.9);
-//
-//        altitudeGauge.addRange(range1);
-//        altitudeGauge.addRange(range2);
 
         //set min and max
         altitudeGauge.setMinValue(0.0);

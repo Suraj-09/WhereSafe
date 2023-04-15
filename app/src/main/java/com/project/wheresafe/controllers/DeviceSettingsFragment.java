@@ -1,16 +1,11 @@
 package com.project.wheresafe.controllers;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.project.wheresafe.R;
-//import com.project.wheresafe.models.BleEspService;
-import com.project.wheresafe.models.BleEspForegroundService;
 import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.FirestoreCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DeviceSettingsFragment extends Fragment {
     private TextView deviceNameTextView;
@@ -40,12 +30,8 @@ public class DeviceSettingsFragment extends Fragment {
     private Button renameDeviceButton;
     private Button unpairDeviceButton;
     private Button pairNewDeviceButton;
-
-//    private BleEspService bleEspService;
     private FirestoreHelper firestoreHelper;
     private SharedPreferenceHelper sharedPreferenceHelper;
-//    private BleEspForegroundService bleEspForegroundService;
-
 
 
     @Override
@@ -105,36 +91,9 @@ public class DeviceSettingsFragment extends Fragment {
                         //updateDeviceProximityUI(deviceProximity);
                     }
                 });
-
-//                if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
-//                    // Get BluetoothAdapter
-//                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//                    if (bluetoothAdapter == null) {
-//                        Log.e(TAG, "Bluetooth not supported");
-//                        return;
-//                    }
-//
-//                    // Calculate proximity and update deviceProximityTextView
-//                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
-//                    Integer rssi = deviceRSSIMap.get(device.getAddress()); // Retrieve the latest RSSI value for the device
-//                    if (rssi != null) {
-//                        double distance = calculateDistance(rssi); // Calculate the distance based on the RSSI value
-//                        String proximity = getProximity(distance); // Get the proximity label based on the distance
-//                        String distanceText = String.format("%.2f m", distance); // Format the distance text
-//                        requireActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                deviceProximityTextView.setText(String.format("%s (%s)", proximity, distanceText)); // Update the deviceProximityTextView
-//                            }
-//                        });
-//                    }
-//                } else {
-//                    Log.e("DeviceSettingsFragment", "Invalid Bluetooth address: " + macAddress);
-//                }
             }
         });
     }
-
 
 
     private void updateMacAddressUI(String macAddress) {
@@ -145,24 +104,13 @@ public class DeviceSettingsFragment extends Fragment {
         }
     }
 
-    private void updateDeviceProximityUI(String deviceProximity){
-        if(deviceProximity != null){
+    private void updateDeviceProximityUI(String deviceProximity) {
+        if (deviceProximity != null) {
             deviceProximityTextView.setText(deviceProximity);
         } else {
             deviceProximityTextView.setText("");
         }
     }
-
-
-//    private void updateDeviceProximity(String proximity) {
-//        firestoreHelper.getDeviceProximity(new FirestoreCallback() {
-//            @SuppressLint("RestrictedApi")
-//            @Override
-//            public void onResultGet() {
-//                Log.d(TAG, "Device proximity updated");
-//            }
-//        }, proximity);
-//    }
 
     private void setupOnClickListeners() {
         renameDeviceButton.setOnClickListener(view -> {
@@ -203,9 +151,8 @@ public class DeviceSettingsFragment extends Fragment {
             builder.show();
         });
 
-
         unpairDeviceButton.setOnClickListener(view -> {
-            ((MainActivity)getActivity()).stopBleEspService();
+            ((MainActivity) getActivity()).stopBleEspService();
 
             //firestoreHelper
             firestoreHelper.removeDeviceName(sharedPreferenceHelper.getUid());
@@ -221,13 +168,9 @@ public class DeviceSettingsFragment extends Fragment {
         });
 
 
-
         pairNewDeviceButton.setOnClickListener(view -> {
             // Stop current BLE service
-            ((MainActivity)getActivity()).stopBleEspService();
-
-            // Set device name to "WhereSafe" when a new device is paired
-//            firestoreHelper.updateDeviceName(sharedPreferenceHelper.getUid(),"WhereSafe");
+            ((MainActivity) getActivity()).stopBleEspService();
 
             // Navigate to Device List screen to pair a new device
             Navigation.findNavController(view).navigate(R.id.action_deviceSettingsFragment_to_deviceListFragment);
@@ -238,7 +181,6 @@ public class DeviceSettingsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        ((MainActivity)getActivity()).stopBleEspService();
     }
 
     @Override

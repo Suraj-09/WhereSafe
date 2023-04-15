@@ -1,12 +1,7 @@
 package com.project.wheresafe.utils;
 
-import static com.project.wheresafe.controllers.DeviceListFragment.PERMISSION_REQUEST_CODE;
-
-import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,30 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.wheresafe.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
 
     private static List<BluetoothDevice> mDeviceList = null;
     private final LayoutInflater mInflater;
-    private OnDeviceClickListener mClickListener;
     private final Context mContext;
-    private Map<BluetoothDevice, String> mProximityMap;
-    private Map<BluetoothDevice, Integer> mDeviceRssiMap;
-
+    private OnDeviceClickListener mClickListener;
+    private final Map<BluetoothDevice, String> mProximityMap;
+    private final Map<BluetoothDevice, Integer> mDeviceRssiMap;
 
 
     public DeviceListAdapter(Context context, List<BluetoothDevice> deviceList, Map<BluetoothDevice, String> mProximityMap) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
-        this.mDeviceList = deviceList;
+        mDeviceList = deviceList;
         this.mProximityMap = mProximityMap;
         this.mDeviceRssiMap = new HashMap<>();
     }
+
     public void updateDeviceRssi(BluetoothDevice device, int rssi) {
         mDeviceRssiMap.put(device, rssi);
     }
@@ -85,7 +78,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             return distance;
         }
     }
-
 
 
     @Override

@@ -16,8 +16,6 @@ public class User {
     private ArrayList<DocumentReference> teamMembers;
     private double longitude;
     private double latitude;
-
-
     public User() {
         id = null;
         name = null;

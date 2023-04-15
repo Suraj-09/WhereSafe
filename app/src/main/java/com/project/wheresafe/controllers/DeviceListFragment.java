@@ -7,34 +7,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import android.annotation.SuppressLint;
-
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.navigation.NavController;
 
 import com.project.wheresafe.R;
+import com.project.wheresafe.models.FirestoreHelper;
 import com.project.wheresafe.models.SharedPreferenceHelper;
 import com.project.wheresafe.utils.DeviceListAdapter;
-import com.project.wheresafe.models.FirestoreHelper;
-import com.project.wheresafe.utils.FirestoreCallback;
 import com.project.wheresafe.utils.Util;
 
 import java.util.ArrayList;
@@ -42,23 +34,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 public class DeviceListFragment extends Fragment implements DeviceListAdapter.OnDeviceClickListener {
 
+    public static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
     private final String TAG = "DeviceListFragment";
+    private final BroadcastReceiver bondStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
+                int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
+                if (bondState == BluetoothDevice.BOND_BONDED) {
+                    // The device is successfully bonded, you can perform further actions if needed
+                }
+            }
+        }
+    };
     private RecyclerView recyclerView;
     private DeviceListAdapter adapter;
     private BluetoothAdapter bluetoothAdapter;
-    private BroadcastReceiver bluetoothReceiver;
-    private List<BluetoothDevice> deviceList = new ArrayList<>();
-    private Map<BluetoothDevice, String> proximityMap = new HashMap<>();
-    private SharedPreferenceHelper sharedPreferenceHelper;
-
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
-    public static final int PERMISSION_REQUEST_CODE = 1;
-
+    private final List<BluetoothDevice> deviceList = new ArrayList<>();
+    private final Map<BluetoothDevice, String> proximityMap = new HashMap<>();
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -81,26 +79,11 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             }
         }
     };
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
-    private boolean isValidDevice(BluetoothDevice device){
-        if(device.getAddress().startsWith("30:AE:A4:58:3E:DA") || device.getAddress().startsWith("3C:61:05:08:AC:5A") || device.getAddress().startsWith("30:AE:A4:2D:53:2A")){
-            return true;
-        }
-        return false;
+    private boolean isValidDevice(BluetoothDevice device) {
+        return device.getAddress().startsWith("30:AE:A4:58:3E:DA") || device.getAddress().startsWith("3C:61:05:08:AC:5A") || device.getAddress().startsWith("30:AE:A4:2D:53:2A");
     }
-
-    private final BroadcastReceiver bondStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
-                if (bondState == BluetoothDevice.BOND_BONDED) {
-                    // The device is successfully bonded, you can perform further actions if needed
-                }
-            }
-        }
-    };
 
     @Nullable
     @Override
@@ -151,8 +134,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        deviceNameTextView = view.findViewById(R.id.device_name_textview);
-//        deviceMacAddressTextView = view.findViewById(R.id.device_mac_address_textview);
     }
 
     private void startDiscovery() {
@@ -163,12 +144,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             bluetoothAdapter.cancelDiscovery();
         }
 
-//        // Add bonded devices to the list
-//        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-//        deviceList.clear();
-//        deviceList.addAll(bondedDevices);
-//        adapter.notifyDataSetChanged();
-
         // Register the BroadcastReceiver
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         getActivity().registerReceiver(receiver, filter);
@@ -176,8 +151,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         // Check if the app has the required permission
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //Permission is not granted, request it
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
             return;
         }
         // Start discovery
@@ -212,20 +186,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         String deviceMacAddress = device.getAddress();
         String deviceProximity = proximityMap != null ? proximityMap.get(device) : "Unknown";
 
-//        // Pair the app to the device
-//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-//            // Request the missing permission
-//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_REQUEST_CODE);
-//            return;
-//        }
-//        device.createBond();
-//
-//        // Rename the device
-//        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (bluetoothAdapter != null) {
-//            bluetoothAdapter.setName(device_name);
-//        }
-
         // Update the device name and MAC address in Firestore
         FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.updateDeviceName(sharedPreferenceHelper.getUid(), device_name);
@@ -237,13 +197,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         firestoreHelper.addDeviceProximity(sharedPreferenceHelper.getUid(), deviceProximity);
 
         ((MainActivity) requireActivity()).startBleEspService();
-
-
-//        Log.d(TAG, "status = " + sharedPreferenceHelper.getConnectionStatus());
-//        while (!sharedPreferenceHelper.getConnectionStatus().equals(getString(R.string.status_connect))) {
-//            // wait
-//            Log.d(TAG, "waiting");
-//        }
 
         // Navigate back to the DeviceSettingsFragment
         Navigation.findNavController(view).navigateUp();

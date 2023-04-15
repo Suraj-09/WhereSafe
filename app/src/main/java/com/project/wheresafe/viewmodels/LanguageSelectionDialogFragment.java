@@ -2,7 +2,6 @@ package com.project.wheresafe.viewmodels;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.project.wheresafe.R;
 
@@ -24,8 +22,6 @@ public class LanguageSelectionDialogFragment extends DialogFragment {
     public void setLanguageSelectionListener(LanguageSelectionListener listener) {
         mListener = listener;
     }
-
-
 
     @NonNull
     @Override

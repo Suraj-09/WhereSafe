@@ -1,10 +1,6 @@
 package com.project.wheresafe.utils;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class FirestoreData<TeamMember> {
     BmeData bmeDataLatest;

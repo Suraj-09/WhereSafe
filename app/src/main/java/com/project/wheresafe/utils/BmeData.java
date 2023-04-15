@@ -37,7 +37,7 @@ public class BmeData {
     }
 
     public BmeData(String docId, Map<String, Object> bmeMap) {
-        this.docId = (String) docId;
+        this.docId = docId;
         this.temperature = objectToDouble(bmeMap.get("temperature"));
         this.humidity = objectToDouble(bmeMap.get("humidity"));
         this.pressure = objectToDouble(bmeMap.get("pressure"));
@@ -150,8 +150,7 @@ public class BmeData {
     }
 
     public String toBetterString() {
-        return "BmeData\n" +
-                "doc_id=" + docId +
+        return "BmeData\n" + "doc_id=" + docId +
                 "\ntemperature=" + temperature +
                 "\nhumidity=" + humidity +
                 "\npressure=" + pressure +
@@ -162,15 +161,14 @@ public class BmeData {
 
     @Override
     public String toString() {
-        return "BmeData{" +
-                "doc_id=" + docId +
+        return "BmeData{" + "doc_id=" + docId +
                 ", temperature=" + temperature +
                 ", humidity=" + humidity +
                 ", pressure=" + pressure +
                 ", gas=" + gas +
                 ", altitude=" + altitude +
-                ", timestamp='" + timestamp + '\'' +
-                '}';
+                ", timestamp='" + timestamp +
+                '\'' + '}';
     }
 
     @Override
@@ -178,13 +176,7 @@ public class BmeData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BmeData bmeData = (BmeData) o;
-        return (temperature == bmeData.temperature)
-                && (humidity == bmeData.humidity)
-                && (pressure == bmeData.pressure)
-                && (gas == bmeData.gas)
-                && (altitude == bmeData.altitude);
-
-//        return Double.compare(bmeData.temperature, temperature) == 0 && Double.compare(bmeData.humidity, humidity) == 0 && Double.compare(bmeData.pressure, pressure) == 0 && Double.compare(bmeData.gas, gas) == 0 && Double.compare(bmeData.altitude, altitude) == 0;
+        return (temperature == bmeData.temperature) && (humidity == bmeData.humidity) && (pressure == bmeData.pressure) && (gas == bmeData.gas) && (altitude == bmeData.altitude);
     }
 
     @Override

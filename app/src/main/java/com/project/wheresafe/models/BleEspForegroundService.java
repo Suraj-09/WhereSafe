@@ -1,7 +1,6 @@
 package com.project.wheresafe.models;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,11 +25,8 @@ import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -40,12 +36,9 @@ import com.project.wheresafe.utils.BmeData;
 import com.project.wheresafe.utils.GattConfig;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class BleEspForegroundService extends Service {
-
 
     public final static UUID UUID_ENVIRONMENTAL_SENSING = UUID.fromString(GattConfig.ENVIRONMENTAL_SENSING);
     public final static UUID UUID_BME680_DATA = UUID.fromString(GattConfig.BME680_DATA);
@@ -58,9 +51,14 @@ public class BleEspForegroundService extends Service {
     private static final String DEVICE_NAME = "WhereSafe";
     private static final int MODE_DEVICE_MAC_ADDRESS = 1;
     private static final int MODE_DEVICE_NAME = 2;
-
+    private final long lastDataTime = 0;
+    private final int notificationId = 9;
+    private final int NOTIFICATION_TEMPERATURE_ID = 2;
+    private final int NOTIFICATION_HUMIDITY_ID = 2;
+    private final int NOTIFICATION_IAQ_ID = 2;
+    // Instantiate the binder
+    private final IBinder mBinder = new LocalBinder();
     private Context mContext;
-    //    Activity mActivity;
     private FirestoreHelper firestoreHelper;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private BluetoothAdapter bluetoothAdapter;
@@ -75,20 +73,7 @@ public class BleEspForegroundService extends Service {
     private double gas;
     private double altitude;
     private BmeData lastBmeData;
-
-    private long lastDataTime = 0;
-    long curTime;
-    private int notificationId = 9;
-
-    String lastCharacteristicTime;
-
-    Set<String> threadSet = new HashSet<>();
-
-    private final int NOTIFICATION_TEMPERATURE_ID = 2;
-    private final int NOTIFICATION_HUMIDITY_ID = 2;
-    private final int NOTIFICATION_IAQ_ID = 2;
     private Notification foregroundNotification;
-
 
     @Override
     public void onCreate() {
@@ -130,15 +115,11 @@ public class BleEspForegroundService extends Service {
         }
 
 
-
         foregroundNotification = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("WhereSafe Bluetooth Service")
                 .setContentText("Connected with " + DEVICE_NAME)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .build();
-
-
-
 
 
         return START_STICKY;
@@ -169,19 +150,8 @@ public class BleEspForegroundService extends Service {
         return mBinder;
     }
 
-    // Binder class implementation
-    public class LocalBinder extends Binder {
-        public BleEspForegroundService getService() {
-            // Return this service instance
-            return BleEspForegroundService.this;
-        }
-    }
-
-    // Instantiate the binder
-    private final IBinder mBinder = new LocalBinder();
-
     private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"BleEspForegroundService Channel", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "BleEspForegroundService Channel", NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
@@ -206,6 +176,7 @@ public class BleEspForegroundService extends Service {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
+
     private void scanConnect(int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
 //            mActivity.requestPermissions(new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BLUETOOTH_SCAN_PERMISSION);
@@ -361,7 +332,7 @@ public class BleEspForegroundService extends Service {
 
         boolean isEqual = bmeData.equals(lastBmeData);
         if (!isEqual) {
-            Log.d(TAG, "storing  " + bmeData.toString());
+            Log.d(TAG, "storing  " + bmeData);
 //            Log.d(TAG, "last bme " + lastBmeData.toString());
 
             lastBmeData = new BmeData(bmeData);
@@ -385,28 +356,28 @@ public class BleEspForegroundService extends Service {
         if (lastBmeData.getTemperature() > 30 && (sharedPreferenceHelper.getLastTemperatureNotification() == -1)) {
             sharedPreferenceHelper.setLastTemperatureNotification(currentTime);
             textTitle = "High Temperature";
-            textContent = "The surrounding temperature is " + lastBmeData.getTemperature()  + " °C";
+            textContent = "The surrounding temperature is " + lastBmeData.getTemperature() + " °C";
             sendNotificationLow(textTitle, textContent, NotificationCompat.PRIORITY_LOW, NOTIFICATION_TEMPERATURE_ID);
         }
 
         if (lastBmeData.getTemperature() < -10 && (sharedPreferenceHelper.getLastTemperatureNotification() == -1)) {
             sharedPreferenceHelper.setLastTemperatureNotification(currentTime);
             textTitle = "Low Temperature";
-            textContent = "The surrounding temperature is " + lastBmeData.getTemperature()  + " °C";
+            textContent = "The surrounding temperature is " + lastBmeData.getTemperature() + " °C";
             sendNotificationLow(textTitle, textContent, NotificationCompat.PRIORITY_LOW, NOTIFICATION_TEMPERATURE_ID);
         }
 
         if (lastBmeData.getHumidity() > 60 && (sharedPreferenceHelper.getLastHumidityNotification() == -1)) {
             sharedPreferenceHelper.setLastHumidityNotification(currentTime);
             textTitle = "High Humidity";
-            textContent = "The surrounding humidity is " + lastBmeData.getHumidity()  + " %";
+            textContent = "The surrounding humidity is " + lastBmeData.getHumidity() + " %";
             sendNotificationLow(textTitle, textContent, NotificationCompat.PRIORITY_LOW, NOTIFICATION_HUMIDITY_ID);
         }
 
         if (lastBmeData.getHumidity() < 25 && (sharedPreferenceHelper.getLastHumidityNotification() == -1)) {
             sharedPreferenceHelper.setLastHumidityNotification(currentTime);
             textTitle = "Low Humidity";
-            textContent = "The surrounding humidity is " + lastBmeData.getHumidity()  + " %";
+            textContent = "The surrounding humidity is " + lastBmeData.getHumidity() + " %";
             sendNotificationLow(textTitle, textContent, NotificationCompat.PRIORITY_LOW, NOTIFICATION_HUMIDITY_ID);
         }
 
@@ -458,7 +429,6 @@ public class BleEspForegroundService extends Service {
         Log.d(TAG, "NOTIFICATIONS => " + title);
     }
 
-
     private void sendNotificationDefault(String title, String text, int priority, int id) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, getResources().getString(R.string.channel_id_default))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
@@ -501,6 +471,14 @@ public class BleEspForegroundService extends Service {
         sharedPreferenceHelper.setLastIaqHeavyNotification(-1);
         sharedPreferenceHelper.setLastIaqSevereNotification(-1);
         sharedPreferenceHelper.setLastIaqExtremeNotification(-1);
+    }
+
+    // Binder class implementation
+    public class LocalBinder extends Binder {
+        public BleEspForegroundService getService() {
+            // Return this service instance
+            return BleEspForegroundService.this;
+        }
     }
 
 

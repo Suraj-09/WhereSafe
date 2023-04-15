@@ -132,7 +132,7 @@ void loop() {
       pCharacteristic->notify();
         
       // Wait for some time before reading the sensor data again
-      delay(30000);
+      delay(15000);
     } else {
       checkIaqSensorStatus();
     }

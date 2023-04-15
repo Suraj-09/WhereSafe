@@ -10,7 +10,6 @@ public class TeamViewModel extends ViewModel {
 
     public TeamViewModel() {
         mText = new MutableLiveData<>();
-//        mText.setValue("Team shenanigans");
     }
 
     public LiveData<String> getText() {

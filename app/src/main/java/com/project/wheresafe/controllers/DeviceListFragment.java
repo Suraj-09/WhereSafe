@@ -180,7 +180,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     }
 
     @Override
-    public void onDeviceClick(BluetoothDevice device) {
+    public void onDeviceClick(BluetoothDevice device) { // When the user selects a BT device from the displayed list
         View view = getView();
         final String device_name = "WhereSafe";
         String deviceMacAddress = device.getAddress();

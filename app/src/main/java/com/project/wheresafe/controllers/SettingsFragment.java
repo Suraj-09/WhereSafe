@@ -211,7 +211,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Langua
         }
     }
 
-    public void onLanguageSelected(String languageCode) {
+    public void onLanguageSelected(String languageCode) { // Updates the selected language to Firestore database for the user
         FirestoreHelper firestoreHelper = new FirestoreHelper();
         firestoreHelper.updateLanguage(sharedPreferenceHelper.getUid(), languageCode);
 

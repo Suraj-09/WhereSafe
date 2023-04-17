@@ -89,7 +89,7 @@ public class TeammateFragment extends Fragment {
         binding = null;
     }
 
-    public void populateCharts(ArrayList<BmeData> bmeDataArrayList) {
+    public void populateCharts(ArrayList<BmeData> bmeDataArrayList) { // Populate the detailed charts for the selected member
         if (bmeDataArrayList.isEmpty()) {
             return;
         }
@@ -101,7 +101,7 @@ public class TeammateFragment extends Fragment {
             }
         });
 
-        // Populate charts!
+        // Populate charts
         FragmentActivity mActivity = getActivity();
 
         if (mActivity != null) {

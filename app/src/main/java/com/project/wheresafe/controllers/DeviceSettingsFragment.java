@@ -69,6 +69,7 @@ public class DeviceSettingsFragment extends Fragment {
     }
 
     private void loadDeviceDetails() {
+        // Load details of the device from the Firestore database
         firestoreHelper.getUser(sharedPreferenceHelper.getUid(), new FirestoreCallback() {
             @SuppressLint("RestrictedApi")
             @Override
@@ -95,7 +96,7 @@ public class DeviceSettingsFragment extends Fragment {
         });
     }
 
-
+    // Update the MAC address on the UI
     private void updateMacAddressUI(String macAddress) {
         if (macAddress != null && macAddress.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")) {
             deviceMacAddressTextView.setText(macAddress);
@@ -104,13 +105,13 @@ public class DeviceSettingsFragment extends Fragment {
         }
     }
 
-    private void updateDeviceProximityUI(String deviceProximity) {
-        if (deviceProximity != null) {
-            deviceProximityTextView.setText(deviceProximity);
-        } else {
-            deviceProximityTextView.setText("");
-        }
-    }
+//    private void updateDeviceProximityUI(String deviceProximity) {
+//        if (deviceProximity != null) {
+//            deviceProximityTextView.setText(deviceProximity);
+//        } else {
+//            deviceProximityTextView.setText("");
+//        }
+//    }
 
     private void setupOnClickListeners() {
         renameDeviceButton.setOnClickListener(view -> {
@@ -151,6 +152,7 @@ public class DeviceSettingsFragment extends Fragment {
             builder.show();
         });
 
+        // Forget Device
         unpairDeviceButton.setOnClickListener(view -> {
             ((MainActivity) getActivity()).stopBleEspService();
 
@@ -167,7 +169,7 @@ public class DeviceSettingsFragment extends Fragment {
             //deviceProximityTextView.setText("");
         });
 
-
+        // Pair new device
         pairNewDeviceButton.setOnClickListener(view -> {
             // Stop current BLE service
             ((MainActivity) getActivity()).stopBleEspService();

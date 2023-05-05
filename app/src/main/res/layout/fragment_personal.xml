@@ -14,25 +14,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <!--        <Switch-->
-        <!--            android:id="@+id/switch1"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:text="Show map" />-->
-
-        <!--        <com.google.android.gms.maps.MapView-->
-        <!--            android:id="@+id/mapView"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:accessibilityLiveRegion="polite"-->
-        <!--            android:apiKey="AIzaSyDmsIq-0qDu2AAZpBPjjFJ8vG2ewVDEeGk"-->
-        <!--            android:contentDescription="Map showing location of the user"-->
-        <!--            android:paddingTop="10dp"-->
-        <!--            android:visibility="gone" />-->
-
-
     </LinearLayout>
 
     <ScrollView

@@ -16,9 +16,9 @@ This was a project designed and implemented for the course COEN 390 (Computer En
 
 ## Installation
 1. Clone the repository
-2. Set up ESP32 with code located in /hardware_code/bme680_ble_server
-2.1 install the [BSEC-Arduino-library](https://github.com/boschsensortec/BSEC-Arduino-library)
-2.2 Upload bme680_ble_server.ino onto an ESP32
+2. Set up ESP32 with code located in [hardware_code/bme680_ble_server](/hardware_code/bme680_ble_server)
+    1. install the [BSEC-Arduino-library](https://github.com/boschsensortec/BSEC-Arduino-library)
+    2. Upload bme680_ble_server.ino onto an ESP32
 3. Build the project and install the APK onto an Android device
 
 ## Credits
